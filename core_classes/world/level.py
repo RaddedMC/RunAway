@@ -21,6 +21,18 @@ class level:
             platform_grid.append(default_block)
             platform_grid = [platform_grid for i in range(0,size[0])]
 
+        # Prepare background
+        world_res = [item*TILE_SIZE for item in size]
+        world_res_rect = pyg.Rect(0, 0, world_res[0], world_res[1])
+        self.background = pyg.Surface(world_res)
+        if background_img == None:
+            pyg.draw.rect(self.background, (0), world_res_rect)
+        else:
+            image = pyg.image.load(background_img)
+            image = pyg.transform.scale(image, world_res)
+            self.background.blit(image, world_res_rect)
+
+
         # Create sprite group
         self.blocks = pyg.sprite.Group()
         for x in range(0, len(platform_grid)):

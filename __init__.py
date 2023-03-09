@@ -5,7 +5,7 @@
 # Imports
 import pygame as pyg
 from core_classes.world.level import level
-from core_classes.entities.moving_entity import moving_entity
+from core_classes.entities.keyboard_controllable_entity import keyboard_controllable_entity
 from time import sleep as zzz
 
 # This method starts the game.
@@ -16,17 +16,16 @@ def init():
     lvl_test = level()
 
     # Initialize player
-    player = moving_entity(spawn_position={"x": 16, "y": 16})
+    player = keyboard_controllable_entity(spawn_position={"x": 2, "y": 2})
     
     # Separate Surfaces allows for the game to run at any (16:9) resolution at fullscreen and scale properly.
-    sys_screen = pyg.display.set_mode((0,0), pyg.FULLSCREEN)
+    sys_screen = pyg.display.set_mode((256*3,144*3))
     game_screen = pyg.Surface((256,144))
 
     # The main game loop! Isolated in a function for better encapuslation
     def main_loop():
         running = True
         while running:
-
             # Event loop
             for ev in pyg.event.get():
 
@@ -34,12 +33,17 @@ def init():
                 if ev.type == pyg.QUIT:
                     running = False
 
+            # Redraw level background
+            game_screen.blit(lvl_test.background, (0,0))
+
+            # Handle player movement
             keys = pyg.key.get_pressed()
-            
+            player.move_with_keys(keys, 5)
+            player.update_position(1)
 
             # Draw level blocks and player to game screen
             lvl_test.blocks.draw(game_screen)
-            game_screen.blit(player.sprite, player.rect)
+            game_screen.blit(player.image, player.rect)
 
             # Upscale the game Surface and display to the user's screen
             scaled_game_disp = pyg.transform.scale(game_screen, (sys_screen.get_width(), sys_screen.get_height()))

@@ -5,6 +5,8 @@
 # Imports
 import pygame as pyg
 from core_classes.world.level import level
+from core_classes.entities.moving_entity import moving_entity
+from time import sleep as zzz
 
 # This method starts the game.
 def init():
@@ -12,6 +14,9 @@ def init():
 
     # Initialize level
     lvl_test = level()
+
+    # Initialize player
+    player = moving_entity(spawn_position={"x": 16, "y": 16})
     
     # Separate Surfaces allows for the game to run at any (16:9) resolution at fullscreen and scale properly.
     sys_screen = pyg.display.set_mode((0,0), pyg.FULLSCREEN)
@@ -29,15 +34,21 @@ def init():
                 if ev.type == pyg.QUIT:
                     running = False
 
-            # Draw level blocks to game screen
+            keys = pyg.key.get_pressed()
+            
+
+            # Draw level blocks and player to game screen
             lvl_test.blocks.draw(game_screen)
-
-
+            game_screen.blit(player.sprite, player.rect)
 
             # Upscale the game Surface and display to the user's screen
             scaled_game_disp = pyg.transform.scale(game_screen, (sys_screen.get_width(), sys_screen.get_height()))
             sys_screen.blit(scaled_game_disp, (0,0))
             pyg.display.flip()
+
+
+            # Sleep and repeat
+            zzz(0.01)
     
     main_loop()
 

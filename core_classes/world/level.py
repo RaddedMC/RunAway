@@ -26,4 +26,4 @@ class level:
         for x in range(0, len(platform_grid)):
             for y in range(0, len(platform_grid[x])):
                 if not platform_grid[x][y] == False:
-                    self.blocks.add(block(image = platform_grid[x][y], xpos = x*TILE_SIZE, ypos= y*TILE_SIZE))
+                    self.blocks.add(block(image = platform_grid[x][y], xpos = x, ypos= y))

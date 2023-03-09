@@ -16,4 +16,4 @@ class spawnable(pyg.sprite.Sprite):
 
         self.image = pyg.image.load(sprite)
         self.image = pyg.transform.scale(self.image, (sprite_res["x"], sprite_res["y"]))
-        self.rect = pyg.Rect(spawn_position["x"], spawn_position["y"], sprite_res["x"], sprite_res["y"])
+        self.rect = pyg.Rect(spawn_position["x"]*TILE_SIZE, spawn_position["y"]*TILE_SIZE, sprite_res["x"], sprite_res["y"])

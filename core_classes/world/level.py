@@ -10,7 +10,7 @@ from constants_config import TILE_SIZE
 class level:
     # This default size will give us a 16x9 grid of blocks to work with
     # The default platform_grid is just a floor
-    def __init__(self, size = (256//16,144//16), background_img = None, platform_grid = None):
+    def __init__(self, size = (256//TILE_SIZE,144//TILE_SIZE), background_img = None, platform_grid = None):
 
         if platform_grid == None:
             # Use a default platform grid that has just a basic floor if none is specified

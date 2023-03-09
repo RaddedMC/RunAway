@@ -2,13 +2,9 @@
 # By James Nicholls, Kelsey Kloosterman, Lukas Adie, and Sharaf Syed
 # Made for SE 2250, made for life
 import pygame as pyg
-from constants_config import TILE_SIZE
+from core_classes.spawnable import spawnable
 
-class block(pyg.sprite.Sprite):
+class block(spawnable):
     def __init__(self, image, xpos, ypos):
-
+        spawnable.__init__(self, {"x":xpos, "y":ypos}, image)
         pyg.sprite.Sprite.__init__(self)
-        
-        self.image = pyg.image.load(image)
-        self.image = pyg.transform.scale(self.image, (TILE_SIZE, TILE_SIZE))
-        self.rect = pyg.Rect(xpos, ypos, TILE_SIZE, TILE_SIZE)

@@ -5,12 +5,12 @@
 # Imports
 import pygame as pyg
 from core_classes.world.block import block
+from constants_config import TILE_SIZE
 
 class level:
     # This default size will give us a 16x9 grid of blocks to work with
     # The default platform_grid is just a floor
     def __init__(self, size = (256//16,144//16), background_img = None, platform_grid = None):
-        tile_size = 16
 
         if platform_grid == None:
             # Use a default platform grid that has just a basic floor if none is specified
@@ -26,4 +26,4 @@ class level:
         for x in range(0, len(platform_grid)):
             for y in range(0, len(platform_grid[x])):
                 if not platform_grid[x][y] == False:
-                    self.blocks.add(block(image = platform_grid[x][y], xpos = x*tile_size, ypos= y*tile_size))
+                    self.blocks.add(block(image = platform_grid[x][y], xpos = x*TILE_SIZE, ypos= y*TILE_SIZE))

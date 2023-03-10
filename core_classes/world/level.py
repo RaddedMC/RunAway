@@ -14,12 +14,18 @@ class level:
 
         if platform_grid == None:
             # Use a default platform grid that has just a basic floor if none is specified
+
             default_block = "res/tile/cake_test.png"
+            # Create column [f,f,f,f,f,f,f,t,f]
             platform_grid = []
-            for i in range(0, size[1]-1):
+            for i in range(0, size[1]-2):
                 platform_grid.append(False)
             platform_grid.append(default_block)
-            platform_grid = [platform_grid for i in range(0,size[0])]
+            platform_grid.append(False)
+            # Create rows, [f, col, col, ]
+            platform_grid = [platform_grid for i in range(0,size[0]-2)]
+            platform_grid.insert(0, [False for i in range(0,size[1])])
+            platform_grid.append([False for i in range(0,size[1])])
 
         # Prepare background
         world_res = [item*TILE_SIZE for item in size]

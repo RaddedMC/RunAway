@@ -1,5 +1,0 @@
-# Dependencies for Run Away
-TODO: Use PIP to freeze / dump deps
-
-- pygame
-- numpy

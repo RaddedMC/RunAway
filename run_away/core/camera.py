@@ -13,6 +13,7 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.x = player.rect.centerx - self.screen.get_width() / 2
         self.offset.y = player.rect.centery - self.screen.get_height() / 2
 
+        # FIXME: sorting not necessary because our game is a platformer
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_rect = sprite.rect.copy()
             offset_rect.center -= self.offset

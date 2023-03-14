@@ -1,1 +1,2 @@
-python __init__.py
+@echo off
+poetry run python run_away/main.py

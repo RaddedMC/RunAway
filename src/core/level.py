@@ -25,7 +25,7 @@ class Level:
         # print(self.display_screen.get_size())
 
         self.all_sprites = CameraGroup()
-        self.collision_sprites = pygame.sprite.Group()
+        self.collidable_sprites = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
         self.import_assets()
@@ -40,19 +40,22 @@ class Level:
             if hasattr(layer, "data"):
                 for x, y, surf in layer.tiles():
                     Entity(
-                        [self.all_sprites, self.collision_sprites],
+                        [self.all_sprites, self.collidable_sprites],
+                        self.collidable_sprites,
                         (x * config.TILE_SIZE, y * config.TILE_SIZE),
-                        surf
+                        surf,
                     )
 
             # print(dir(layer))  # DEBUG
 
         for obj in tmx_data.get_layer_by_name("Player"):
             if obj.name == "Start":
+                # TODO: should Player belong to collidable_sprites?
                 Player(
                     [self.all_sprites, self.player],
+                    self.collidable_sprites,
                     (obj.x, obj.y),
-                    "./resources/gfx/player/"
+                    "./resources/gfx/player/",
                 )
 
     def run(self, dt):

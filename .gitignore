@@ -161,3 +161,6 @@ cython_debug/
 
 # Tiled
 *.tiled-session
+
+# VS Code
+.vscode/settings.json

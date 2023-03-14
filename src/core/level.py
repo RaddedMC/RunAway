@@ -1,0 +1,72 @@
+from pathlib import Path
+
+import pygame
+from pytmx.util_pygame import load_pygame
+
+import config
+from core.camera import CameraGroup
+from core.entity import Entity
+from core.player import Player
+
+
+class Level:
+    def __init__(self) -> None:
+        """
+        To solve the issue of resolution scaling, this game draws all of its sprites to a
+        small (256px by 144px) surface, then upscales this surface to the resolution of the
+        user's display before finally updating the display.
+
+        This makes designing sprites, levels, etc. much easier as we're enforcing a single
+        aspect ratio with the added benefit being that our game will also look the same to all
+        players.
+        """
+        self.render_screen = pygame.Surface(config.RENDER_AREA)
+        self.display_screen = pygame.display.get_surface()
+        # print(self.display_screen.get_size())
+
+        self.all_sprites = CameraGroup()
+        self.collision_sprites = pygame.sprite.Group()
+        self.player = pygame.sprite.GroupSingle()
+
+        self.import_assets()
+
+    def import_assets(self):
+        tmx_data = load_pygame(Path("./resources/levels/level_spring.tmx").resolve())
+        # print(dir(tmx_data))
+        # print(tmx_data.layers)
+
+        for layer in tmx_data.visible_layers:
+            # Only get tile layers
+            if hasattr(layer, "data"):
+                for x, y, surf in layer.tiles():
+                    Entity(
+                        [self.all_sprites, self.collision_sprites],
+                        (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                        surf
+                    )
+
+            # print(dir(layer))  # DEBUG
+
+        for obj in tmx_data.get_layer_by_name("Player"):
+            if obj.name == "Start":
+                Player(
+                    [self.all_sprites, self.player],
+                    (obj.x, obj.y),
+                    "./resources/gfx/player/"
+                )
+
+    def run(self, dt):
+        # self.display_screen.fill("black")
+        # self.all_sprites.draw(display_screen)
+        # pygame.display.flip()
+
+        # Draw sprites, upscale the render surface and display to the user's screen
+        self.render_screen.fill("black")
+        self.all_sprites.update(dt)
+        self.all_sprites.draw(self.render_screen)
+        scaled_display = pygame.transform.scale(
+            self.render_screen,
+            (self.display_screen.get_width(), self.display_screen.get_height()),
+        )
+        self.display_screen.blit(scaled_display, (0, 0))
+        pygame.display.flip()

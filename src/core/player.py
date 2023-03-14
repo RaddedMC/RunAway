@@ -1,8 +1,11 @@
+from pathlib import Path
+
 import pygame
 
-from entity import AnimatedEntity
+from core.entity import AnimatedEntity
+from utils import tools
+
 
 class Player(AnimatedEntity):
-    def __init__(self, pos, image, speed, groups):
-        super().__init__(groups)
-        pass
+    def __init__(self, groups: pygame.sprite.Group, pos: tuple, root_dir: str):
+        super().__init__(groups, pos, root_dir)

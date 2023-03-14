@@ -1,3 +1,5 @@
+import pygame
+
 # Run Away
 # By James Nicholls, Kelsey Kloosterman, Lukas Adie, and Sharaf Syed
 # Made for SE 2250, made for life
@@ -9,7 +11,6 @@ TILE_SIZE = 16
 
 
 ### CONTROLS ###
-import pygame
 KEYS_LEFT = [pygame.K_LEFT, pygame.K_a]
 KEYS_RIGHT = [pygame.K_RIGHT, pygame.K_d]
 KEYS_UP = [pygame.K_UP, pygame.K_w]
@@ -20,5 +21,6 @@ KEYS_QUIT = [pygame.K_ESCAPE]
 ### RENDERING ###
 # All computers and displays are different. Pygame seems to be finicky with its handling of frame-independent movement.
 # The default FPS is 120hz, as that matches (or doubles) the system refresh rate of everyone's development machines.
-# If you have performance issues, reduce this to 60hz or lower (I would recommend keeping it a factor of 120 however)
+# If you have performance issues, reduce this to 60hz or lower (I would recommend keeping it a factor of 2 however)
 FPS = 120
+RENDER_AREA = (256, 144)  # 16:9 resolution

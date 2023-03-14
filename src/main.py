@@ -1,37 +1,35 @@
-import core.entity
-import pygame
 import sys
 
-from core.camera import CameraGroup
-from core.enemy import Enemy
-from core.player import Player
+import pygame
 
-from pytmx.util_pygame import load_pygame
-from pathlib import Path
+import config
+from core.level import Level
 
 
-TILE_SIZE = 16
+class Game:
+    def __init__(self) -> None:
+        pygame.init()
+        self.display_screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.display_screen = pygame.display.set_mode((256,144), pygame.SCALED + pygame.FULLSCREEN)
+        pygame.display.set_caption("Run Away")
+        self.clock = pygame.time.Clock()
+        self.level = Level()
+        self.running = True
 
-pygame.init()
-screen = pygame.display.set_mode((640, 360))
-tmx_data = load_pygame(Path("./resources/levels/level_spring.tmx").resolve())
-# print(dir(tmx_data))
-# print(tmx_data.layers)
-collision_sprites = pygame.sprite.Group()
-all_sprites = CameraGroup()
+    def run(self):
+        while self.running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    self.running = False
 
-for layer in tmx_data.visible_layers:
-    # Only get tile layers
-    if hasattr(layer, "data"):
-        for x,y,surf in layer.tiles():
-            Entity((x*TILE_SIZE, y*TILE_SIZE), surf, all_sprites)
+            dt = self.clock.tick(config.FPS) / 1000
+            self.level.run(dt)
+            pygame.display.flip()
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
+        pygame.quit()
+        sys.exit(0)
 
-    screen.fill("black")
-    all_sprites.draw(screen)
-    pygame.display.update()
+
+if __name__ == "__main__":
+    game = Game()
+    game.run()

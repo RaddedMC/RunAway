@@ -31,7 +31,7 @@ class Level:
         self.import_assets()
 
     def import_assets(self):
-        tmx_data = load_pygame(Path("./resources/levels/level_spring.tmx").resolve())
+        tmx_data = load_pygame(Path("./run_away/resources/levels/level_spring.tmx").resolve())
         # print(dir(tmx_data))
         # print(tmx_data.layers)
 
@@ -55,7 +55,7 @@ class Level:
                     [self.all_sprites, self.player],
                     self.collidable_sprites,
                     (obj.x, obj.y),
-                    "./resources/gfx/player/",
+                    "./run_away/resources/gfx/player/",
                 )
 
     def run(self, dt):

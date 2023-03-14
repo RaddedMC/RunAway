@@ -5,12 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: __init__.py",
+            "name": "run-away",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/__init__.py",
-            "console": "integratedTerminal",
-            "justMyCode": true
+            "cwd": "${workspaceFolder}",
+            "module": "run_away",
+            "args": []
         }
     ]
 }

@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "run-away"
+version = "0.1.0"
+description = ""
+authors = ["lukadd16 <lukadd@icloud.com>"]
+readme = "README.md"
+packages = [{include = "run_away"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pygame = "^2.2.0"
+pytmx = "^3.31"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.1.0"
+ruff = "^0.0.255"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -18,9 +18,18 @@ KEYS_DOWN = [pygame.K_DOWN, pygame.K_s]
 KEYS_QUIT = [pygame.K_ESCAPE]
 
 
+### COLOURS ###
+RGB_BLACK = (0, 0, 0)
+RGB_WHITE = (255, 255, 255)
+
+
 ### RENDERING ###
 # All computers and displays are different. Pygame seems to be finicky with its handling of frame-independent movement.
 # The default FPS is 120hz, as that matches (or doubles) the system refresh rate of everyone's development machines.
 # If you have performance issues, reduce this to 60hz or lower (I would recommend keeping it a factor of 2 however)
 FPS = 120
 RENDER_AREA = (256, 144)  # 16:9 resolution
+
+### FONTS ###
+pygame.font.init()
+DEBUG_FONT = pygame.font.Font(None, 30)

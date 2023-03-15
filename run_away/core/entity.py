@@ -1,9 +1,7 @@
-from pathlib import Path
 from typing import Optional
 
 import pygame
-
-from utils import tools
+from utils.tools import import_animations
 
 
 class Entity(pygame.sprite.Sprite):
@@ -71,7 +69,7 @@ class AnimatedEntity(Entity):
         self.status = "idle"  # FIXME: hardcoded for now
         self.animation_speed = 0.15  # FIXME: hardcoded for now
         self.frame_index = 0
-        self.animations = tools.import_animations(root_dir)
+        self.animations = import_animations(root_dir)
         image = pygame.image.load(
             self.animations[self.status][self.frame_index]
         ).convert_alpha()

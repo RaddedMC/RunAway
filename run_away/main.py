@@ -9,8 +9,8 @@ from core.level import Level
 class Game:
     def __init__(self) -> None:
         pygame.init()
-        self.display_screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
-        # self.display_screen = pygame.display.set_mode((256,144), pygame.SCALED + pygame.FULLSCREEN)
+        self.display_surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
+        # self.display_surface = pygame.display.set_mode((256,144), pygame.SCALED + pygame.FULLSCREEN)
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
         self.level = Level()

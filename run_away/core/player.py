@@ -1,10 +1,5 @@
-from pathlib import Path
-
-import config
 import pygame
-
 from core.entity import AnimatedEntity
-from utils import tools
 
 
 class Player(AnimatedEntity):

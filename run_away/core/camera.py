@@ -6,7 +6,7 @@ from core.player import Player
 class CameraGroup(pygame.sprite.Group):
     def __init__(self) -> None:
         super().__init__()
-        self.display_screen = pygame.display.get_surface()
+        self.display_surface = pygame.display.get_surface()
         self.offset = pygame.math.Vector2()
 
     def custom_draw(self, player: Player):
@@ -17,7 +17,7 @@ class CameraGroup(pygame.sprite.Group):
         for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_rect = sprite.rect.copy()
             offset_rect.center -= self.offset
-            self.display_screen.blit(sprite.image, offset_rect)
+            self.display_surface.blit(sprite.image, offset_rect)
 
         # for layer in LAYERS.values():
         #     for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):

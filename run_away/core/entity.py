@@ -66,14 +66,15 @@ class AnimatedEntity(Entity):
 
     def update(self, dt: float):
         super().update(dt)
+        self.collision()
         self.move(dt)
-        #self.collision()
         self.animate(dt)
 
     def move(self, dt: float):
 
         # Handle gravity
-        self.vert_speed += dt*self.gravity
+        if not self.test_collide_down():
+            self.vert_speed += dt*self.gravity
 
         # Determine pixels to move
         self.pixels_buffer.x += self.walk_direction * self.walk_speed * dt # Based on walk speed and deltatime
@@ -100,31 +101,62 @@ class AnimatedEntity(Entity):
 
     def collision(self):
         """
-        Handle collision between this entity and a group of possible entities it can
+        Handle directional collision between this entity and a group of possible entities it can
         collide with.
 
         Note: collisions that occur while this entity is stationary are ignored.
         """
-        # TODO: actually update the entity's position in response to collisions
-        # I think all we need to do here is just set speed in a direction to 0 if a collision occurs -- James
+        # Test all collisions
+        # If left collides:
+        if self.test_collide_left():
+            # x speed should be >=0
+            if self.walk_direction < 0:
+                self.walk_direction = 0
+                
 
-        # The entity was moving when the collision occurred
-        if self.direction.magnitude() != 0 and pygame.sprite.spritecollideany(
-            self, self.collidable_sprites
-        ):
-            # The entity was moving horizontally
-            if self.direction.x != 0:
-                if self.direction.x > 0:  # Moving right
-                    pass
-                elif self.direction.x < 0:  # Moving left
-                    pass
+        # If right collides:
+        if self.test_collide_right():
+            # x speed should be <=0
+            if self.walk_direction > 0:
+                self.walk_direction = 0
+        
+        # If up collides:
+        if self.test_collide_up():
+            # y speed should be >= 0
+            if self.vert_speed < 0:
+                self.vert_speed = 0
 
-            # The entity was moving vertically
-            if self.direction.y != 0:
-                if self.direction.y < 0:  # Moving up
-                    pass
-                elif self.direction.y > 0:  # Moving down
-                    pass
+        # If down collides:
+        if self.test_collide_down():
+            # y speed should be <= 0
+            if self.vert_speed > 0:
+                self.vert_speed = 0
+
+    def test_collide(self, dir = pygame.Vector2):
+        # Move by dir
+        self.rect.move_ip(dir.x, dir.y)
+        
+        # Test collision
+        collided = not pygame.sprite.spritecollideany(self, self.collidable_sprites) == None
+
+        # undo movement
+        self.rect.move_ip(-dir.x, -dir.y)
+
+        # Return true if collide, false if not collide
+        print(f"Collision {dir}: {collided} | Vertical speed = {self.vert_speed} | Horiz direction = {self.walk_direction}")
+        return collided
+
+    def test_collide_left(self):
+        return self.test_collide(pygame.Vector2(-1,0))
+    
+    def test_collide_right(self):
+        return self.test_collide(pygame.Vector2(1,0))
+
+    def test_collide_up(self):
+        return self.test_collide(pygame.Vector2(0,-1))
+
+    def test_collide_down(self):
+        return self.test_collide(pygame.Vector2(0,1))
     
 
 

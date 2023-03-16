@@ -21,6 +21,10 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                if event.type == pygame.KEYDOWN:
+                    keys = pygame.key.get_pressed()
+                    if True in [keys[key] for key in config.KEYS_QUIT]:
+                        self.running = False
 
             dt = self.clock.tick(config.FPS) / 1000
             self.level.run(dt)

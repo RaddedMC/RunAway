@@ -75,8 +75,6 @@ class AnimatedEntity(Entity):
         # Handle gravity
         if not self.test_collide_down():
             self.vert_speed += dt*self.gravity
-        else:
-            self.vert_speed = 0
 
         # Determine pixels to move
         self.pixels_buffer.x += self.walk_direction * self.walk_speed * dt # Based on walk speed and deltatime

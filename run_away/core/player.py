@@ -11,7 +11,8 @@ class Player(AnimatedEntity):
         pos: tuple,
         root_dir: str,
         speed: int, # Measured in PIXELS per SECOND
-        gravity: int
+        gravity: int,
+        jump_speed: int
     ):
         super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
 
@@ -30,6 +31,9 @@ class Player(AnimatedEntity):
         self.vulnerable = True
         self.invulnerable_duration = None
         self.hurt_time = None
+
+        # Movement
+        self.jump_speed = jump_speed
 
     def get_inputs(self):
         """
@@ -56,7 +60,7 @@ class Player(AnimatedEntity):
         Make the player jump
         """
         if self.test_collide_down():
-            self.vert_speed = -50
+            self.vert_speed = -self.jump_speed
 
     def get_status(self):
         """

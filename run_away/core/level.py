@@ -58,8 +58,9 @@ class Level:
                     self.collidable_sprites,
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
-                    speed=50,
-                    gravity=50
+                    speed=90,
+                    gravity=70,
+                    jump_speed=150
                 )
 
     def run(self, dt):

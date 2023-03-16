@@ -10,9 +10,10 @@ class Player(AnimatedEntity):
         collidable_sprites: pygame.sprite.Group,
         pos: tuple,
         root_dir: str,
-        speed: int # Measured in PIXELS per SECOND
+        speed: int, # Measured in PIXELS per SECOND
+        gravity: int
     ):
-        super().__init__(groups, collidable_sprites, pos, root_dir, speed)
+        super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
 
         # Player stats
         self.stats = None
@@ -41,22 +42,20 @@ class Player(AnimatedEntity):
         keys_pressed = False
 
         if True in [keys[key] for key in config.KEYS_RIGHT]:
-            self.direction.x = 1
+            self.walk_direction = 1
         elif True in [keys[key] for key in config.KEYS_LEFT]:
-            self.direction.x = -1
+            self.walk_direction = -1
         else:
-            self.direction.x = 0
+            self.walk_direction = 0
         
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
-        else:
-            self.direction.y = 0
 
     def jump(self):
         """
         Make the player jump
         """
-        self.direction.y = -1
+        self.vert_speed = -50
 
     def get_status(self):
         """

@@ -11,25 +11,78 @@ class Entity(pygame.sprite.Sprite):
         collidable_sprites: pygame.sprite.Group,
         pos: tuple,
         image: pygame.Surface,
-        speed: Optional[int] = 0,
     ):
         super().__init__(groups)
         self.image = image
         self.rect = self.image.get_rect(topleft=pos)
-        self.speed = speed
-        self.direction = pygame.math.Vector2(0, 0)
         self.collidable_sprites = collidable_sprites
         self.pixels_buffer = pygame.math.Vector2(0, 0)
 
-    def move(self, dt: float):
-        # Pixel buffer to ensure that the rectangle only moves given whole number input:
+    def update(self, dt: float):
+        pass
 
+class AnimatedEntity(Entity):
+    def __init__(
+        self,
+        groups: pygame.sprite.Group,
+        collidable_sprites: pygame.sprite.Group,
+        pos: tuple,
+        root_dir: str,
+        speed: float = 0,
+        gravity: float = 0
+    ):
+        self.status = "idle"  # FIXME: hardcoded for now
+        self.animation_speed = 0.15  # FIXME: hardcoded for now
+        self.frame_index = 0
+        # Movement vars
+        self.walk_speed = speed
+        self.gravity = gravity
+        self.vert_speed = 0
+        self.walk_direction = 0
+
+        # Animations
+        self.animations = import_animations(root_dir)
+        image = pygame.image.load(
+            self.animations[self.status][self.frame_index]
+        ).convert_alpha()
+        super().__init__(groups, collidable_sprites, pos, image)
+
+    def animate(self, dt: float):
+        animation = self.animations[self.status]
+
+        # Increment to the next frame in the animation
+        self.frame_index += self.animation_speed
+
+        # Reached the end of the animation, return to the beginning
+        if self.frame_index >= len(animation):
+            # TODO: use % operator instead
+            self.frame_index = 0
+
+        # Set the image for the current frame
+        # TODO: implement left/right directions
+        image_path = animation[int(self.frame_index)]
+        self.image = pygame.image.load(image_path)
+        self.rect = self.image.get_rect(center=self.rect.center)
+
+    def update(self, dt: float):
+        super().update(dt)
+        self.move(dt)
+        #self.collision()
+        self.animate(dt)
+
+    def move(self, dt: float):
+
+        # Handle gravity
+        self.vert_speed += dt*self.gravity
+
+        # Determine pixels to move
+        self.pixels_buffer.x += self.walk_direction * self.walk_speed * dt # Based on walk speed and deltatime
+        self.pixels_buffer.y += self.vert_speed * dt
+
+        # Pixel buffer to ensure that the rectangle only moves given whole number input:
         # Add (x/y)*speed*dir to x and y buffer
         # if abs(buffer) for a coord is greater than 1
         # Move 1 and subtract buffer by 1
-        self.pixels_buffer.x += self.direction.x * self.speed * dt
-        self.pixels_buffer.y += self.direction.y * self.speed * dt
-
         import math
         if (math.floor(self.pixels_buffer.x) > 1):
             self.rect.move_ip(math.floor(self.pixels_buffer.x),0)
@@ -44,8 +97,6 @@ class Entity(pygame.sprite.Sprite):
         elif (math.floor(self.pixels_buffer.y) < -1):
             self.rect.move_ip(0, math.floor(self.pixels_buffer.y))
             self.pixels_buffer.y -= math.floor(self.pixels_buffer.y)
-
-        print(self.pixels_buffer)
 
     def collision(self):
         """
@@ -74,50 +125,7 @@ class Entity(pygame.sprite.Sprite):
                     pass
                 elif self.direction.y > 0:  # Moving down
                     pass
-
-    def update(self, dt: float):
-        self.move(dt)
-        #self.collision()
-
-
-class AnimatedEntity(Entity):
-    def __init__(
-        self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
-        pos: tuple,
-        root_dir: str,
-        speed: Optional[int] = 0,
-    ):
-        self.status = "idle"  # FIXME: hardcoded for now
-        self.animation_speed = 0.15  # FIXME: hardcoded for now
-        self.frame_index = 0
-        self.animations = import_animations(root_dir)
-        image = pygame.image.load(
-            self.animations[self.status][self.frame_index]
-        ).convert_alpha()
-        super().__init__(groups, collidable_sprites, pos, image, speed)
-
-    def animate(self, dt: float):
-        animation = self.animations[self.status]
-
-        # Increment to the next frame in the animation
-        self.frame_index += self.animation_speed
-
-        # Reached the end of the animation, return to the beginning
-        if self.frame_index >= len(animation):
-            # TODO: use % operator instead
-            self.frame_index = 0
-
-        # Set the image for the current frame
-        # TODO: implement left/right directions
-        image_path = animation[int(self.frame_index)]
-        self.image = pygame.image.load(image_path)
-        self.rect = self.image.get_rect(center=self.rect.center)
-
-    def update(self, dt: float):
-        super().update(dt)
-        self.animate(dt)
+    
 
 
 class InteractableEntity(Entity):

@@ -4,8 +4,9 @@ import pprint
 from pathlib import Path
 from typing import Optional
 
-import config
 import pygame
+
+from run_away import config
 
 font = config.DEBUG_FONT
 
@@ -38,4 +39,4 @@ def debug(info, y: int = 10, x: Optional[int] = 10):
 
 
 if __name__ == "__main__":  # DEBUG
-    pprint.pprint(import_animations(Path("./resources/gfx/player/")))
+    pprint.pprint(import_animations(Path("./run_away/resources/gfx/player/")))

@@ -59,7 +59,7 @@ class Level:
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
                     speed=50,
-                    gravity=20
+                    gravity=50
                 )
 
     def run(self, dt):
@@ -70,7 +70,7 @@ class Level:
         # Draw sprites, upscale the render surface and display to the user's screen
         self.render_surface.fill("black")
         self.all_sprites.update(dt)
-        self.all_sprites.draw(self.render_surface)
+        self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
         scaled_display = pygame.transform.scale(
             self.render_surface,
             (self.display_surface.get_width(), self.display_surface.get_height()),

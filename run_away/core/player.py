@@ -1,5 +1,6 @@
 import pygame
 from core.entity import AnimatedEntity
+import config
 
 
 class Player(AnimatedEntity):
@@ -9,8 +10,9 @@ class Player(AnimatedEntity):
         collidable_sprites: pygame.sprite.Group,
         pos: tuple,
         root_dir: str,
+        speed: int # Measured in PIXELS per SECOND
     ):
-        super().__init__(groups, collidable_sprites, pos, root_dir)
+        super().__init__(groups, collidable_sprites, pos, root_dir, speed)
 
         # Player stats
         self.stats = None
@@ -36,15 +38,19 @@ class Player(AnimatedEntity):
         keys = pygame.key.get_pressed()
 
         # Movement
-        if keys[pygame.K_d]:
+        keys_pressed = False
+
+        if True in [keys[key] for key in config.KEYS_RIGHT]:
             self.direction.x = 1
-        elif keys[pygame.K_a]:
+        elif True in [keys[key] for key in config.KEYS_LEFT]:
             self.direction.x = -1
-        elif keys[pygame.K_w]:
+        else:
+            self.direction.x = 0
+        
+        if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
         else:
-            # Not moving
-            self.direction.update(0, 0)
+            self.direction.y = 0
 
     def jump(self):
         """

@@ -19,11 +19,33 @@ class Entity(pygame.sprite.Sprite):
         self.speed = speed
         self.direction = pygame.math.Vector2(0, 0)
         self.collidable_sprites = collidable_sprites
+        self.pixels_buffer = pygame.math.Vector2(0, 0)
 
     def move(self, dt: float):
-        # TODO: rounding?
-        self.rect.x += self.direction.x * self.speed * dt
-        self.rect.y += self.direction.y * self.speed * dt
+        # Pixel buffer to ensure that the rectangle only moves given whole number input:
+
+        # Add (x/y)*speed*dir to x and y buffer
+        # if abs(buffer) for a coord is greater than 1
+        # Move 1 and subtract buffer by 1
+        self.pixels_buffer.x += self.direction.x * self.speed * dt
+        self.pixels_buffer.y += self.direction.y * self.speed * dt
+
+        import math
+        if (math.floor(self.pixels_buffer.x) > 1):
+            self.rect.move_ip(math.floor(self.pixels_buffer.x),0)
+            self.pixels_buffer.x -= math.floor(self.pixels_buffer.x)
+        elif (math.floor(self.pixels_buffer.x) < -1):
+            self.rect.move_ip(math.floor(self.pixels_buffer.x),0)
+            self.pixels_buffer.x -= math.floor(self.pixels_buffer.x)
+
+        if (math.floor(self.pixels_buffer.y) > 1):
+            self.rect.move_ip(0, math.floor(self.pixels_buffer.y))
+            self.pixels_buffer.y -= math.floor(self.pixels_buffer.y)
+        elif (math.floor(self.pixels_buffer.y) < -1):
+            self.rect.move_ip(0, math.floor(self.pixels_buffer.y))
+            self.pixels_buffer.y -= math.floor(self.pixels_buffer.y)
+
+        print(self.pixels_buffer)
 
     def collision(self):
         """
@@ -33,6 +55,7 @@ class Entity(pygame.sprite.Sprite):
         Note: collisions that occur while this entity is stationary are ignored.
         """
         # TODO: actually update the entity's position in response to collisions
+        # I think all we need to do here is just set speed in a direction to 0 if a collision occurs -- James
 
         # The entity was moving when the collision occurred
         if self.direction.magnitude() != 0 and pygame.sprite.spritecollideany(
@@ -54,7 +77,7 @@ class Entity(pygame.sprite.Sprite):
 
     def update(self, dt: float):
         self.move(dt)
-        self.collision()
+        #self.collision()
 
 
 class AnimatedEntity(Entity):

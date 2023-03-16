@@ -58,6 +58,7 @@ class Level:
                     self.collidable_sprites,
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
+                    speed=50
                 )
 
     def run(self, dt):
@@ -75,4 +76,5 @@ class Level:
         )
         self.display_surface.blit(scaled_display, (0, 0))
         debug(self.player.sprite.status)
+
         pygame.display.flip()

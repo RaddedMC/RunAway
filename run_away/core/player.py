@@ -55,7 +55,8 @@ class Player(AnimatedEntity):
         """
         Make the player jump
         """
-        self.vert_speed = -50
+        if self.test_collide_down():
+            self.vert_speed = -50
 
     def get_status(self):
         """

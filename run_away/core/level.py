@@ -10,7 +10,7 @@ from utils.tools import debug
 
 
 class Level:
-    def __init__(self) -> None:
+    def __init__(self, level_path) -> None:
         """
         To solve the issue of resolution scaling, this game draws all of its sprites to a
         small (256px by 144px) surface, then upscales this surface to the resolution of the
@@ -28,11 +28,11 @@ class Level:
         self.collidable_sprites = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
-        self.import_assets()
+        self.import_assets(level_path)
 
-    def import_assets(self):
+    def import_assets(self, level_path):
         tmx_data = load_pygame(
-            Path("./run_away/resources/levels/level_spring.tmx").resolve()
+            Path(level_path).resolve()
         )
         # print(dir(tmx_data))
         # print(tmx_data.layers)
@@ -59,8 +59,8 @@ class Level:
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
                     speed=90,
-                    gravity=70,
-                    jump_speed=150
+                    gravity=100,
+                    jump_speed=120
                 )
 
     def run(self, dt):

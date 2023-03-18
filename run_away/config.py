@@ -6,6 +6,12 @@ import pygame
 
 ### THIS FILE contains key settings for the game that can be adjusted. ###
 
+### DEBUG FLAG ###
+VERBOSE_LOGGING = False
+DEBUG_UI = False
+
+
+
 ### GAME WORLD ###
 TILE_SIZE = 16
 

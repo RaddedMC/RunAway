@@ -47,10 +47,15 @@ class Player(AnimatedEntity):
 
         if True in [keys[key] for key in config.KEYS_RIGHT]:
             self.walk_direction = 1
+            self.status = "run"
+            self.flip_sprite = False
         elif True in [keys[key] for key in config.KEYS_LEFT]:
             self.walk_direction = -1
+            self.status = "run"
+            self.flip_sprite = True
         else:
             self.walk_direction = 0
+            self.status = "idle"
         
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()

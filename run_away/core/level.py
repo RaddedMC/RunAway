@@ -58,9 +58,9 @@ class Level:
                     self.collidable_sprites,
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
-                    speed=90,
-                    gravity=100,
-                    jump_speed=120
+                    speed=90,      # FIXME: hardcoded for now
+                    gravity=100,   # FIXME: hardcoded for now
+                    jump_speed=120 # FIXME: hardcoded for now
                 )
 
     def run(self, dt):
@@ -77,6 +77,7 @@ class Level:
             (self.display_surface.get_width(), self.display_surface.get_height()),
         )
         self.display_surface.blit(scaled_display, (0, 0))
-        debug(self.player.sprite.status)
+        if config.DEBUG_UI:
+            debug(self.player.sprite.status)
 
         pygame.display.flip()

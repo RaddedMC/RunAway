@@ -64,21 +64,25 @@ class Level:
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
                     speed=90,      # FIXME: hardcoded for now
-                    gravity=100,   # FIXME: hardcoded for now
+                    gravity=100,   # FIXME: hardcoded for now, make world property?
                     jump_speed=120 # FIXME: hardcoded for now
                 )
-
-        for obj in tmx_data.get_layer_by_name("Enemies"):
-            if obj.name == "Grunt":
-                Grunt(
-                    [self.all_sprites, self.enemies, self.collidable_sprites],
-                    self.collidable_sprites,
-                    (obj.x, obj.y),
-                    "./run_away/resources/gfx/enemies/grunt/",
-                    speed=40,
-                    gravity=100,
-                    colour="blue"
-                )
+        
+        try:
+            for obj in tmx_data.get_layer_by_name("Enemies"):
+                if obj.type == "Grunt":
+                    Grunt(
+                        [self.all_sprites, self.enemies, self.collidable_sprites],
+                        self.collidable_sprites,
+                        (obj.x, obj.y),
+                        "./run_away/resources/gfx/enemies/grunt/",
+                        speed=40,
+                        gravity=100, # FIXME: hardcoded for now, make world property?
+                        colour="yellow"
+                    )
+        except ValueError:
+            # This level probably has no enemies
+            pass
         
 
     def run(self, dt):

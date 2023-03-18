@@ -37,8 +37,11 @@ RGB_WHITE = (255, 255, 255)
 FPS = 120
 DISP_ZOOM = 1.1
 RENDER_AREA = (256*DISP_ZOOM, 144*DISP_ZOOM)  # 16:9 aspect ratio
-def reset_zoom():
+def change_render_area():
     global RENDER_AREA
+    global DISP_ZOOM
+    if DISP_ZOOM <= 0:
+        DISP_ZOOM = 0.0000000000001
     RENDER_AREA = (256*DISP_ZOOM, 144*DISP_ZOOM)  # 16:9 aspect ratio
 
 ### FONTS ###

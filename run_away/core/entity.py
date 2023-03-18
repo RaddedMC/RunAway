@@ -46,6 +46,9 @@ class AnimatedEntity(Entity):
 
         # Animations
         self.animations = import_animations(root_dir)
+        from config import DEBUG_VERBOSE_LOGGING
+        if DEBUG_VERBOSE_LOGGING:
+            print(self.animations)
         image = pygame.image.load(
             self.animations[self.status][self.frame_index]
         ).convert_alpha()
@@ -145,8 +148,8 @@ class AnimatedEntity(Entity):
         self.rect.move_ip(-dir.x, -dir.y)
 
         # Return true if collide, false if not collide
-        from config import VERBOSE_LOGGING
-        if VERBOSE_LOGGING:
+        from config import DEBUG_VERBOSE_LOGGING
+        if DEBUG_VERBOSE_LOGGING:
             print(f"Collision {dir}: {collided} | Vertical speed = {self.vert_speed} | Horiz direction = {self.walk_direction}")
         return collided
 

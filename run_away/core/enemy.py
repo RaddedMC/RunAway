@@ -41,9 +41,9 @@ class Grunt(Enemy):
                 colour: str = "red"):
         health = 10 #FIXME: change once we have a combat system
         damage = 10 #FIXME: ^
-        self.root_dir = self.root_dir + "/" + colour
+        self.root_dir = root_dir + "/" + colour
         self.walk_direction = Directions.RIGHT
-        super().__init__(health, damage, groups, collidable_sprites, pos, root_dir, speed, gravity)
+        super().__init__(health, damage, groups, collidable_sprites, pos, self.root_dir, speed, gravity)
 
     def run_behaviour(self):
         # Grunts are braindead bricks that move back and forth

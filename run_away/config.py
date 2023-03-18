@@ -7,7 +7,7 @@ import pygame
 ### THIS FILE contains key settings for the game that can be adjusted. ###
 
 ### DEBUG FLAG ###
-VERBOSE_LOGGING = False
+DEBUG_VERBOSE_LOGGING = True
 DEBUG_UI = False
 DEBUG_ZOOM = True
 

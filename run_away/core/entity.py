@@ -3,6 +3,9 @@ from typing import Optional
 import pygame
 from utils.tools import import_animations
 
+class Directions():
+    LEFT = -1
+    RIGHT = 1
 
 class Entity(pygame.sprite.Sprite):
     def __init__(
@@ -26,7 +29,7 @@ class AnimatedEntity(Entity):
         self,
         groups: pygame.sprite.Group,
         collidable_sprites: pygame.sprite.Group,
-        pos: tuple,
+        pos: tuple, #FIXME: Should be vector2?
         root_dir: str,
         speed: float = 0,
         gravity: float = 0

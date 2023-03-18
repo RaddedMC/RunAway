@@ -9,6 +9,7 @@ import pygame
 ### DEBUG FLAG ###
 VERBOSE_LOGGING = False
 DEBUG_UI = False
+DEBUG_ZOOM = True
 
 
 
@@ -36,6 +37,9 @@ RGB_WHITE = (255, 255, 255)
 FPS = 120
 DISP_ZOOM = 1.1
 RENDER_AREA = (256*DISP_ZOOM, 144*DISP_ZOOM)  # 16:9 aspect ratio
+def reset_zoom():
+    global RENDER_AREA
+    RENDER_AREA = (256*DISP_ZOOM, 144*DISP_ZOOM)  # 16:9 aspect ratio
 
 ### FONTS ###
 pygame.font.init()

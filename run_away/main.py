@@ -13,7 +13,7 @@ class Game:
         # self.display_surface = pygame.display.set_mode((256,144), pygame.SCALED + pygame.FULLSCREEN)
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
-        self.level = Level()
+        self.level = Level("run_away/resources/levels/level_wind.tmx")
         self.running = True
 
     def run(self):

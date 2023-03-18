@@ -6,6 +6,12 @@ import pygame
 
 ### THIS FILE contains key settings for the game that can be adjusted. ###
 
+### DEBUG FLAG ###
+VERBOSE_LOGGING = False
+DEBUG_UI = False
+
+
+
 ### GAME WORLD ###
 TILE_SIZE = 16
 
@@ -28,7 +34,8 @@ RGB_WHITE = (255, 255, 255)
 # The default FPS is 120hz, as that matches (or doubles) the system refresh rate of everyone's development machines.
 # If you have performance issues, reduce this to 60hz or lower (I would recommend keeping it a factor of 2 however)
 FPS = 120
-RENDER_AREA = (256, 144)  # 16:9 resolution
+DISP_ZOOM = 1.1
+RENDER_AREA = (256*DISP_ZOOM, 144*DISP_ZOOM)  # 16:9 aspect ratio
 
 ### FONTS ###
 pygame.font.init()

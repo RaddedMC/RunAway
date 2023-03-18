@@ -31,14 +31,15 @@ class AnimatedEntity(Entity):
         speed: float = 0,
         gravity: float = 0
     ):
-        self.status = "idle"  # FIXME: hardcoded for now
-        self.animation_speed = 0.15  # FIXME: hardcoded for now
+        self.status = "idle"
+        self.animation_speed = 18  # FIXME: hardcoded for now
         self.frame_index = 0
         # Movement vars
         self.walk_speed = speed
         self.gravity = gravity
         self.vert_speed = 0
         self.walk_direction = 0
+        self.flip_sprite = False # False = right, True = left
 
         # Animations
         self.animations = import_animations(root_dir)
@@ -51,17 +52,15 @@ class AnimatedEntity(Entity):
         animation = self.animations[self.status]
 
         # Increment to the next frame in the animation
-        self.frame_index += self.animation_speed
-
-        # Reached the end of the animation, return to the beginning
-        if self.frame_index >= len(animation):
-            # TODO: use % operator instead
-            self.frame_index = 0
+        self.frame_index += self.animation_speed * dt
+        self.frame_index = self.frame_index % len(animation)
 
         # Set the image for the current frame
         # TODO: implement left/right directions
         image_path = animation[int(self.frame_index)]
         self.image = pygame.image.load(image_path)
+        if self.flip_sprite:
+            self.image = pygame.transform.flip(self.image, flip_x=True, flip_y=False)
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def update(self, dt: float):
@@ -143,7 +142,9 @@ class AnimatedEntity(Entity):
         self.rect.move_ip(-dir.x, -dir.y)
 
         # Return true if collide, false if not collide
-        print(f"Collision {dir}: {collided} | Vertical speed = {self.vert_speed} | Horiz direction = {self.walk_direction}")
+        from config import VERBOSE_LOGGING
+        if VERBOSE_LOGGING:
+            print(f"Collision {dir}: {collided} | Vertical speed = {self.vert_speed} | Horiz direction = {self.walk_direction}")
         return collided
 
     def test_collide_left(self):

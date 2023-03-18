@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="60" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="3" nextobjectid="10">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="60" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="10">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_objects.tsx"/>
  <tileset firstgid="163" source="../gfx/tilesets/terrain_rain.tsx"/>
  <tileset firstgid="383" source="../gfx/tilesets/terrain_snow.tsx"/>
@@ -33,13 +33,15 @@
   <object id="6" name="Start" x="160" y="256">
    <point/>
   </object>
-  <object id="7" name="Wind_Portal" x="352" y="240">
+ </objectgroup>
+ <objectgroup id="3" name="Interactables">
+  <object id="7" name="Wind_Portal" type="Portal" x="352" y="240">
    <point/>
   </object>
-  <object id="8" name="Lightning_Portal" x="544" y="240">
+  <object id="8" name="Lightning_Portal" type="Portal" x="544" y="240">
    <point/>
   </object>
-  <object id="9" name="Snow_Portal" x="736" y="240">
+  <object id="9" name="Snow_Portal" type="Portal" x="736" y="240">
    <point/>
   </object>
  </objectgroup>

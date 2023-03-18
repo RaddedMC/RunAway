@@ -44,18 +44,21 @@ class Grunt(Enemy):
         self.root_dir = root_dir + "/" + colour
         self.walk_direction = Directions.RIGHT
         super().__init__(health, damage, groups, collidable_sprites, pos, self.root_dir, speed, gravity)
+        self.animation_speed = 6
 
-    def run_behaviour(self):
-        # Grunts are braindead bricks that move back and forth
-        if self.test_collide_down():
-            self.walk_direction *= -1
+    def collision(self):
+        if not self.test_collide_down():
+            print("doesn't collides down")
+            self.walk_direction = -1*self.walk_direction
 
         if self.walk_direction == Directions.LEFT:
             if self.test_collide_left():
+                print("collides left")
                 self.walk_direction = Directions.RIGHT
 
         if self.walk_direction == Directions.RIGHT:
             if self.test_collide_right():
+                print("collides right")
                 self.walk_direction = Directions.LEFT
 
 class Flying(Enemy):

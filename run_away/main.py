@@ -29,11 +29,18 @@ class Game:
                 # For mouse wheel zooming
                 if event.type == pygame.MOUSEWHEEL:
                     if config.DEBUG_ZOOM:
-                        config.DISP_ZOOM += event.y*0.1
+                        config.DISP_ZOOM += event.y*2/3*0.1
                         print(event.y)
-                        config.reset_zoom()
+                        config.change_render_area()
                         self.level.resize_render_surface()
                         print(config.RENDER_AREA)
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 2:
+                        if config.DEBUG_ZOOM:
+                            config.DISP_ZOOM = 1.1
+                            config.change_render_area()
+                            self.level.resize_render_surface()
+                            print(config.RENDER_AREA)
 
             dt = self.clock.tick(config.FPS) / 1000
             self.level.run(dt)

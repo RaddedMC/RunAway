@@ -32,7 +32,7 @@ class AnimatedEntity(Entity):
         gravity: float = 0
     ):
         self.status = "idle"
-        self.animation_speed = 0.15  # FIXME: hardcoded for now
+        self.animation_speed = 18  # FIXME: hardcoded for now
         self.frame_index = 0
         # Movement vars
         self.walk_speed = speed
@@ -52,7 +52,7 @@ class AnimatedEntity(Entity):
         animation = self.animations[self.status]
 
         # Increment to the next frame in the animation
-        self.frame_index += self.animation_speed
+        self.frame_index += self.animation_speed * dt
         self.frame_index = self.frame_index % len(animation)
 
         # Set the image for the current frame

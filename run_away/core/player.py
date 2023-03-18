@@ -1,6 +1,7 @@
 import pygame
 from core.entity import AnimatedEntity
 import config
+from core.entity import Directions
 
 
 class Player(AnimatedEntity):
@@ -46,11 +47,11 @@ class Player(AnimatedEntity):
         keys_pressed = False
 
         if True in [keys[key] for key in config.KEYS_RIGHT]:
-            self.walk_direction = 1
+            self.walk_direction = Directions.RIGHT
             self.status = "run"
             self.flip_sprite = False
         elif True in [keys[key] for key in config.KEYS_LEFT]:
-            self.walk_direction = -1
+            self.walk_direction = Directions.LEFT
             self.status = "run"
             self.flip_sprite = True
         else:

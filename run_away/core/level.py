@@ -5,6 +5,7 @@ import pygame
 from core.camera import CameraGroup
 from core.entity import Entity
 from core.player import Player
+from core.enemy import Grunt
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 
@@ -26,9 +27,13 @@ class Level:
 
         self.all_sprites = CameraGroup()
         self.collidable_sprites = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
         self.import_assets(level_path)
+
+    def resize_render_surface(self):
+        self.render_surface = pygame.Surface(config.RENDER_AREA)
 
     def import_assets(self, level_path):
         tmx_data = load_pygame(
@@ -62,6 +67,19 @@ class Level:
                     gravity=100,   # FIXME: hardcoded for now
                     jump_speed=120 # FIXME: hardcoded for now
                 )
+
+        for obj in tmx_data.get_layer_by_name("Enemies"):
+            if obj.name == "Grunt":
+                Grunt(
+                    [self.all_sprites, self.enemies, self.collidable_sprites],
+                    self.collidable_sprites,
+                    (obj.x, obj.y),
+                    "./run_away/resources/gfx/enemies/grunt/",
+                    speed=40,
+                    gravity=100,
+                    colour="blue"
+                )
+        
 
     def run(self, dt):
         # self.display_surface.fill("black")

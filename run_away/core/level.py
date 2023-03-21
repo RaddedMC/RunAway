@@ -59,7 +59,7 @@ class Level:
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
                     speed=90,
-                    gravity=70,
+                    gravity=200,
                     jump_speed=150
                 )
 
@@ -78,5 +78,9 @@ class Level:
         )
         self.display_surface.blit(scaled_display, (0, 0))
         debug(self.player.sprite.status)
-
+        debug(f"Direction: {self.player.sprite.direction}", 40)
+        debug(f"Speed: {self.player.sprite.speed}", 60)
+        debug(f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}", 80)
+        debug(f"On Ground: {self.player.sprite.on_ground}", 100)
+        debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
         pygame.display.flip()

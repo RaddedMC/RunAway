@@ -15,11 +15,13 @@ class Entity(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = image
         self.rect = self.image.get_rect(topleft=pos)
+        self.collision_rect = self.rect.copy()
         self.collidable_sprites = collidable_sprites
         self.pixels_buffer = pygame.math.Vector2(0, 0)
 
     def update(self, dt: float):
         pass
+
 
 class AnimatedEntity(Entity):
     def __init__(
@@ -29,29 +31,32 @@ class AnimatedEntity(Entity):
         pos: tuple,
         root_dir: str,
         speed: float = 0,
-        gravity: float = 0
+        gravity: float = 0,
     ):
-        self.status = "idle"  # FIXME: hardcoded for now
-        self.animation_speed = 0.15  # FIXME: hardcoded for now
-        self.frame_index = 0
-        # Movement vars
-        self.walk_speed = speed
+        # Movement
+        self.speed = pygame.math.Vector2(speed, 0)
+        # self.walk_speed = speed
         self.gravity = gravity
-        self.vert_speed = 0
-        self.walk_direction = 0
+        # self.vert_speed = 0
+        # self.walk_direction = 0
+        self.direction = pygame.math.Vector2(0, 0)
 
         # Animations
+        self.status = "idle"  # FIXME: hardcoded for now
+        self.animation_speed = 18  # FIXME: hardcoded for now
+        self.frame_index = 0
         self.animations = import_animations(root_dir)
         image = pygame.image.load(
             self.animations[self.status][self.frame_index]
         ).convert_alpha()
+
         super().__init__(groups, collidable_sprites, pos, image)
 
     def animate(self, dt: float):
         animation = self.animations[self.status]
 
         # Increment to the next frame in the animation
-        self.frame_index += self.animation_speed
+        self.frame_index += self.animation_speed * dt
 
         # Reached the end of the animation, return to the beginning
         if self.frame_index >= len(animation):
@@ -66,40 +71,154 @@ class AnimatedEntity(Entity):
 
     def update(self, dt: float):
         super().update(dt)
-        self.collision()
+        self.apply_gravity(dt)
         self.move(dt)
         self.animate(dt)
 
-    def move(self, dt: float):
+    def apply_gravity(self, dt):
+        self.max_gravity = 75
 
-        # Handle gravity
-        if not self.test_collide_down():
-            self.vert_speed += dt*self.gravity
+        if not self.on_ground:
+            self.speed.y += self.gravity * dt
 
+            # Limit how fast the entity can fall
+            if self.speed.y > self.max_gravity:
+                self.speed.y = self.max_gravity
+
+            # FIXME: use a less arbitrary number
+            if self.speed.y > 30:
+                self.direction.y = 1
+
+    def move_old(self, dt: float):
         # Determine pixels to move
-        self.pixels_buffer.x += self.walk_direction * self.walk_speed * dt # Based on walk speed and deltatime
-        self.pixels_buffer.y += self.vert_speed * dt
+        self.pixels_buffer.x += self.direction.x * self.speed.x * dt
+
+        # Based on walk speed and deltatime
+        self.pixels_buffer.y += self.speed.y * dt
 
         # Pixel buffer to ensure that the rectangle only moves given whole number input:
         # Add (x/y)*speed*dir to x and y buffer
         # if abs(buffer) for a coord is greater than 1
         # Move 1 and subtract buffer by 1
         import math
-        if (math.floor(self.pixels_buffer.x) > 1):
-            self.rect.move_ip(math.floor(self.pixels_buffer.x),0)
+
+        if math.floor(self.pixels_buffer.x) > 1:
+            self.rect.move_ip(math.floor(self.pixels_buffer.x), 0)
             self.pixels_buffer.x -= math.floor(self.pixels_buffer.x)
-        elif (math.floor(self.pixels_buffer.x) < -1):
-            self.rect.move_ip(math.floor(self.pixels_buffer.x),0)
+        elif math.floor(self.pixels_buffer.x) < -1:
+            self.rect.move_ip(math.floor(self.pixels_buffer.x), 0)
             self.pixels_buffer.x -= math.floor(self.pixels_buffer.x)
 
-        if (math.floor(self.pixels_buffer.y) > 1):
+        if math.floor(self.pixels_buffer.y) > 1:
             self.rect.move_ip(0, math.floor(self.pixels_buffer.y))
             self.pixels_buffer.y -= math.floor(self.pixels_buffer.y)
-        elif (math.floor(self.pixels_buffer.y) < -1):
+        elif math.floor(self.pixels_buffer.y) < -1:
             self.rect.move_ip(0, math.floor(self.pixels_buffer.y))
             self.pixels_buffer.y -= math.floor(self.pixels_buffer.y)
 
-    def collision(self):
+    def move(self, dt: float):
+        # FIXME: due to the "always on" gravity, the vertical speed is never zero, this causes issues with the collision system when we're on the ground
+
+        # FIXME: for some reason collision when moving right works but when moving left I'm able to phase through objects after enough tries
+
+        # Calculate the position the entity will attempt to move to
+        self.pixels_buffer.x += self.direction.x * self.speed.x * dt
+        self.pixels_buffer.y += self.speed.y * dt
+
+        import math
+
+        if self.pixels_buffer.x != 0:
+            # Calculate the horizontal position that the entity can actually move to
+            self.pixels_buffer.x = self.horizontal_collision(self.pixels_buffer.x)
+
+            # Perform the horizontal movement
+            self.rect.move_ip(math.floor(self.pixels_buffer.x), 0)
+
+            self.pixels_buffer.x -= math.floor(self.pixels_buffer.x)
+
+        if self.pixels_buffer.y != 0:
+            # Calculate the vertical position that the entity can actually move to
+            self.pixels_buffer.y = self.vertical_collision(self.pixels_buffer.y)
+
+            # Perform the vertical movement
+            self.rect.move_ip(0, math.floor(self.pixels_buffer.y))
+
+            self.pixels_buffer.y -= math.floor(self.pixels_buffer.y)
+
+        if self.direction.y != 0:
+            self.on_ground = False
+
+
+    def horizontal_collision(self, dx: float):
+        if dx != 0:
+            # Move a copy of the entity and check for collisions
+            test_rect = self.rect.copy()
+            test_rect.move_ip(dx, 0)
+            collided = self.test_collisions(test_rect)
+
+            # The proposed move caused collisions
+            if len(collided) > 0:
+                self.speed.x = 0
+
+                if dx > 0:  # Moving right
+                    # The x-coordinate of the closest (leftmost) entity we collided with
+                    min_left = min([sprite.left for sprite in collided])
+
+                    # The max distance that this entity can move without causing collision
+                    return min_left - self.rect.right
+                else:  # Moving left
+                    # The x-coordinate of the closest (rightmost) entity we collided with
+                    max_right = max([sprite.right for sprite in collided])
+
+                    # The max distance that this entity can move without causing collision
+                    return max_right - self.rect.left
+            else:
+                # No collisions, the entity can move the full distance
+                return dx
+
+    def vertical_collision(self, dy: float):
+        if dy != 0:
+            # Move a copy of the entity and check for collisions
+            test_rect = self.rect.copy()
+            test_rect.move_ip(0, dy)
+            # collided = pygame.sprite.spritecollide(
+            #     test_rect, self.collidable_sprites, False
+            # )
+            collided = self.test_collisions(test_rect)
+
+            # The proposed move caused collisions
+            if len(collided) > 0:
+                self.speed.y = 0
+
+                if dy < 0:  # Moving up
+                    # The y-coordinate of the closest (bottommost) entity we collided with
+                    lowest_bottom = max([sprite.bottom for sprite in collided])
+
+                    # The max distance that this entity can move without causing collision
+                    return lowest_bottom - self.rect.top
+                else:
+                    self.direction.y = 0
+                    self.speed.y = 0
+                    self.on_ground = True
+
+                    # The y-coordinate of the closest (topmost) entity we collided with
+                    max_top = min([sprite.top for sprite in collided])
+
+                    # The max distance that this entity can move without causing collision
+                    return max_top - self.rect.bottom
+            else:
+                # No collisions, the entity can move the full distance
+                return dy
+
+    def test_collisions(self, test_rect: pygame.Rect):
+        collided = []
+        for sprite in self.collidable_sprites:
+            if test_rect.colliderect(sprite):
+                collided.append(sprite.rect)
+
+        return collided
+
+    def collision_old(self):
         """
         Handle directional collision between this entity and a group of possible entities it can
         collide with.
@@ -107,57 +226,106 @@ class AnimatedEntity(Entity):
         Note: collisions that occur while this entity is stationary are ignored.
         """
         # Test all collisions
+        collided = False
         # If left collides:
         if self.test_collide_left():
+            collided = True
             # x speed should be >=0
-            if self.walk_direction < 0:
-                self.walk_direction = 0
-                
+            if self.direction.x < 0:
+                self.speed.x = 0
 
         # If right collides:
         if self.test_collide_right():
+            collided = True
             # x speed should be <=0
-            if self.walk_direction > 0:
-                self.walk_direction = 0
-        
+            if self.direction.x > 0:
+                self.speed.x = 0
+
         # If up collides:
         if self.test_collide_up():
+            collided = True
             # y speed should be >= 0
-            if self.vert_speed < 0:
-                self.vert_speed = 0
+            if self.direction.y < 0:
+                self.on_ground = False
+                self.speed.y = 0
+                self.direction.y = 0
 
         # If down collides:
         if self.test_collide_down():
+            collided = True
             # y speed should be <= 0
-            if self.vert_speed > 0:
-                self.vert_speed = 0
+            if self.direction.y > 0:
+                self.on_ground = True
+                self.speed.y = 0
+                self.direction.y = 0
 
-    def test_collide(self, dir = pygame.Vector2):
+        if collided:
+            self.on_ground = True
+        else:
+            self.on_ground = False
+
+        # if pygame.sprite.spritecollideany(self, self.collidable_sprites) is None:
+        #     self.rect.center = self.collision_rect.center
+        #     self.on_ground = False
+        #     return
+
+        # for sprite in self.collidable_sprites:
+        #     if sprite.rect.colliderect(self.collision_rect):
+        #         # The entity was moving horizontally
+        #         if self.direction.x > 0:  # Moving right
+        #             self.rect.right = sprite.rect.left
+        #         elif self.direction.x < 0:  # Moving left
+        #             self.rect.left = sprite.rect.right
+
+        #         # The entity was moving vertically
+        #         if self.direction.y < 0:  # Moving up
+        #             self.rect.top = sprite.rect.bottom
+        #             # self.is_jumping = False
+        #             self.on_ground = False
+        #             self.speed.y = 0
+        #         elif self.direction.y > 0:  # Moving down
+        #             self.rect.bottom = sprite.rect.top
+        #             self.on_ground = True
+        #             # self.is_jumping = False
+        #             self.speed.y = 0
+        #             self.direction.y = 0
+
+        #         # Update the collision rect
+        #         self.collision_rect = self.rect.copy()
+
+        if self.on_ground and self.direction.y != 0:
+            self.on_ground = False
+
+    def test_collide(self, dir: pygame.math.Vector2):
         # Move by dir
         self.rect.move_ip(dir.x, dir.y)
-        
+
         # Test collision
-        collided = not pygame.sprite.spritecollideany(self, self.collidable_sprites) == None
+        collided = (
+            not pygame.sprite.spritecollideany(self, self.collidable_sprites) == None
+        )
+        print(collided)
 
         # undo movement
         self.rect.move_ip(-dir.x, -dir.y)
 
         # Return true if collide, false if not collide
-        print(f"Collision {dir}: {collided} | Vertical speed = {self.vert_speed} | Horiz direction = {self.walk_direction}")
+        # print(
+        #     f"Collision {dir}: {collided} | Vertical speed = {self.speed.y} | Horiz direction = {self.walk_direction}"
+        # )
         return collided
 
     def test_collide_left(self):
-        return self.test_collide(pygame.Vector2(-1,0))
-    
+        return self.test_collide(pygame.Vector2(-1, 0))
+
     def test_collide_right(self):
-        return self.test_collide(pygame.Vector2(1,0))
+        return self.test_collide(pygame.Vector2(1, 0))
 
     def test_collide_up(self):
-        return self.test_collide(pygame.Vector2(0,-1))
+        return self.test_collide(pygame.Vector2(0, -1))
 
     def test_collide_down(self):
-        return self.test_collide(pygame.Vector2(0,1))
-    
+        return self.test_collide(pygame.Vector2(0, 1))
 
 
 class InteractableEntity(Entity):

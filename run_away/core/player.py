@@ -17,7 +17,7 @@ class Player(AnimatedEntity):
         super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
 
         # Player stats
-        self.stats = None
+        self.stats = {"speed": speed}  # FIXME: temp
         self.skills = None
 
         # Weapon
@@ -34,6 +34,7 @@ class Player(AnimatedEntity):
 
         # Movement
         self.jump_speed = jump_speed
+        self.on_ground = False
 
     def get_inputs(self):
         """
@@ -42,15 +43,16 @@ class Player(AnimatedEntity):
         # Get the keys that were pressed
         keys = pygame.key.get_pressed()
 
-        # Movement
-        keys_pressed = False
-
+        # Modify speed and direction of the player based on the key that was pressed
         if True in [keys[key] for key in config.KEYS_RIGHT]:
-            self.walk_direction = 1
+            self.direction.x = 1
+            self.speed.x = self.stats["speed"]
         elif True in [keys[key] for key in config.KEYS_LEFT]:
-            self.walk_direction = -1
+            self.direction.x = -1
+            self.speed.x = self.stats["speed"]
         else:
-            self.walk_direction = 0
+            self.direction.x = 0
+            self.speed.x = 0
         
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
@@ -59,8 +61,9 @@ class Player(AnimatedEntity):
         """
         Make the player jump
         """
-        if self.test_collide_down():
-            self.vert_speed = -self.jump_speed
+        if self.on_ground:
+            self.speed.y = -self.jump_speed
+            self.direction.y = -1
 
     def get_status(self):
         """
@@ -73,5 +76,6 @@ class Player(AnimatedEntity):
 
     def update(self, dt):
         self.get_inputs()
+        # self.get_status()
         super().update(dt)
         self.check_death()

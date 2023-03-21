@@ -63,9 +63,9 @@ class Level:
                     self.collidable_sprites,
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
-                    speed=90,
-                    gravity=200,  # 100, make world property?
-                    jump_speed=150  # 120
+                    speed=120,
+                    gravity=275,
+                    jump_speed=175
                 )
         
         try:

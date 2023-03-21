@@ -40,6 +40,7 @@ class AnimatedEntity(Entity):
         # Movement
         self.speed = pygame.math.Vector2(speed, 0)
         self.gravity = gravity
+        self.max_gravity = gravity
         self.direction = pygame.math.Vector2(0, 0)
         self.flip_sprite = False  # False = right, True = left
 
@@ -64,12 +65,9 @@ class AnimatedEntity(Entity):
         self.frame_index += self.animation_speed * dt
 
         # Reached the end of the animation, return to the beginning
-        if self.frame_index >= len(animation):
-            # TODO: use % operator instead
-            self.frame_index = 0
+        self.frame_index = self.frame_index % len(animation)
 
         # Set the image for the current frame
-        # TODO: implement left/right directions
         image_path = animation[int(self.frame_index)]
         self.image = pygame.image.load(image_path)
         if self.flip_sprite:
@@ -83,8 +81,6 @@ class AnimatedEntity(Entity):
         self.animate(dt)
 
     def apply_gravity(self, dt):
-        self.max_gravity = 75
-
         # if not self.on_ground:
         self.speed.y += self.gravity * dt
 

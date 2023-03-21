@@ -1,6 +1,7 @@
 import pygame
 from core.entity import AnimatedEntity
 import config
+from core.entity import Directions
 
 
 class Player(AnimatedEntity):
@@ -45,12 +46,17 @@ class Player(AnimatedEntity):
 
         # Modify speed and direction of the player based on the key that was pressed
         if True in [keys[key] for key in config.KEYS_RIGHT]:
+            # self.status = "run"  # FIXME: disabled temporarily until we add the idle, run animations for the new sprite (make sure that both images have the same height!)
             self.direction.x = 1
             self.speed.x = self.stats["speed"]
+            self.flip_sprite = False
         elif True in [keys[key] for key in config.KEYS_LEFT]:
+            # self.status = "run"
             self.direction.x = -1
             self.speed.x = self.stats["speed"]
+            self.flip_sprite = True
         else:
+            self.status = "idle"
             self.direction.x = 0
             self.speed.x = 0
         

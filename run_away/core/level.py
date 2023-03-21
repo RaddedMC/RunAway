@@ -5,12 +5,13 @@ import pygame
 from core.camera import CameraGroup
 from core.entity import Entity
 from core.player import Player
+from core.enemy import Grunt
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 
 
 class Level:
-    def __init__(self) -> None:
+    def __init__(self, level_path) -> None:
         """
         To solve the issue of resolution scaling, this game draws all of its sprites to a
         small (256px by 144px) surface, then upscales this surface to the resolution of the
@@ -26,13 +27,17 @@ class Level:
 
         self.all_sprites = CameraGroup()
         self.collidable_sprites = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
-        self.import_assets()
+        self.import_assets(level_path)
 
-    def import_assets(self):
+    def resize_render_surface(self):
+        self.render_surface = pygame.Surface(config.RENDER_AREA)
+
+    def import_assets(self, level_path):
         tmx_data = load_pygame(
-            Path("./run_away/resources/levels/level_spring.tmx").resolve()
+            Path(level_path).resolve()
         )
         # print(dir(tmx_data))
         # print(tmx_data.layers)
@@ -59,9 +64,26 @@ class Level:
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
                     speed=90,
-                    gravity=200,
-                    jump_speed=150
+                    gravity=200,  # 100, make world property?
+                    jump_speed=150  # 120
                 )
+        
+        try:
+            for obj in tmx_data.get_layer_by_name("Enemies"):
+                if obj.type == "Grunt":
+                    Grunt(
+                        [self.all_sprites, self.enemies, self.collidable_sprites],
+                        self.collidable_sprites,
+                        (obj.x, obj.y),
+                        "./run_away/resources/gfx/enemies/grunt/",
+                        speed=40,
+                        gravity=100, # FIXME: hardcoded for now, make world property?
+                        colour="yellow"
+                    )
+        except ValueError:
+            # This level probably has no enemies
+            pass
+        
 
     def run(self, dt):
         # self.display_surface.fill("black")
@@ -77,10 +99,11 @@ class Level:
             (self.display_surface.get_width(), self.display_surface.get_height()),
         )
         self.display_surface.blit(scaled_display, (0, 0))
-        debug(self.player.sprite.status)
-        debug(f"Direction: {self.player.sprite.direction}", 40)
-        debug(f"Speed: {self.player.sprite.speed}", 60)
-        debug(f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}", 80)
-        debug(f"On Ground: {self.player.sprite.on_ground}", 100)
-        debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
+        if config.DEBUG_UI:
+            debug(self.player.sprite.status)
+            debug(f"Direction: {self.player.sprite.direction}", 40)
+            debug(f"Speed: {self.player.sprite.speed}", 60)
+            debug(f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}", 80)
+            debug(f"On Ground: {self.player.sprite.on_ground}", 100)
+            debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
         pygame.display.flip()

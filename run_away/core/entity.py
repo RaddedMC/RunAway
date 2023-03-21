@@ -4,6 +4,9 @@ from typing import Optional
 import pygame
 from utils.tools import import_animations
 
+class Directions():
+    LEFT = -1
+    RIGHT = 1
 
 class Entity(pygame.sprite.Sprite):
     def __init__(
@@ -29,7 +32,7 @@ class AnimatedEntity(Entity):
         self,
         groups: pygame.sprite.Group,
         collidable_sprites: pygame.sprite.Group,
-        pos: tuple,
+        pos: tuple, #FIXME: Should be vector2?
         root_dir: str,
         speed: float = 0,
         gravity: float = 0,
@@ -38,12 +41,16 @@ class AnimatedEntity(Entity):
         self.speed = pygame.math.Vector2(speed, 0)
         self.gravity = gravity
         self.direction = pygame.math.Vector2(0, 0)
+        self.flip_sprite = False  # False = right, True = left
 
         # Animations
         self.status = "idle"  # FIXME: hardcoded for now
         self.animation_speed = 18  # FIXME: hardcoded for now
         self.frame_index = 0
         self.animations = import_animations(root_dir)
+        from config import DEBUG_VERBOSE_LOGGING
+        if DEBUG_VERBOSE_LOGGING:
+            print(self.animations)
         image = pygame.image.load(
             self.animations[self.status][self.frame_index]
         ).convert_alpha()
@@ -65,6 +72,8 @@ class AnimatedEntity(Entity):
         # TODO: implement left/right directions
         image_path = animation[int(self.frame_index)]
         self.image = pygame.image.load(image_path)
+        if self.flip_sprite:
+            self.image = pygame.transform.flip(self.image, flip_x=True, flip_y=False)
         self.rect = self.image.get_rect(center=self.rect.center)
 
     def update(self, dt: float):

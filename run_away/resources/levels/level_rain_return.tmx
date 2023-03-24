@@ -2,6 +2,7 @@
 <map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="27">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_rain.tsx"/>
  <tileset firstgid="221" source="../gfx/tilesets/terrain_objects.tsx"/>
+ <tileset firstgid="383" source="../gfx/tilesets/terrain_wind.tsx"/>
  <layer id="7" name="vLayer1" width="80" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

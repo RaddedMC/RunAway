@@ -717,6 +717,20 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="9" name="Consumables">
+  <object id="24" name="Coin" type="Coin" x="512" y="976">
+   <point/>
+  </object>
+  <object id="25" name="Coin" type="Coin" x="544" y="976">
+   <point/>
+  </object>
+  <object id="26" name="Coin" type="Coin" x="512" y="992">
+   <point/>
+  </object>
+  <object id="27" name="Coin" type="Coin" x="544" y="992">
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="4" name="Enemies">
   <object id="17" name="Grunt1" type="Grunt" x="96" y="992">
    <point/>
@@ -734,11 +748,6 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="2" name="Player">
-  <object id="1" name="Start" x="144" y="1216">
-   <point/>
-  </object>
- </objectgroup>
  <objectgroup id="5" name="Interactables">
   <object id="14" name="WindNPC" type="NPC" x="256" y="1216">
    <point/>
@@ -750,17 +759,8 @@
    <point/>
   </object>
  </objectgroup>
- <objectgroup id="9" name="Consumables">
-  <object id="24" name="Coin" type="Coin" x="512" y="976">
-   <point/>
-  </object>
-  <object id="25" name="Coin" type="Coin" x="544" y="976">
-   <point/>
-  </object>
-  <object id="26" name="Coin" type="Coin" x="512" y="992">
-   <point/>
-  </object>
-  <object id="27" name="Coin" type="Coin" x="544" y="992">
+ <objectgroup id="2" name="Player">
+  <object id="1" name="Start" x="144" y="1216">
    <point/>
   </object>
  </objectgroup>

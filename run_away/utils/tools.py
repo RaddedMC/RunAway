@@ -5,24 +5,29 @@ from pathlib import Path
 from typing import Optional
 
 import pygame
+import os
 
 from run_away import config
 
 font = config.DEBUG_FONT
 
 
-def import_folder():
-    pass
-
-
-def import_animations(folder_path: str):
-    animations = {}
+def import_folder(folder_path: str):
+    folder_dict = {}
 
     for path in Path(folder_path).iterdir():
         if path.is_dir():
-            animations.update({f"{path.name}": [child for child in path.iterdir()]})
+            folder_dict.update({f"{path.name}": [child for child in path.iterdir()]})
 
-    return animations
+    return folder_dict
+
+def get_sounds_by_key(key: str):
+    path = "./run_away/resources/sfx/" + key + "/"
+    files = os.listdir(path)
+    return [pygame.mixer.Sound(path+file) for file in files]
+
+def import_animations(folder_path: str):
+    return import_folder(folder_path)
 
 
 def debug(info, y: int = 10, x: Optional[int] = 10):

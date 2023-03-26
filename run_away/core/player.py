@@ -17,6 +17,9 @@ class Player(AnimatedEntity):
     ):
         super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
 
+        # Animation
+        self.animation_speed = 9  # FIXME: hardcoded for now, this should be loaded from the config
+
         # Player stats
         self.stats = {"speed": speed}  # FIXME: temp
         self.skills = None
@@ -46,12 +49,12 @@ class Player(AnimatedEntity):
 
         # Modify speed and direction of the player based on the key that was pressed
         if True in [keys[key] for key in config.KEYS_RIGHT]:
-            # self.status = "run"  # FIXME: disabled temporarily until we add the idle, run animations for the new sprite (make sure that both images have the same height!)
+            self.status = "run"
             self.direction.x = 1
             self.speed.x = self.stats["speed"]
             self.flip_sprite = False
         elif True in [keys[key] for key in config.KEYS_LEFT]:
-            # self.status = "run"
+            self.status = "run"
             self.direction.x = -1
             self.speed.x = self.stats["speed"]
             self.flip_sprite = True

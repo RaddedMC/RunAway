@@ -3,7 +3,7 @@
  <tileset firstgid="1" source="../gfx/tilesets/terrain_snow.tsx"/>
  <tileset firstgid="281" source="../gfx/tilesets/terrain_objects.tsx"/>
  <tileset firstgid="443" source="../gfx/tilesets/terrain_rain.tsx"/>
- <layer id="10" name="vLayer1" width="64" height="44" visible="0">
+ <layer id="10" name="vLayer1" width="64" height="44">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -51,7 +51,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="11" name="vlayer2" width="64" height="44" visible="0">
+ <layer id="11" name="vlayer2" width="64" height="44">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -389,7 +389,7 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="Interactables">
-  <object id="12" name="Hub_Portal" type="Portal" x="96" y="480">
+  <object id="12" name="Hub_Portal" type="Portal" x="80" y="464">
    <point/>
   </object>
   <object id="26" name="SnowShop" type="Shop" x="928" y="144">

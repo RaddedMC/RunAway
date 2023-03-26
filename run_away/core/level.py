@@ -143,7 +143,20 @@ class Level:
         except ValueError:
             # This level probably has no enemies
             pass
+
+
+        # Load hub portal location
+        portal_objects = tmx_data.get_layer_by_name("Interactables")
+        self.portals = [(obj.name, obj.x, obj.y) for obj in portal_objects if "portal" in obj.name.lower()]
+        print(self.portals)
+
         
+        
+    def check_portals(self):
+        for portal in self.portals:
+            if self.player.sprite.rect.x < portal[1]+10 and self.player.sprite.rect.x > portal[1]-10 and self.player.sprite.rect.y < portal[2]+10 and self.player.sprite.rect.y > portal[2]-10:
+                return portal[0]
+        return None
 
     def run(self, dt):
         # self.display_surface.fill("black")
@@ -169,3 +182,4 @@ class Level:
             debug(f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})", 140)
 
         pygame.display.flip()
+        return self.check_portals()

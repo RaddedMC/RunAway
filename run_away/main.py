@@ -42,8 +42,10 @@ class Game:
                             print(config.RENDER_AREA)
 
             dt = self.clock.tick(config.FPS) / 1000
-            self.level.run(dt)
+            next_level = self.level.run(dt)
             pygame.display.flip()
+            if next_level != None:
+                self.level = Level("run_away/resources/levels/level_"+ next_level[0:next_level.find("_")].lower() +".tmx")
 
         pygame.quit()
         sys.exit(0)

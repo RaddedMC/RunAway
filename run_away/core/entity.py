@@ -93,10 +93,6 @@ class AnimatedEntity(Entity):
             self.direction.y = 1
 
     def move(self, dt: float):
-        # FIXME: due to the "always on" gravity, the vertical speed is never zero, this causes issues with the collision system when we're on the ground
-
-        # FIXME: for some reason collision when moving right works but when moving left I'm able to phase through objects after enough tries
-
         # Calculate the position the entity will attempt to move to
         self.pixels_buffer.x += self.direction.x * self.speed.x * dt
         self.pixels_buffer.y += self.speed.y * dt

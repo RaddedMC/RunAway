@@ -8,7 +8,7 @@ import pygame
 
 ### DEBUG FLAG ###
 DEBUG_VERBOSE_LOGGING = True
-DEBUG_UI = False
+DEBUG_UI = True
 DEBUG_ZOOM = True
 
 

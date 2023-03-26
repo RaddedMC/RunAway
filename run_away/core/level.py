@@ -35,6 +35,7 @@ class Level:
     def resize_render_surface(self):
         self.render_surface = pygame.Surface(config.RENDER_AREA)
 
+    # Load level items
     def import_assets(self, level_path):
         tmx_data = load_pygame(
             Path(level_path).resolve()
@@ -42,6 +43,7 @@ class Level:
         # print(dir(tmx_data))
         # print(tmx_data.layers)
 
+        # Load blocks
         for layer in tmx_data.visible_layers:
             # Only get tile layers
             if hasattr(layer, "data"):
@@ -55,6 +57,7 @@ class Level:
 
             # print(dir(layer))  # DEBUG
 
+        # Spawn player
         for obj in tmx_data.get_layer_by_name("Player"):
             if obj.name == "Start":
                 # TODO: should Player belong to collidable_sprites?
@@ -67,7 +70,11 @@ class Level:
                     gravity=275,
                     jump_speed=175
                 )
-        
+
+        # TODO: Create grunt tiles, if any exist
+        # for obj in tmx_data.get_layer_by_name("GruntTiles")
+
+        # Spawn grunts, if any exist
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):
                 print(obj.type)

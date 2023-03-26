@@ -6,6 +6,7 @@ from core.camera import CameraGroup
 from core.entity import Entity
 from core.player import Player
 from core.enemy import Grunt
+from core.portal import Portal
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 import os
@@ -30,6 +31,7 @@ class Level:
         self.all_sprites = CameraGroup()
         self.collidable_sprites = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.portals = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
 
         self.import_assets(level_path)
@@ -129,13 +131,11 @@ class Level:
         try:
             
             for obj in tmx_data.get_layer_by_name("Enemies"):
-                print(obj.type)
                 if obj.type == "Grunt":
                     Grunt(
                         [self.all_sprites, self.enemies],
                         [self.collidable_sprites, self.player],
                         (obj.x, obj.y),
-                        "./run_away/resources/gfx/enemies/grunt/",
                         speed=40,
                         gravity=100, # FIXME: hardcoded for now, make world property?
                         colour=grunt_colour
@@ -145,18 +145,23 @@ class Level:
             pass
 
 
-        # Load hub portal location
-        portal_objects = tmx_data.get_layer_by_name("Interactables")
-        self.portals = [(obj.name, obj.x, obj.y) for obj in portal_objects if "portal" in obj.name.lower()]
-        print(self.portals)
-
+        for obj in tmx_data.get_layer_by_name("Interactables"):
+            # Load portals
+            if obj.type == "Portal":
+                Portal(
+                    [self.all_sprites, self.portals],
+                    None,
+                    (obj.x, obj.y),
+                    colour="blue",
+                    level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                )
         
         
     def check_portals(self):
-        for portal in self.portals:
-            if self.player.sprite.rect.x < portal[1]+10 and self.player.sprite.rect.x > portal[1]-10 and self.player.sprite.rect.y < portal[2]+10 and self.player.sprite.rect.y > portal[2]-10:
-                return portal[0]
-        return None
+        grpcollide = pygame.sprite.groupcollide(self.player, self.portals, False, False)
+        if self.player.sprite in grpcollide:
+            return grpcollide[self.player.sprite][0]
+        else: return False
 
     def run(self, dt):
         # self.display_surface.fill("black")

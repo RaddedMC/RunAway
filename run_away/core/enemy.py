@@ -1,6 +1,7 @@
 import pygame
 from core.entity import AnimatedEntity
 from core.entity import Directions
+from config import DEBUG_VERBOSE_LOGGING
 
 class Enemy(AnimatedEntity):
     def __init__(self, health, damage,
@@ -35,24 +36,23 @@ class Grunt(Enemy):
                 groups: pygame.sprite.Group,
                 collidable_sprites: pygame.sprite.Group,
                 pos: tuple,
-                root_dir: str,
                 speed: float = 5,
                 gravity: float = 0,
                 colour: str = "red"):
         health = 10 #FIXME: change once we have a combat system
         damage = 10 #FIXME: ^
-        self.root_dir = root_dir + "/" + colour
+        self.root_dir = "./run_away/resources/gfx/enemies/grunt" + "/" + colour
         super().__init__(health, damage, groups, collidable_sprites, pos, self.root_dir, speed, gravity)
         self.animation_speed = 6
         self.direction.x = -1
         self.desired_speed = speed
 
-        from config import DEBUG_VERBOSE_LOGGING
         if DEBUG_VERBOSE_LOGGING:
             print(f"Grunt spawned!: speed:{speed}| colour:{colour}| pos:{pos}| gravity:{gravity}")
 
     def update(self, dt: float):
-        print(f"Grunt - {self.direction.x}, {self.speed.x}")
+        if DEBUG_VERBOSE_LOGGING:
+            print(f"Grunt - {self.direction.x}, {self.speed.x}")
         super().update(dt)
         self.handle_directions(dt)
     

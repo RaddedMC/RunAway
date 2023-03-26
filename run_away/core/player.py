@@ -2,6 +2,8 @@ import pygame
 from core.entity import AnimatedEntity
 import config
 from core.entity import Directions
+from utils.tools import get_sounds_by_key
+import random
 
 
 class Player(AnimatedEntity):
@@ -40,6 +42,8 @@ class Player(AnimatedEntity):
         self.jump_speed = jump_speed
         self.on_ground = False
 
+        self.jump_sounds = get_sounds_by_key("player_jump")
+
     def get_inputs(self):
         """
         Handle inputs from the user
@@ -71,6 +75,7 @@ class Player(AnimatedEntity):
         Make the player jump
         """
         if self.on_ground:
+            random.choice(self.jump_sounds).play()
             self.speed.y = -self.jump_speed
             self.direction.y = -1
 

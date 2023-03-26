@@ -8,6 +8,8 @@ from core.player import Player
 from core.enemy import Grunt
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
+import os
+import random
 
 
 class Level:
@@ -71,11 +73,18 @@ class Level:
                     jump_speed=175
                 )
 
-        # TODO: Create grunt tiles, if any exist
-        # for obj in tmx_data.get_layer_by_name("GruntTiles")
+        # Select grunt colour
+        grunt_colour = "green"
+        if "lightning" in level_path:
+            grunt_colour = "yellow"
+        elif "snow" in level_path:
+            grunt_colour = "blue"
+        elif "rain" in level_path:
+            grunt_colour = "red"
 
         # Spawn grunts, if any exist
         try:
+            
             for obj in tmx_data.get_layer_by_name("Enemies"):
                 print(obj.type)
                 if obj.type == "Grunt":
@@ -86,7 +95,7 @@ class Level:
                         "./run_away/resources/gfx/enemies/grunt/",
                         speed=40,
                         gravity=100, # FIXME: hardcoded for now, make world property?
-                        colour="yellow"
+                        colour=grunt_colour
                     )
         except ValueError:
             # This level probably has no enemies

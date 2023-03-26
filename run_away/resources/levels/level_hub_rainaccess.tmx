@@ -92,13 +92,13 @@
   <object id="10" name="Rain_Portal" type="Portal" x="144" y="256">
    <point/>
   </object>
-  <object id="7" name="Wind_Portal" type="Portral" x="432" y="256">
+  <object id="7" name="Wind_Portal" type="Portral" x="416" y="224">
    <point/>
   </object>
-  <object id="8" name="Lightning_Portal" type="Portal" x="624" y="256">
+  <object id="8" name="Lightning_Portal" type="Portal" x="608" y="224">
    <point/>
   </object>
-  <object id="9" name="Snow_Portal" type="Portal" x="816" y="256">
+  <object id="9" name="Snow_Portal" type="Portal" x="800" y="224">
    <point/>
   </object>
   <object id="12" name="Hub2Shop" type="Shop" x="1039.75" y="275.25">

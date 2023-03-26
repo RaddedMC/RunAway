@@ -143,7 +143,7 @@
   <object id="2" name="Rain_NPC" type="NPC" x="160" y="304">
    <point/>
   </object>
-  <object id="9" name="Hub_Portal" type="Portal" x="1152" y="384">
+  <object id="9" name="Hub_Portal" type="Portal" x="1152" y="368">
    <point/>
   </object>
  </objectgroup>

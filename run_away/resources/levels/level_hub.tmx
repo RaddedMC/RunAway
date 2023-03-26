@@ -89,13 +89,13 @@
   </object>
  </objectgroup>
  <objectgroup id="3" name="Interactables">
-  <object id="7" name="Wind_Portal" type="Portal" x="352" y="256">
+  <object id="7" name="Wind_Portal" type="Portal" x="336" y="224">
    <point/>
   </object>
-  <object id="8" name="Lightning_Portal" type="Portal" x="544" y="256">
+  <object id="8" name="Lightning_Portal" type="Portal" x="528" y="224">
    <point/>
   </object>
-  <object id="9" name="Snow_Portal" type="Portal" x="736" y="256">
+  <object id="9" name="Snow_Portal" type="Portal" x="720" y="224">
    <point/>
   </object>
   <object id="10" name="Hub1Shop" type="Shop" x="960.417" y="277.5">

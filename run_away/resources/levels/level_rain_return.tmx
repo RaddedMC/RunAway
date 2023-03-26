@@ -232,7 +232,7 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="Interactables">
-  <object id="17" name="Final_Portal" type="Portal" x="64" y="400">
+  <object id="17" name="Final_Portal" type="Portal" x="48" y="368">
    <point/>
   </object>
   <object id="26" name="Rain2Shop" type="Shop" x="127.5" y="115.75">

@@ -1,6 +1,7 @@
 import pygame
 from core.entity import AnimatedEntity
 from core.entity import Directions
+from config import DEBUG_VERBOSE_LOGGING
 
 class Enemy(AnimatedEntity):
     def __init__(self, health, damage,
@@ -46,12 +47,12 @@ class Grunt(Enemy):
         self.direction.x = -1
         self.desired_speed = speed
 
-        from config import DEBUG_VERBOSE_LOGGING
         if DEBUG_VERBOSE_LOGGING:
             print(f"Grunt spawned!: speed:{speed}| colour:{colour}| pos:{pos}| gravity:{gravity}")
 
     def update(self, dt: float):
-        print(f"Grunt - {self.direction.x}, {self.speed.x}")
+        if DEBUG_VERBOSE_LOGGING:
+            print(f"Grunt - {self.direction.x}, {self.speed.x}")
         super().update(dt)
         self.handle_directions(dt)
     

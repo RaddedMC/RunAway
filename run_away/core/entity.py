@@ -2,6 +2,7 @@ import math
 from typing import Optional
 
 import pygame
+import random
 from utils.tools import import_animations
 
 class Directions():
@@ -165,7 +166,13 @@ class AnimatedEntity(Entity):
                 else:
                     self.direction.y = 0
                     self.speed.y = 0
+                    if self.on_ground == False:
+                        try:
+                            random.choice(self.land_sounds).play()
+                        except AttributeError:
+                            pass
                     self.on_ground = True
+                    
 
                     # The y-coordinate of the closest (topmost) entity we collided with
                     max_top = min([sprite.top for sprite in collided])

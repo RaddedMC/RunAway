@@ -43,6 +43,7 @@ class Player(AnimatedEntity):
         self.on_ground = False
 
         self.jump_sounds = get_sounds_by_key("player_jump")
+        self.land_sounds = get_sounds_by_key("player_land")
 
     def get_inputs(self):
         """

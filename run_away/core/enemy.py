@@ -45,6 +45,9 @@ class Grunt(Enemy):
         self.walk_direction = Directions.RIGHT
         super().__init__(health, damage, groups, collidable_sprites, pos, self.root_dir, speed, gravity)
         self.animation_speed = 6
+        from config import DEBUG_VERBOSE_LOGGING
+        if DEBUG_VERBOSE_LOGGING:
+            print(f"Grunt spawned!: speed:{speed}| colour:{colour}| pos:{pos}| gravity:{gravity}")
 
     def collision(self):
         if not self.test_collide_down():

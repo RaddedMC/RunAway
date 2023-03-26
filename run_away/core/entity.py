@@ -182,9 +182,15 @@ class AnimatedEntity(Entity):
 
     def test_collisions(self, test_rect: pygame.Rect):
         collided = []
-        for sprite in self.collidable_sprites:
-            if test_rect.colliderect(sprite):
-                collided.append(sprite.rect)
+        if type(self.collidable_sprites) == list:
+            for sprite_list in self.collidable_sprites:
+                for sprite in sprite_list:
+                    if test_rect.colliderect(sprite):
+                        collided.append(sprite.rect)
+        else:
+            for sprite in self.collidable_sprites:
+                if test_rect.colliderect(sprite):
+                    collided.append(sprite.rect)
 
         return collided
 

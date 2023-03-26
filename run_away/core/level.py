@@ -60,7 +60,7 @@ class Level:
                 # TODO: should Player belong to collidable_sprites?
                 Player(
                     [self.all_sprites, self.player],
-                    self.collidable_sprites,
+                    [self.collidable_sprites, self.enemies],
                     (obj.x, obj.y),
                     "./run_away/resources/gfx/player/",
                     speed=120,
@@ -70,10 +70,11 @@ class Level:
         
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):
+                print(obj.type)
                 if obj.type == "Grunt":
                     Grunt(
-                        [self.all_sprites, self.enemies, self.collidable_sprites],
-                        self.collidable_sprites,
+                        [self.all_sprites, self.enemies],
+                        [self.collidable_sprites, self.player],
                         (obj.x, obj.y),
                         "./run_away/resources/gfx/enemies/grunt/",
                         speed=40,
@@ -106,4 +107,6 @@ class Level:
             debug(f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}", 80)
             debug(f"On Ground: {self.player.sprite.on_ground}", 100)
             debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
+            debug(f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})", 140)
+
         pygame.display.flip()

@@ -50,12 +50,55 @@ class Level:
             # Only get tile layers
             if hasattr(layer, "data"):
                 for x, y, surf in layer.tiles():
-                    Entity(
-                        [self.all_sprites, self.collidable_sprites],
-                        self.collidable_sprites,
-                        (x * config.TILE_SIZE, y * config.TILE_SIZE),
-                        surf,
-                    )
+                    if layer.name == "Ground":
+                        Entity(
+                            [self.all_sprites, self.collidable_sprites],
+                            self.collidable_sprites,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        )
+                    elif layer.name == "Bottom Spikes":
+                        Entity(
+                            [self.all_sprites, self.collidable_sprites],
+                            self.collidable_sprites,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        )
+                    elif layer.name == "Top Spikes":
+                        Entity(
+                            [self.all_sprites, self.collidable_sprites],
+                            self.collidable_sprites,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        )
+                    elif layer.name == "Left Spikes":
+                        Entity(
+                            [self.all_sprites, self.collidable_sprites],
+                            self.collidable_sprites,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        )
+                    elif layer.name == "Right Spikes":
+                        Entity(
+                            [self.all_sprites, self.collidable_sprites],
+                            self.collidable_sprites,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        )
+                    elif layer.name == "vLayer1":
+                        Entity(
+                            [self.all_sprites],
+                            None,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        )
+                    elif layer.name == "vLayer2":
+                        Entity(
+                            [self.all_sprites],
+                            None,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        )
 
             # print(dir(layer))  # DEBUG
 

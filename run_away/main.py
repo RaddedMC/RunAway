@@ -44,8 +44,8 @@ class Game:
             dt = self.clock.tick(config.FPS) / 1000
             next_level = self.level.run(dt)
             pygame.display.flip()
-            if next_level != None:
-                self.level = Level("run_away/resources/levels/level_"+ next_level[0:next_level.find("_")].lower() +".tmx")
+            if next_level:
+                self.level = Level(next_level.level_path)
 
         pygame.quit()
         sys.exit(0)

@@ -198,10 +198,17 @@ class AnimatedEntity(Entity):
         return collided
 
 
-class InteractableEntity(Entity):
-    def __init__(self, pos, image, name, groups):
-        super().__init__(pos, image, groups)
-        self.name = name
+class InteractableEntity(AnimatedEntity):
+    def __init__(
+        self,
+        groups: pygame.sprite.Group,
+        collidable_sprites: pygame.sprite.Group,
+        pos: tuple, #FIXME: Should be vector2?
+        root_dir: str,
+        speed: float = 0,
+        gravity: float = 0,
+    ):
+        super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
 
 
 class Portal(InteractableEntity):

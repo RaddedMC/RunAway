@@ -12,7 +12,7 @@ class Game:
         self.display_surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
-        self.level = Level("run_away/resources/levels/level_lightning.tmx")
+        self.level = Level("run_away/resources/levels/level_hub.tmx")
         self.running = True
 
     def run(self):
@@ -42,8 +42,10 @@ class Game:
                             print(config.RENDER_AREA)
 
             dt = self.clock.tick(config.FPS) / 1000
-            self.level.run(dt)
+            next_level = self.level.run(dt)
             pygame.display.flip()
+            if next_level != None:
+                self.level = Level("run_away/resources/levels/level_"+ next_level[0:next_level.find("_")].lower() +".tmx")
 
         pygame.quit()
         sys.exit(0)

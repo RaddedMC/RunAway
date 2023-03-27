@@ -24,6 +24,7 @@ class Level:
         aspect ratio with the added benefit being that our game will also look the same to all
         players.
         """
+        self.lvl_path = level_path
         self.render_surface = pygame.Surface(config.RENDER_AREA)
         self.display_surface = pygame.display.get_surface()
 

@@ -14,6 +14,9 @@ class Game:
         self.clock = pygame.time.Clock()
         self.level = Level(config.STARTING_LEVEL_PATH)
         self.running = True
+        self.lightning_clear = False
+        self.snow_clear = False
+        self.wind_clear = False
 
     def run(self):
         while self.running:
@@ -45,6 +48,19 @@ class Game:
             next_level = self.level.run(dt)
             pygame.display.flip()
             if next_level:
+                if "hub" in next_level.level_path:
+                    if "lightning" in self.level.lvl_path:
+                        self.lightning_clear = True
+                    elif "snow" in self.level.lvl_path:
+                        self.snow_clear = True 
+                    elif "wind" in self.level.lvl_path:
+                        self.wind_clear = True
+
+                if self.lightning_clear and self.snow_clear and self.wind_clear:
+                    if "hub" in next_level.level_path:
+                        next_level.level_path = "run_away/resources/levels/level_hub_rainaccess.tmx"
+
+                
                 self.level = Level(next_level.level_path)
 
         pygame.quit()

@@ -54,10 +54,10 @@
 </data>
  </layer>
  <objectgroup id="7" name="Interactables">
-  <object id="2" name="Home" class="Home" x="80" y="224">
+  <object id="3" name="Hub_Portal" class="Portal" x="192" y="192">
    <point/>
   </object>
-  <object id="3" name="Hub_Portal" class="Portal" x="192" y="192">
+  <object id="2" name="Home" class="Home" x="80" y="224">
    <point/>
   </object>
  </objectgroup>

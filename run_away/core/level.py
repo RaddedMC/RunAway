@@ -147,7 +147,7 @@ class Level:
 
         for obj in tmx_data.get_layer_by_name("Interactables"):
             # Load portals
-            print(obj.name, ":", obj.type)
+            print(obj.name, ":", getattr(obj, "class"))
             if obj.type == "Portal":
                 Portal(
                     [self.all_sprites, self.portals],

@@ -4,6 +4,7 @@ import config
 import pygame
 from core.camera import CameraGroup
 from core.entity import Entity
+from core.entity import AnimatedEntity
 from core.player import Player
 from core.enemy import Grunt
 from core.portal import Portal
@@ -14,7 +15,7 @@ import random
 
 
 class Level:
-    def __init__(self, level_path) -> None:
+    def __init__(self, level_path, stats) -> None:
         """
         To solve the issue of resolution scaling, this game draws all of its sprites to a
         small (256px by 144px) surface, then upscales this surface to the resolution of the
@@ -33,6 +34,12 @@ class Level:
         self.enemies = pygame.sprite.Group()
         self.portals = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
+        self.coins = pygame.sprite.Group()
+        self.npcs = pygame.sprite.Group()
+        
+        self.stats = stats
+        # TODO create dictionary with all player possessions and attributes to pass down?
+        # self.items = {coins :0, }
 
         self.import_assets(level_path)
 
@@ -103,11 +110,20 @@ class Level:
                         )
 
             # print(dir(layer))  # DEBUG
-
+        for obj in tmx_data.get_layer_by_name("Interactables"):
+            # Load portals
+            if obj.type == "Portal":
+                Portal(
+                    [self.all_sprites, self.portals],
+                    None,
+                    (obj.x, obj.y),
+                    colour="blue",
+                    level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                )
         # Spawn player
         for obj in tmx_data.get_layer_by_name("Player"):
             if obj.name == "Start":
-                # TODO: should Player belong to collidable_sprites?
+                # TODO: add Player stats attribute that contains coins?
                 Player(
                     [self.all_sprites, self.player],
                     [self.collidable_sprites, self.enemies],
@@ -115,8 +131,10 @@ class Level:
                     "./run_away/resources/gfx/player/",
                     speed=120,
                     gravity=275,
-                    jump_speed=175
+                    jump_speed=175,
+                    coins = self.stats["coins"]
                 )
+
 
         # Select grunt colour
         grunt_colour = "green"
@@ -145,24 +163,38 @@ class Level:
             pass
 
 
-        for obj in tmx_data.get_layer_by_name("Interactables"):
-            # Load portals
-            if obj.type == "Portal":
-                Portal(
-                    [self.all_sprites, self.portals],
-                    None,
-                    (obj.x, obj.y),
-                    colour="blue",
-                    level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
-                )
+
+
+        try:
+            for obj in tmx_data.get_layer_by_name("Consumables"):
+                if obj.type == "Coin":
+                    AnimatedEntity(
+                        [self.all_sprites, self.coins],
+                        [self.player], 
+                        (obj.x, obj.y),
+                        "./run_away/resources/gfx/objects/coins",
+                    )
+        except ValueError:
+            pass
+
         
         
     def check_portals(self):
         grpcollide = pygame.sprite.groupcollide(self.player, self.portals, False, False)
-        if self.player.sprite in grpcollide:
-            return grpcollide[self.player.sprite][0]
+        if self.player.sprite in grpcollide and self.player.sprite.status == "interacting":
+            return grpcollide[self.player.sprite][0]  # and self.player.sprite.status == "interacting"
         else: return False
+    
+    def check_coins(self):
+        for coin in pygame.sprite.groupcollide(self.coins, self.player, True, False):
+            # TODO add sfx
+            self.player.sprite.get_coin()
 
+    def check_interactables(self):
+        if pygame.sprite.collide_rect(self.player.sprite, self.npcs.sprite):
+            if self.player.sprite.status == "interacting":
+                self.npcs.sprite.trigger()
+        
     def run(self, dt):
         # self.display_surface.fill("black")
         # self.all_sprites.draw(display_surface)
@@ -176,6 +208,9 @@ class Level:
             self.render_surface,
             (self.display_surface.get_width(), self.display_surface.get_height()),
         )
+        self.check_coins()
+        # TODO update entire stats dictionary at once?
+        self.stats["coins"] = self.player.sprite.coins
         self.display_surface.blit(scaled_display, (0, 0))
         if config.DEBUG_UI:
             debug(self.player.sprite.status)
@@ -185,6 +220,7 @@ class Level:
             debug(f"On Ground: {self.player.sprite.on_ground}", 100)
             debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
             debug(f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})", 140)
+            debug(f"Player Coins: {self.player.sprite.coins}", 160)
 
         pygame.display.flip()
         return self.check_portals()

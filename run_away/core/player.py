@@ -15,7 +15,8 @@ class Player(AnimatedEntity):
         root_dir: str,
         speed: int, # Measured in PIXELS per SECOND
         gravity: int,
-        jump_speed: int
+        jump_speed: int,
+        coins: int
     ):
         super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
 
@@ -45,6 +46,9 @@ class Player(AnimatedEntity):
         self.jump_sounds = get_sounds_by_key("player_jump")
         self.land_sounds = get_sounds_by_key("player_land")
 
+        self.coins = coins
+
+
     def get_inputs(self):
         """
         Handle inputs from the user
@@ -71,6 +75,9 @@ class Player(AnimatedEntity):
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
 
+        if True in [keys[key] for key in config.KEYS_INTERACT]:
+            self.status = "interacting"
+
     def jump(self):
         """
         Make the player jump
@@ -88,6 +95,9 @@ class Player(AnimatedEntity):
 
     def check_death(self):
         pass
+
+    def get_coin(self):
+        self.coins += 1
 
     def update(self, dt):
         self.get_inputs()

@@ -8,7 +8,7 @@ import pygame
 
 ### DEBUG FLAG ###
 DEBUG_VERBOSE_LOGGING = False
-DEBUG_UI = False
+DEBUG_UI = True
 DEBUG_ZOOM = True
 
 
@@ -23,6 +23,7 @@ KEYS_RIGHT = [pygame.K_RIGHT, pygame.K_d]
 KEYS_UP = [pygame.K_UP, pygame.K_w]
 KEYS_DOWN = [pygame.K_DOWN, pygame.K_s]
 KEYS_QUIT = [pygame.K_ESCAPE]
+KEYS_INTERACT = [pygame.K_j, pygame.K_z]
 
 
 ### COLOURS ###
@@ -35,7 +36,7 @@ RGB_WHITE = (255, 255, 255)
 # The default FPS is 120hz, as that matches (or doubles) the system refresh rate of everyone's development machines.
 # If you have performance issues, reduce this to 60hz or lower (I would recommend keeping it a factor of 2 however)
 FPS = 120
-DISP_ZOOM = 1.1
+DISP_ZOOM = 2.0
 RENDER_AREA = (256*DISP_ZOOM, 144*DISP_ZOOM)  # 16:9 aspect ratio
 def change_render_area():
     global RENDER_AREA
@@ -47,3 +48,5 @@ def change_render_area():
 ### FONTS ###
 pygame.font.init()
 DEBUG_FONT = pygame.font.Font(None, 30)
+
+GAME_FONT = pygame.font.Font("run_away\\resources\\font\BitFont.ttf", 30)

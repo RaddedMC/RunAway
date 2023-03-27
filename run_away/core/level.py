@@ -149,22 +149,13 @@ class Level:
         for obj in tmx_data.get_layer_by_name("Interactables"):
             # Load portals
             if obj.type == "Portal":
-                if obj.name == "Rain_Portal":
-                    Portal(
-                        [self.all_sprites, self.portals],
-                        None,
-                        (obj.x, obj.y),
-                        colour="blue",
-                        level_path="run_away/resources/levels/level_rain_return.tmx"
-                    )
-                else:
-                    Portal(
-                        [self.all_sprites, self.portals],
-                        None,
-                        (obj.x, obj.y),
-                        colour="blue",
-                        level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
-                    )
+                Portal(
+                    [self.all_sprites, self.portals],
+                    None,
+                    (obj.x, obj.y),
+                    colour="blue",
+                    level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                )
         
         
     def check_portals(self):

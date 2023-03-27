@@ -3,7 +3,7 @@ from pathlib import Path
 import config
 import pygame
 from core.camera import CameraGroup
-from core.entity import Entity
+from core.entity import Entity, Hazard
 from core.player import Player
 from core.enemy import Grunt
 from core.portal import Portal
@@ -26,7 +26,6 @@ class Level:
         """
         self.render_surface = pygame.Surface(config.RENDER_AREA)
         self.display_surface = pygame.display.get_surface()
-        # print(self.display_surface.get_size())
 
         self.all_sprites = CameraGroup()
         self.collidable_sprites = pygame.sprite.Group()
@@ -41,11 +40,7 @@ class Level:
 
     # Load level items
     def import_assets(self, level_path):
-        tmx_data = load_pygame(
-            Path(level_path).resolve()
-        )
-        # print(dir(tmx_data))
-        # print(tmx_data.layers)
+        tmx_data = load_pygame(Path(level_path).resolve())
 
         # Load blocks
         for layer in tmx_data.visible_layers:
@@ -60,32 +55,36 @@ class Level:
                             surf,
                         )
                     elif layer.name == "Bottom Spikes":
-                        Entity(
+                        Hazard(
                             [self.all_sprites, self.collidable_sprites],
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            type="bottom",
                         )
                     elif layer.name == "Top Spikes":
-                        Entity(
+                        Hazard(
                             [self.all_sprites, self.collidable_sprites],
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            type="top"
                         )
                     elif layer.name == "Left Spikes":
-                        Entity(
+                        Hazard(
                             [self.all_sprites, self.collidable_sprites],
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            type="left"
                         )
                     elif layer.name == "Right Spikes":
-                        Entity(
+                        Hazard(
                             [self.all_sprites, self.collidable_sprites],
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            type="right"
                         )
                     elif layer.name == "vLayer1":
                         Entity(
@@ -102,8 +101,6 @@ class Level:
                             surf,
                         )
 
-            # print(dir(layer))  # DEBUG
-
         # Spawn player
         for obj in tmx_data.get_layer_by_name("Player"):
             if obj.name == "Start":
@@ -115,7 +112,7 @@ class Level:
                     "./run_away/resources/gfx/player/",
                     speed=120,
                     gravity=275,
-                    jump_speed=175
+                    jump_speed=175,
                 )
 
         # Select grunt colour
@@ -129,7 +126,6 @@ class Level:
 
         # Spawn grunts, if any exist
         try:
-            
             for obj in tmx_data.get_layer_by_name("Enemies"):
                 if obj.type == "Grunt":
                     Grunt(
@@ -137,13 +133,12 @@ class Level:
                         [self.collidable_sprites, self.player],
                         (obj.x, obj.y),
                         speed=40,
-                        gravity=100, # FIXME: hardcoded for now, make world property?
-                        colour=grunt_colour
+                        gravity=100,  # FIXME: hardcoded for now, make world property?
+                        colour=grunt_colour,
                     )
         except ValueError:
             # This level probably has no enemies
             pass
-
 
         for obj in tmx_data.get_layer_by_name("Interactables"):
             # Load portals
@@ -153,21 +148,19 @@ class Level:
                     None,
                     (obj.x, obj.y),
                     colour="blue",
-                    level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                    level_path="run_away/resources/levels/level_"
+                    + obj.name[0 : obj.name.find("_")].lower()
+                    + ".tmx",
                 )
-        
-        
+
     def check_portals(self):
-        grpcollide = pygame.sprite.groupcollide(self.player, self.portals, False, False)
-        if self.player.sprite in grpcollide:
-            return grpcollide[self.player.sprite][0]
-        else: return False
+        collided = pygame.sprite.groupcollide(self.player, self.portals, False, False)
+        if self.player.sprite in collided:
+            return collided[self.player.sprite][0]
+        else:
+            return False
 
     def run(self, dt):
-        # self.display_surface.fill("black")
-        # self.all_sprites.draw(display_surface)
-        # pygame.display.flip()
-
         # Draw sprites, upscale the render surface and display to the user's screen
         self.render_surface.fill("black")
         self.all_sprites.update(dt)
@@ -181,10 +174,16 @@ class Level:
             debug(self.player.sprite.status)
             debug(f"Direction: {self.player.sprite.direction}", 40)
             debug(f"Speed: {self.player.sprite.speed}", 60)
-            debug(f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}", 80)
+            debug(
+                f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}",
+                80,
+            )
             debug(f"On Ground: {self.player.sprite.on_ground}", 100)
             debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
-            debug(f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})", 140)
+            debug(
+                f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})",
+                140,
+            )
 
         pygame.display.flip()
         return self.check_portals()

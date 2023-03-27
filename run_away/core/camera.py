@@ -2,6 +2,8 @@ import pygame
 
 from core.player import Player
 
+import config
+
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self) -> None:
@@ -16,3 +18,8 @@ class CameraGroup(pygame.sprite.Group):
             offset_rect = sprite.rect.copy()
             offset_rect.center -= self.offset
             surface.blit(sprite.image, offset_rect)
+
+            if config.DEBUG_SHOW_HITBOXES is True:
+                hitbox = sprite.hitbox.copy()
+                hitbox.center -= self.offset
+                pygame.draw.rect(surface, (255,0,0), hitbox, 1)

@@ -5,9 +5,13 @@ import pygame
 import random
 from utils.tools import import_animations
 
-class Directions():
+import config
+
+
+class Directions:
     LEFT = -1
     RIGHT = 1
+
 
 class Entity(pygame.sprite.Sprite):
     def __init__(
@@ -20,7 +24,7 @@ class Entity(pygame.sprite.Sprite):
         super().__init__(groups)
         self.image = image
         self.rect = self.image.get_rect(topleft=pos)
-        self.collision_rect = self.rect.copy()
+        self.hitbox = self.rect.copy()
         self.collidable_sprites = collidable_sprites
         self.pixels_buffer = pygame.math.Vector2(0, 0)
 
@@ -33,7 +37,7 @@ class AnimatedEntity(Entity):
         self,
         groups: pygame.sprite.Group,
         collidable_sprites: pygame.sprite.Group,
-        pos: tuple, #FIXME: Should be vector2?
+        pos: tuple,
         root_dir: str,
         speed: float = 0,
         gravity: float = 0,
@@ -51,6 +55,7 @@ class AnimatedEntity(Entity):
         self.frame_index = 0
         self.animations = import_animations(root_dir)
         from config import DEBUG_VERBOSE_LOGGING
+
         if DEBUG_VERBOSE_LOGGING:
             print(self.animations)
         image = pygame.image.load(
@@ -104,6 +109,7 @@ class AnimatedEntity(Entity):
 
             # Perform the horizontal movement
             self.rect.move_ip(math.floor(self.pixels_buffer.x), 0)
+            self.hitbox.move_ip(math.floor(self.pixels_buffer.x), 0)
 
             self.pixels_buffer.x -= math.floor(self.pixels_buffer.x)
 
@@ -113,6 +119,7 @@ class AnimatedEntity(Entity):
 
             # Perform the vertical movement
             self.rect.move_ip(0, math.floor(self.pixels_buffer.y))
+            self.hitbox.move_ip(0, math.floor(self.pixels_buffer.y))
 
             self.pixels_buffer.y -= math.floor(self.pixels_buffer.y)
 
@@ -122,7 +129,7 @@ class AnimatedEntity(Entity):
     def horizontal_collision(self, dx: float):
         if dx != 0:
             # Move a copy of the entity and check for collisions
-            test_rect = self.rect.copy()
+            test_rect = self.hitbox.copy()
             test_rect.move_ip(math.floor(dx), 0)
             collided = self.test_collisions(test_rect)
 
@@ -135,13 +142,13 @@ class AnimatedEntity(Entity):
                     min_left = min([sprite.left for sprite in collided])
 
                     # The max distance that this entity can move without causing collision
-                    return min_left - self.rect.right
+                    return min_left - self.hitbox.right
                 else:  # Moving left
                     # The x-coordinate of the closest (rightmost) entity we collided with
                     max_right = max([sprite.right for sprite in collided])
 
                     # The max distance that this entity can move without causing collision
-                    return max_right - self.rect.left
+                    return max_right - self.hitbox.left
             else:
                 # No collisions, the entity can move the full distance
                 return dx
@@ -149,7 +156,7 @@ class AnimatedEntity(Entity):
     def vertical_collision(self, dy: float):
         if dy != 0:
             # Move a copy of the entity and check for collisions
-            test_rect = self.rect.copy()
+            test_rect = self.hitbox.copy()
             test_rect.move_ip(0, math.floor(dy))
             collided = self.test_collisions(test_rect)
 
@@ -162,7 +169,7 @@ class AnimatedEntity(Entity):
                     lowest_bottom = max([sprite.bottom for sprite in collided])
 
                     # The max distance that this entity can move without causing collision
-                    return lowest_bottom - self.rect.top
+                    return lowest_bottom - self.hitbox.top
                 else:
                     self.direction.y = 0
                     self.speed.y = 0
@@ -172,13 +179,12 @@ class AnimatedEntity(Entity):
                         except AttributeError:
                             pass
                     self.on_ground = True
-                    
 
                     # The y-coordinate of the closest (topmost) entity we collided with
                     max_top = min([sprite.top for sprite in collided])
 
                     # The max distance that this entity can move without causing collision
-                    return max_top - self.rect.bottom
+                    return max_top - self.hitbox.bottom
             else:
                 # No collisions, the entity can move the full distance
                 return dy
@@ -188,12 +194,12 @@ class AnimatedEntity(Entity):
         if type(self.collidable_sprites) == list:
             for sprite_list in self.collidable_sprites:
                 for sprite in sprite_list:
-                    if test_rect.colliderect(sprite):
-                        collided.append(sprite.rect)
+                    if test_rect.colliderect(sprite.hitbox):
+                        collided.append(sprite.hitbox)
         else:
             for sprite in self.collidable_sprites:
-                if test_rect.colliderect(sprite):
-                    collided.append(sprite.rect)
+                if test_rect.colliderect(sprite.hitbox):
+                    collided.append(sprite.hitbox)
 
         return collided
 
@@ -203,7 +209,7 @@ class InteractableEntity(AnimatedEntity):
         self,
         groups: pygame.sprite.Group,
         collidable_sprites: pygame.sprite.Group,
-        pos: tuple, #FIXME: Should be vector2?
+        pos: tuple,  # FIXME: Should be vector2?
         root_dir: str,
         speed: float = 0,
         gravity: float = 0,
@@ -217,3 +223,28 @@ class Portal(InteractableEntity):
 
 class NPC(InteractableEntity):
     pass
+
+
+class Hazard(Entity):
+    def __init__(
+        self,
+        groups: pygame.sprite.Group,
+        collidable_sprites: pygame.sprite.Group,
+        pos: tuple,
+        image: pygame.Surface,
+        type: str,
+    ):
+        super().__init__(groups, collidable_sprites, pos, image)
+        self.type = type
+        self.hitbox = (
+            self.rect.copy()
+            .inflate(
+                tuple(
+                    l * r
+                    for l, r in zip(
+                        self.rect.size, config.HAZARD_DATA[self.type]["scale"]
+                    )
+                )
+            )
+            .move(config.HAZARD_DATA[self.type]["offset"])
+        )

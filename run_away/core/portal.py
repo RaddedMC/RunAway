@@ -1,6 +1,9 @@
 import pygame
 from core.entity import InteractableEntity
 
+import config
+from config import BASE_PATH
+
 class Portal(InteractableEntity):
     def __init__(
             self,
@@ -11,6 +14,8 @@ class Portal(InteractableEntity):
             level_path: str
             
     ):
-        root_dir = "./run_away/resources/gfx/objects/portal" + "/" + colour
+        self.config = config.PORTAL_DATA
+        root_dir = f"{BASE_PATH}/gfx/objects/portal/{colour}"
+        super().__init__(groups, collidable_sprites, pos, root_dir)
         self.level_path = level_path
-        super().__init__(groups, collidable_sprites, pos, root_dir, speed=0, gravity=0)
+        self.animation_speed = self.config["animation_speed"]

@@ -12,7 +12,7 @@ class Game:
         self.display_surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
-        self.level = Level("run_away/resources/levels/level_hub.tmx")
+        self.level = Level(config.STARTING_LEVEL_PATH)
         self.running = True
 
     def run(self):

@@ -17,14 +17,22 @@ class Player(AnimatedEntity):
         gravity: int,
         jump_speed: int
     ):
-        super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
+
+        self.config = config.PLAYER_DATA
+        self.stats = self.config["stats"]
+        super().__init__(groups, collidable_sprites, pos, root_dir, self.stats["speed"], self.config["gravity"])
 
         # Animation
-        self.animation_speed = 9  # FIXME: hardcoded for now, this should be loaded from the config
+        self.animation_speed = self.config["animation_speed"]  # FIXME: hardcoded for now, this should be loaded from the config
 
         # Player stats
-        self.stats = {"speed": speed}  # FIXME: temp
+        self.health = self.stats["health"]
+        self.damage = self.stats["damage"]
         self.skills = None
+
+        # Movement
+        self.jump_speed = self.config["jump_speed"]
+        self.on_ground = False
 
         # Weapon
         self.weapon_data = None
@@ -38,10 +46,7 @@ class Player(AnimatedEntity):
         self.invulnerable_duration = None
         self.hurt_time = None
 
-        # Movement
-        self.jump_speed = jump_speed
-        self.on_ground = False
-
+        # SFX
         self.jump_sounds = get_sounds_by_key("player_jump")
         self.land_sounds = get_sounds_by_key("player_land")
 

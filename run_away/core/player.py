@@ -1,9 +1,9 @@
-import pygame
-from core.entity import AnimatedEntity
-import config
-from core.entity import Directions
-from utils.tools import get_sounds_by_key
 import random
+
+import config
+import pygame
+from core.entity import AnimatedEntity, Directions, Hazard
+from utils.tools import get_sounds_by_key
 
 
 class Player(AnimatedEntity):
@@ -13,17 +13,25 @@ class Player(AnimatedEntity):
         collidable_sprites: pygame.sprite.Group,
         pos: tuple,
         root_dir: str,
-        speed: int, # Measured in PIXELS per SECOND
+        speed: int,  # Measured in PIXELS per SECOND
         gravity: int,
-        jump_speed: int
+        jump_speed: int,
     ):
-
         self.config = config.PLAYER_DATA
         self.stats = self.config["stats"]
-        super().__init__(groups, collidable_sprites, pos, root_dir, self.stats["speed"], self.config["gravity"])
+        super().__init__(
+            groups,
+            collidable_sprites,
+            pos,
+            root_dir,
+            self.stats["speed"],
+            self.config["gravity"],
+        )
 
         # Animation
-        self.animation_speed = self.config["animation_speed"]  # FIXME: hardcoded for now, this should be loaded from the config
+        self.animation_speed = self.config[
+            "animation_speed"
+        ]  # FIXME: hardcoded for now, this should be loaded from the config
 
         # Player stats
         self.health = self.stats["health"]
@@ -31,6 +39,7 @@ class Player(AnimatedEntity):
         self.skills = None
 
         # Movement
+        self.spawn_point = pos
         self.jump_speed = self.config["jump_speed"]
         self.on_ground = False
 
@@ -42,8 +51,9 @@ class Player(AnimatedEntity):
         self.attack_cooldown = None
 
         # Invincibility frames
+        self.on_hazard = False
         self.vulnerable = True
-        self.invulnerable_duration = None
+        self.invulnerable_duration = 500  # Note: time is in milliseconds
         self.hurt_time = None
 
         # SFX
@@ -72,7 +82,7 @@ class Player(AnimatedEntity):
             self.status = "idle"
             self.direction.x = 0
             self.speed.x = 0
-        
+
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
 
@@ -91,11 +101,48 @@ class Player(AnimatedEntity):
         """
         pass
 
+    def cooldowns(self):
+        now = pygame.time.get_ticks()
+
+        if not self.vulnerable:
+            # Invincibility frame has expired
+            if now - self.hurt_time >= self.invulnerable_duration:
+                self.vulnerable = True
+                self.hurt_time = None
+
+    def get_damage(self):
+        if self.vulnerable and self.on_hazard:
+            self.health -= 1  # FIXME: hardcoded for now
+            self.vulnerable = False
+            self.on_hazard = False
+            self.hurt_time = pygame.time.get_ticks()
+
     def check_death(self):
-        pass
+        """
+        Determine if the player is dead.
+        """
+        if self.health <= 0:
+            print("You Died!")
+
+            # FIXME: make a respawn method that resets all booleans, position, etc.?
+
+            # Reset player status
+            self.status = "idle"
+            self.on_ground = False
+            self.on_hazard = False
+            self.vulnerable = True
+
+            # Restore player health back to its base value
+            self.health = self.stats["health"]
+
+            # Respawn the player at the start of the current level
+            self.rect.topleft = self.spawn_point
+            self.hitbox.topleft = self.spawn_point
 
     def update(self, dt):
         self.get_inputs()
+        self.cooldowns()
         # self.get_status()
         super().update(dt)
+        self.get_damage()
         self.check_death()

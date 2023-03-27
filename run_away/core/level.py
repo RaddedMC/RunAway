@@ -68,7 +68,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
-                            type="top"
+                            type="top",
                         )
                     elif layer.name == "Left Spikes":
                         Hazard(
@@ -76,7 +76,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
-                            type="left"
+                            type="left",
                         )
                     elif layer.name == "Right Spikes":
                         Hazard(
@@ -84,7 +84,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
-                            type="right"
+                            type="right",
                         )
                     elif layer.name == "vLayer1":
                         Entity(
@@ -140,18 +140,21 @@ class Level:
             # This level probably has no enemies
             pass
 
-        for obj in tmx_data.get_layer_by_name("Interactables"):
-            # Load portals
-            if obj.type == "Portal":
-                Portal(
-                    [self.all_sprites, self.portals],
-                    None,
-                    (obj.x, obj.y),
-                    colour="blue",
-                    level_path="run_away/resources/levels/level_"
-                    + obj.name[0 : obj.name.find("_")].lower()
-                    + ".tmx",
-                )
+        try:
+            for obj in tmx_data.get_layer_by_name("Interactables"):
+                # Load portals
+                if obj.type == "Portal":
+                    Portal(
+                        [self.all_sprites, self.portals],
+                        None,
+                        (obj.x, obj.y),
+                        colour="blue",
+                        level_path="run_away/resources/levels/level_"
+                        + obj.name[0 : obj.name.find("_")].lower()
+                        + ".tmx",
+                    )
+        except ValueError:
+            pass
 
     def check_portals(self):
         collided = pygame.sprite.groupcollide(self.player, self.portals, False, False)
@@ -184,6 +187,8 @@ class Level:
                 f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})",
                 140,
             )
+            debug(f"Player Health: {self.player.sprite.health}", 160)
+            debug(f"On Spikes: {self.player.sprite.on_hazard}", 180)
 
         pygame.display.flip()
         return self.check_portals()

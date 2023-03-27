@@ -1,11 +1,10 @@
 import math
+import random
 from typing import Optional
 
-import pygame
-import random
-from utils.tools import import_animations
-
 import config
+import pygame
+from utils.tools import get_wave_value, import_animations
 
 
 class Directions:
@@ -27,6 +26,7 @@ class Entity(pygame.sprite.Sprite):
         self.hitbox = self.rect.copy()
         self.collidable_sprites = collidable_sprites
         self.pixels_buffer = pygame.math.Vector2(0, 0)
+        self.vulnerable = True  # FIXME: temp fix for AttributeError
 
     def update(self, dt: float):
         pass
@@ -80,6 +80,13 @@ class AnimatedEntity(Entity):
             self.image = pygame.transform.flip(self.image, flip_x=True, flip_y=False)
         self.rect = self.image.get_rect(center=self.rect.center)
 
+        # Make the player flicker to indicate an invincibility frame
+        if not self.vulnerable:
+            alpha = get_wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
+
     def update(self, dt: float):
         super().update(dt)
         self.apply_gravity(dt)
@@ -127,6 +134,8 @@ class AnimatedEntity(Entity):
             self.on_ground = False
 
     def horizontal_collision(self, dx: float):
+        from core.player import Player
+
         if dx != 0:
             # Move a copy of the entity and check for collisions
             test_rect = self.hitbox.copy()
@@ -139,13 +148,19 @@ class AnimatedEntity(Entity):
 
                 if dx > 0:  # Moving right
                     # The x-coordinate of the closest (leftmost) entity we collided with
-                    min_left = min([sprite.left for sprite in collided])
+                    min_left = min([sprite.hitbox.left for sprite in collided])
+
+                    if type(self) is Player:
+                        self.check_hazards(collided, min_left, "left")
 
                     # The max distance that this entity can move without causing collision
                     return min_left - self.hitbox.right
                 else:  # Moving left
                     # The x-coordinate of the closest (rightmost) entity we collided with
-                    max_right = max([sprite.right for sprite in collided])
+                    max_right = max([sprite.hitbox.right for sprite in collided])
+
+                    if type(self) is Player:
+                        self.check_hazards(collided, max_right, "right")
 
                     # The max distance that this entity can move without causing collision
                     return max_right - self.hitbox.left
@@ -154,6 +169,8 @@ class AnimatedEntity(Entity):
                 return dx
 
     def vertical_collision(self, dy: float):
+        from core.player import Player
+
         if dy != 0:
             # Move a copy of the entity and check for collisions
             test_rect = self.hitbox.copy()
@@ -166,7 +183,10 @@ class AnimatedEntity(Entity):
 
                 if dy < 0:  # Moving up
                     # The y-coordinate of the closest (bottommost) entity we collided with
-                    lowest_bottom = max([sprite.bottom for sprite in collided])
+                    lowest_bottom = max([sprite.hitbox.bottom for sprite in collided])
+
+                    if type(self) is Player:
+                        self.check_hazards(collided, lowest_bottom, "bottom")
 
                     # The max distance that this entity can move without causing collision
                     return lowest_bottom - self.hitbox.top
@@ -178,10 +198,14 @@ class AnimatedEntity(Entity):
                             random.choice(self.land_sounds).play()
                         except AttributeError:
                             pass
+
                     self.on_ground = True
 
                     # The y-coordinate of the closest (topmost) entity we collided with
-                    max_top = min([sprite.top for sprite in collided])
+                    max_top = min([sprite.hitbox.top for sprite in collided])
+
+                    if type(self) is Player:
+                        self.check_hazards(collided, max_top, "top")
 
                     # The max distance that this entity can move without causing collision
                     return max_top - self.hitbox.bottom
@@ -189,19 +213,43 @@ class AnimatedEntity(Entity):
                 # No collisions, the entity can move the full distance
                 return dy
 
-    def test_collisions(self, test_rect: pygame.Rect):
+    def test_collisions(self, test_rect: pygame.Rect) -> list[Entity]:
         collided = []
         if type(self.collidable_sprites) == list:
             for sprite_list in self.collidable_sprites:
                 for sprite in sprite_list:
                     if test_rect.colliderect(sprite.hitbox):
-                        collided.append(sprite.hitbox)
+                        collided.append(sprite)
         else:
             for sprite in self.collidable_sprites:
                 if test_rect.colliderect(sprite.hitbox):
-                    collided.append(sprite.hitbox)
+                    collided.append(sprite)
 
         return collided
+
+    def check_hazards(self, collided: list[Entity], rect_pos: int, rect_pos_attr: str):
+        if rect_pos_attr == "top":
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.top == rect_pos), None
+            )
+        elif rect_pos_attr == "bottom":
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.bottom == rect_pos),
+                None,
+            )
+        elif rect_pos_attr == "left":
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.left == rect_pos), None
+            )
+        else:
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.right == rect_pos), None
+            )
+
+        if type(s) is Hazard:
+            self.on_hazard = True
+        else:
+            self.on_hazard = False
 
 
 class InteractableEntity(AnimatedEntity):

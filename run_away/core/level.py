@@ -110,6 +110,8 @@ class Level:
                         )
 
             # print(dir(layer))  # DEBUG
+
+
         for obj in tmx_data.get_layer_by_name("Interactables"):
             # Load portals
             if obj.type == "Portal":
@@ -162,9 +164,6 @@ class Level:
             # This level probably has no enemies
             pass
 
-
-
-
         try:
             for obj in tmx_data.get_layer_by_name("Consumables"):
                 if obj.type == "Coin":
@@ -175,14 +174,17 @@ class Level:
                         "./run_away/resources/gfx/objects/coins",
                     )
         except ValueError:
+            # level has no coins
             pass
 
         
         
     def check_portals(self):
         grpcollide = pygame.sprite.groupcollide(self.player, self.portals, False, False)
-        if self.player.sprite in grpcollide and self.player.sprite.status == "interacting":
-            return grpcollide[self.player.sprite][0]  # and self.player.sprite.status == "interacting"
+        if self.player.sprite in grpcollide:
+            grpcollide[self.player.sprite][0].interact()
+            if self.player.sprite.status == "interacting":
+                return grpcollide[self.player.sprite][0]
         else: return False
     
     def check_coins(self):
@@ -191,9 +193,9 @@ class Level:
             self.player.sprite.get_coin()
 
     def check_interactables(self):
-        if pygame.sprite.collide_rect(self.player.sprite, self.npcs.sprite):
+        if pygame.sprite.collide_rect(self.player.sprite, self.npcs):
             if self.player.sprite.status == "interacting":
-                self.npcs.sprite.trigger()
+                self.npcs.sprite.interact()
         
     def run(self, dt):
         # self.display_surface.fill("black")
@@ -221,6 +223,7 @@ class Level:
             debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
             debug(f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})", 140)
             debug(f"Player Coins: {self.player.sprite.coins}", 160)
-
+            self.check_portals()
+            
         pygame.display.flip()
         return self.check_portals()

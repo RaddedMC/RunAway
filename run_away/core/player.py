@@ -98,6 +98,9 @@ class Player(AnimatedEntity):
 
     def get_coin(self):
         self.coins += 1
+    
+    def spend_coins(self, price: int):
+        self.coins -= price
 
     def update(self, dt):
         self.get_inputs()

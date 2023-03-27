@@ -7,6 +7,7 @@ from core.entity import Entity
 from core.player import Player
 from core.enemy import Grunt
 from core.portal import Portal
+from core.entity import AnimatedEntity
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 import os
@@ -129,7 +130,6 @@ class Level:
 
         # Spawn grunts, if any exist
         try:
-            
             for obj in tmx_data.get_layer_by_name("Enemies"):
                 if obj.type == "Grunt":
                     Grunt(
@@ -147,6 +147,7 @@ class Level:
 
         for obj in tmx_data.get_layer_by_name("Interactables"):
             # Load portals
+            print(obj.name, ":", obj.type)
             if obj.type == "Portal":
                 Portal(
                     [self.all_sprites, self.portals],
@@ -154,6 +155,15 @@ class Level:
                     (obj.x, obj.y),
                     colour="blue",
                     level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                )
+            # Load home if available
+            if obj.type == "Home":
+                print("Home!")
+                AnimatedEntity(
+                    [self.all_sprites, self.home],
+                    None,
+                    (obj.x, obj.y),
+                    "./run_away/resources/objects/home/",
                 )
         
         

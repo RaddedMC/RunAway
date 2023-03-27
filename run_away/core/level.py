@@ -24,6 +24,7 @@ class Level:
         aspect ratio with the added benefit being that our game will also look the same to all
         players.
         """
+        self.lvl_path = level_path
         self.render_surface = pygame.Surface(config.RENDER_AREA)
         self.display_surface = pygame.display.get_surface()
         # print(self.display_surface.get_size())
@@ -148,13 +149,22 @@ class Level:
         for obj in tmx_data.get_layer_by_name("Interactables"):
             # Load portals
             if obj.type == "Portal":
-                Portal(
-                    [self.all_sprites, self.portals],
-                    None,
-                    (obj.x, obj.y),
-                    colour="blue",
-                    level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
-                )
+                if obj.name == "Rain_Portal":
+                    Portal(
+                        [self.all_sprites, self.portals],
+                        None,
+                        (obj.x, obj.y),
+                        colour="blue",
+                        level_path="run_away/resources/levels/level_rain_return.tmx"
+                    )
+                else:
+                    Portal(
+                        [self.all_sprites, self.portals],
+                        None,
+                        (obj.x, obj.y),
+                        colour="blue",
+                        level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                    )
         
         
     def check_portals(self):

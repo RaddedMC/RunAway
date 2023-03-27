@@ -12,8 +12,11 @@ class Game:
         self.display_surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
-        self.level = Level("run_away/resources/levels/level_hub.tmx")
+        self.level = Level("run_away/resources/levels/level_rain.tmx")
         self.running = True
+        self.lightning_clear = False
+        self.snow_clear = False
+        self.wind_clear = False
 
     def run(self):
         while self.running:
@@ -45,6 +48,23 @@ class Game:
             next_level = self.level.run(dt)
             pygame.display.flip()
             if next_level:
+                print(self.level.lvl_path)
+                if "lightning" in self.level.lvl_path:
+                    self.lightning_clear = True
+                elif "snow" in self.level.lvl_path:
+                    self.snow_clear = True 
+                elif "wind" in self.level.lvl_path:
+                    self.wind_clear = True
+
+                print(self.lightning_clear, "lighting")
+                print(self.snow_clear, "snow")
+                print(self.wind_clear, "wind")
+
+                if self.lightning_clear and self.snow_clear and self.wind_clear:
+                    if "hub" in next_level.level_path:
+                        next_level.level_path = "run_away/resources/levels/level_hub_rainaccess.tmx"
+
+                
                 self.level = Level(next_level.level_path)
 
         pygame.quit()

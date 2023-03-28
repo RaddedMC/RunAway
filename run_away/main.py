@@ -5,6 +5,7 @@ import pygame
 import config
 from core.level import Level
 from core.player import Player
+from utils.tools import get_sounds_by_key
 
 
 class Game:
@@ -19,6 +20,7 @@ class Game:
         self.lightning_clear = False
         self.snow_clear = False
         self.wind_clear = False
+        self.load_sfx = get_sounds_by_key("portal")
 
     def run(self):
         while self.running:
@@ -50,6 +52,7 @@ class Game:
             next_level = self.level.run(dt)
             pygame.display.flip()
             if next_level:
+                self.load_sfx[0].play()
                 if "hub" in next_level.level_path:
                     if "lightning" in self.level.lvl_path:
                         self.lightning_clear = True

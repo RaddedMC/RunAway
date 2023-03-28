@@ -31,7 +31,6 @@ class Home(AnimatedEntity):
         animation = self.animations[self.status]
 
         # Set the image for the current frame
-        print(self.index_i_want)
         image_path = animation[self.index_i_want]
         self.image = pygame.image.load(image_path)
         if self.flip_sprite:

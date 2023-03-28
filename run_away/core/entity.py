@@ -91,7 +91,8 @@ class AnimatedEntity(Entity):
 
     def update(self, dt: float):
         super().update(dt)
-        self.apply_gravity(dt)
+        if not self.gravity == 0:
+            self.apply_gravity(dt)
         self.move(dt)
         self.animate(dt)
 
@@ -195,11 +196,12 @@ class AnimatedEntity(Entity):
                 else:
                     self.direction.y = 0
                     self.speed.y = 0
-                    if self.on_ground == False:
-                        try:
-                            random.choice(self.land_sounds).play()
-                        except AttributeError:
-                            pass
+                    if not self.gravity == 0:
+                        if self.on_ground == False:
+                            try:
+                                random.choice(self.land_sounds).play()
+                            except AttributeError:
+                                pass
 
                     self.on_ground = True
 

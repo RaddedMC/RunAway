@@ -13,7 +13,7 @@ DEBUG_ZOOM = True
 DEBUG_SHOW_HITBOXES = False
 
 BASE_PATH = "run_away/resources"
-STARTING_LEVEL_PATH = f"{BASE_PATH}/levels/level_home.tmx"
+STARTING_LEVEL_PATH = f"{BASE_PATH}/levels/level_rain.tmx"
 
 ### GAME WORLD ###
 TILE_SIZE = 16

@@ -2,12 +2,19 @@ from pathlib import Path
 
 import config
 import pygame
+
 from core.camera import CameraGroup
+
 from core.entity import Entity, AnimatedEntity, Hazard
+
 from core.player import Player
+
 from core.enemy import Grunt
+from core.enemy import Flying
+
 from core.portal import Portal
-from core.entity import AnimatedEntity
+
+
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 
@@ -155,8 +162,17 @@ class Level:
                         (obj.x, obj.y),
                         speed=40,
                         gravity=100,  # FIXME: hardcoded for now, make world property?
-                        colour=grunt_colour,
+                        colour=grunt_colour
                     )
+                elif obj.type == "Flying":
+                    Flying(
+                        [self.all_sprites, self.enemies],
+                        [self.collidable_sprites, self.player],
+                        self.player,
+                        (obj.x, obj.y),
+                        speed=100
+                    )
+
         except ValueError:
             # This level probably has no enemies
             pass
@@ -164,7 +180,7 @@ class Level:
         try:
             for obj in tmx_data.get_layer_by_name("Interactables"):
                 # Load portals
-                if getattr(obj, "class") == "Portal":
+                if obj.type == "Portal":
                     Portal(
                         [self.all_sprites, self.portals],
                         None,
@@ -172,13 +188,14 @@ class Level:
                         colour="blue",
                         level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
                     )
-                if getattr(obj, "class") == "Home":
-                    from core.home import Home
-                    Home(
-                        [self.all_sprites, self.home],
-                        None,
-                        (obj.x, obj.y)
-                    )
+                if self.is_end_cutscene:
+                    if getattr(obj, "class") == "Home":
+                        from core.home import Home
+                        Home(
+                            [self.all_sprites, self.home],
+                            None,
+                            (obj.x, obj.y)
+                        )
         except ValueError:
             pass
 

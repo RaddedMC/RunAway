@@ -4,6 +4,7 @@ import pygame
 
 import config
 from core.level import Level
+from core.player import Player
 
 
 class Game:
@@ -12,7 +13,8 @@ class Game:
         self.display_surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
-        self.level = Level(config.STARTING_LEVEL_PATH)
+        self.player_stats = {"coins": 1}
+        self.level = Level(config.STARTING_LEVEL_PATH, self.player_stats)
         self.running = True
         self.lightning_clear = False
         self.snow_clear = False
@@ -60,8 +62,7 @@ class Game:
                     if "hub" in next_level.level_path:
                         next_level.level_path = "run_away/resources/levels/level_hub_rainaccess.tmx"
 
-                
-                self.level = Level(next_level.level_path)
+                self.level = Level(next_level.level_path, self.player_stats)
 
         pygame.quit()
         sys.exit(0)

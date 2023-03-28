@@ -16,6 +16,7 @@ class Player(AnimatedEntity):
         speed: int,  # Measured in PIXELS per SECOND
         gravity: int,
         jump_speed: int,
+        coins: int
     ):
         self.config = config.PLAYER_DATA
         self.stats = self.config["stats"]
@@ -59,6 +60,10 @@ class Player(AnimatedEntity):
         # SFX
         self.jump_sounds = get_sounds_by_key("player_jump")
         self.land_sounds = get_sounds_by_key("player_land")
+        self.coin_sounds = get_sounds_by_key("coin_pick")
+
+        self.coins = coins
+
 
     def get_inputs(self):
         """
@@ -85,6 +90,9 @@ class Player(AnimatedEntity):
 
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
+
+        if True in [keys[key] for key in config.KEYS_INTERACT]:
+            self.status = "interacting"
 
     def jump(self):
         """
@@ -138,6 +146,13 @@ class Player(AnimatedEntity):
             # Respawn the player at the start of the current level
             self.rect.topleft = self.spawn_point
             self.hitbox.topleft = self.spawn_point
+
+    def get_coin(self):
+        self.coins += 1
+        self.coin_sounds[0].play()
+    
+    def spend_coins(self, price: int):
+        self.coins -= price
 
     def update(self, dt):
         self.get_inputs()

@@ -83,11 +83,6 @@
 269,268,269,268,269,268,269,268,269,268,269,268,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214
 </data>
  </layer>
- <objectgroup id="2" name="Player">
-  <object id="6" name="Start" x="240" y="256">
-   <point/>
-  </object>
- </objectgroup>
  <objectgroup id="3" name="Interactables">
   <object id="10" name="RainReturn_Portal" type="Portal" x="128" y="224">
    <point/>
@@ -102,6 +97,11 @@
    <point/>
   </object>
   <object id="12" name="Hub2Shop" type="Shop" x="1039.75" y="275.25">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="2" name="Player">
+  <object id="6" name="Start" x="240" y="256">
    <point/>
   </object>
  </objectgroup>

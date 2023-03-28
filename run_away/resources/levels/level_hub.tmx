@@ -83,11 +83,6 @@
 213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214,213,214
 </data>
  </layer>
- <objectgroup id="2" name="Player">
-  <object id="6" name="Start" x="160" y="256">
-   <point/>
-  </object>
- </objectgroup>
  <objectgroup id="3" name="Interactables">
   <object id="7" name="Wind_Portal" type="Portal" x="336" y="224">
    <point/>
@@ -99,6 +94,11 @@
    <point/>
   </object>
   <object id="10" name="Hub1Shop" type="Shop" x="960.417" y="277.5">
+   <point/>
+  </object>
+ </objectgroup>
+ <objectgroup id="2" name="Player">
+  <object id="6" name="Start" x="160" y="256">
    <point/>
   </object>
  </objectgroup>

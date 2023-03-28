@@ -8,8 +8,8 @@ import pygame
 
 ### DEBUG FLAG ###
 DEBUG_VERBOSE_LOGGING = False
-DEBUG_UI = True
-DEBUG_ZOOM = True
+DEBUG_UI = False
+DEBUG_ZOOM = False
 DEBUG_SHOW_HITBOXES = False
 
 BASE_PATH = "run_away/resources"
@@ -41,6 +41,7 @@ KEYS_RIGHT = [pygame.K_RIGHT, pygame.K_d]
 KEYS_UP = [pygame.K_UP, pygame.K_w]
 KEYS_DOWN = [pygame.K_DOWN, pygame.K_s]
 KEYS_QUIT = [pygame.K_ESCAPE]
+KEYS_INTERACT = [pygame.K_j, pygame.K_z]
 
 ### COLOURS ###
 RGB_BLACK = (0, 0, 0)
@@ -66,3 +67,5 @@ def change_render_area():
 ### FONTS ###
 pygame.font.init()
 DEBUG_FONT = pygame.font.Font(None, 30)
+
+GAME_FONT = pygame.font.Font("run_away\\resources\\font\BitFont.ttf", 30)

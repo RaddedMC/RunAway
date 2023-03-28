@@ -10,8 +10,6 @@ from core.portal import Portal
 from core.entity import AnimatedEntity
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
-import os
-import random
 
 
 class Level:
@@ -34,6 +32,8 @@ class Level:
         self.enemies = pygame.sprite.Group()
         self.portals = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
+        self.home = pygame.sprite.GroupSingle()
+        self.is_end_cutscene = False
 
         self.import_assets(level_path)
 
@@ -118,6 +118,16 @@ class Level:
                     gravity=275,
                     jump_speed=175
                 )
+            elif obj.name == "Start:ForceLeft":
+                AnimatedEntity(
+                    [self.all_sprites, self.player],
+                    [self.collidable_sprites],
+                    (obj.x, obj.y),
+                    "./run_away/resources/gfx/player/",
+                    speed=60, gravity=275
+                ).direction = pygame.Vector2(-1, 0)
+                self.is_end_cutscene = True
+                self.player.sprite.status = "run"
 
         # Select grunt colour
         grunt_colour = "green"
@@ -131,7 +141,7 @@ class Level:
         # Spawn grunts, if any exist
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):
-                if obj.type == "Grunt":
+                if getattr(obj,"class") == "Grunt":
                     Grunt(
                         [self.all_sprites, self.enemies],
                         [self.collidable_sprites, self.player],
@@ -147,8 +157,7 @@ class Level:
 
         for obj in tmx_data.get_layer_by_name("Interactables"):
             # Load portals
-            print(obj.name, ":", getattr(obj, "class"))
-            if obj.type == "Portal":
+            if getattr(obj,"class") == "Portal":
                 Portal(
                     [self.all_sprites, self.portals],
                     None,
@@ -157,13 +166,12 @@ class Level:
                     level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
                 )
             # Load home if available
-            if obj.type == "Home":
-                print("Home!")
-                AnimatedEntity(
+            from core.home import Home
+            if getattr(obj,"class") == "Home":
+                Home(
                     [self.all_sprites, self.home],
                     None,
-                    (obj.x, obj.y),
-                    "./run_away/resources/objects/home/",
+                    (obj.x, obj.y)
                 )
         
         
@@ -186,7 +194,14 @@ class Level:
             self.render_surface,
             (self.display_surface.get_width(), self.display_surface.get_height()),
         )
-        self.display_surface.blit(scaled_display, (0, 0))
+
+        # Handle end cutscene
+        if self.is_end_cutscene:
+            self.update_end_cutscene(dt)
+            self.display_surface.blit(scaled_display, (0, 150))
+        else:
+            self.display_surface.blit(scaled_display, (0, 0))
+        
         if config.DEBUG_UI:
             debug(self.player.sprite.status)
             debug(f"Direction: {self.player.sprite.direction}", 40)
@@ -198,3 +213,53 @@ class Level:
 
         pygame.display.flip()
         return self.check_portals()
+    
+
+    def update_end_cutscene(self, dt):
+
+        # Create timer if doesn't exist
+        if not hasattr(self, "timer"):
+                self.timer = dt
+        else:
+            # Update timer based on delta-time
+            self.timer += dt
+
+        # Set Tye's speed
+        if self.player.sprite.speed.x < 0:
+            # RUN AWAY
+            self.player.sprite.speed.x -= dt*20
+        else:
+            # Run to home
+            self.player.sprite.speed.x -= dt*4.33
+
+        # Flip Tye based on movement dir
+        self.player.sprite.flip_sprite = self.player.sprite.speed.x > 0
+
+        # Reveal text
+        if self.timer >= 19:
+
+            # Opacity should range from 0 to 1
+            opacity = (self.timer - 19)/4
+
+            # Create font if it doesn't exist
+            if not hasattr(self, "end_font"):
+                self.end_font = pygame.font.Font("run_away/resources/font/Renogare-Regular.otf", 128)
+                self.font_disp = self.end_font.render("Run Away", False, (255, 255, 255))
+
+            self.font_disp.set_alpha(opacity*255) # Set opacity of text
+
+            # Draw font onto the render surface
+            self.display_surface.blit(self.font_disp, (0,10))
+
+        # End game 
+        if self.timer >= 23:
+            pygame.quit()
+            exit()
+
+        # Set frame of house based on player position
+        dist_factor = (self.player.sprite.rect.x - self.home.sprite.rect.x-85)
+        if dist_factor > 100:
+            self.home.sprite.set_frame_by_percent(0)
+        else:
+            self.home.sprite.set_frame_by_percent((100-dist_factor)/100)
+        self.home.sprite.set_frame_by_percent(self.player.sprite.rect.x)

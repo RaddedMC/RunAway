@@ -22,8 +22,8 @@ TILE_SIZE = 16
 HAZARD_DATA = {
     "top": {"scale": (0, -0.65), "offset": pygame.math.Vector2(0, -6)},
     "bottom": {"scale": (0, -0.65), "offset": pygame.math.Vector2(0, 6)},
-    "left": {"scale": (-0.65, 0), "offset": pygame.math.Vector2(6, 0)},
-    "right": {"scale": (-0.65, 0), "offset": pygame.math.Vector2(-6, 0)},
+    "left": {"scale": (-0.65, 0), "offset": pygame.math.Vector2(-6, 0)},
+    "right": {"scale": (-0.65, 0), "offset": pygame.math.Vector2(6, 0)},
 }
 PLAYER_DATA = {
     "animation_speed": 9,

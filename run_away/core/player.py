@@ -45,6 +45,7 @@ class Player(AnimatedEntity):
 
         self.jump_sounds = get_sounds_by_key("player_jump")
         self.land_sounds = get_sounds_by_key("player_land")
+        self.coin_sounds = get_sounds_by_key("coin_pick")
 
         self.coins = coins
 
@@ -98,6 +99,7 @@ class Player(AnimatedEntity):
 
     def get_coin(self):
         self.coins += 1
+        self.coin_sounds[0].play()
     
     def spend_coins(self, price: int):
         self.coins -= price

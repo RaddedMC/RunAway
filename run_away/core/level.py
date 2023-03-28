@@ -148,7 +148,7 @@ class Level:
         # Spawn grunts, if any exist
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):
-                if getattr(obj,"class") == "Grunt":
+                if obj.type == "Grunt":
                     Grunt(
                         [self.all_sprites, self.enemies],
                         [self.collidable_sprites, self.player],
@@ -164,7 +164,7 @@ class Level:
         try:
             for obj in tmx_data.get_layer_by_name("Interactables"):
                 # Load portals
-                if getattr(obj,"class") == "Portal":
+                if getattr(obj, "class") == "Portal":
                     Portal(
                         [self.all_sprites, self.portals],
                         None,
@@ -172,7 +172,7 @@ class Level:
                         colour="blue",
                         level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
                     )
-                if getattr(obj,"class") == "Home":
+                if getattr(obj, "class") == "Home":
                     from core.home import Home
                     Home(
                         [self.all_sprites, self.home],
@@ -219,20 +219,21 @@ class Level:
         self.render_surface.fill("black")
         self.all_sprites.update(dt)
         self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
-        scaled_display = pygame.transform.scale(
-            self.render_surface,
-            (self.display_surface.get_width(), self.display_surface.get_height()),
-        )
-        self.check_coins()
-        # TODO update entire stats dictionary at once?
-        self.stats["coins"] = self.player.sprite.coins
-
+        
         # Handle end cutscene
         if self.is_end_cutscene:
             self.update_end_cutscene(dt)
             self.display_surface.blit(scaled_display, (0, 150))
         else:
             self.display_surface.blit(scaled_display, (0, 0))
+            # TODO update entire stats dictionary at once?
+            self.stats["coins"] = self.player.sprite.coins
+
+        scaled_display = pygame.transform.scale(
+            self.render_surface,
+            (self.display_surface.get_width(), self.display_surface.get_height()),
+        )
+        self.check_coins()
         
         if config.DEBUG_UI:
             debug(self.player.sprite.status)
@@ -259,6 +260,8 @@ class Level:
     
 
     def update_end_cutscene(self, dt):
+
+        print(self.home.sprite.rect)
 
         # Create timer if doesn't exist
         if not hasattr(self, "timer"):
@@ -287,12 +290,12 @@ class Level:
             # Create font if it doesn't exist
             if not hasattr(self, "end_font"):
                 self.end_font = pygame.font.Font("run_away/resources/font/Renogare-Regular.otf", 128)
-                self.font_disp = self.end_font.render("Run Away", False, (255, 255, 255))
+                self.font_disp = self.end_font.render("Run Away", True, (255, 255, 255))
 
             self.font_disp.set_alpha(opacity*255) # Set opacity of text
 
             # Draw font onto the render surface
-            self.display_surface.blit(self.font_disp, (0,10))
+            self.render_surface.blit(self.font_disp, (0,10))
 
         # End game 
         if self.timer >= 23:

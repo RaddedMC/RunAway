@@ -4,6 +4,7 @@ from typing import Optional
 import pygame
 import random
 from utils.tools import import_animations
+from config import GAME_FONT
 
 class Directions():
     LEFT = -1
@@ -209,11 +210,3 @@ class InteractableEntity(AnimatedEntity):
         gravity: float = 0,
     ):
         super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
-
-
-class Portal(InteractableEntity):
-    pass
-
-
-class NPC(InteractableEntity):
-    pass

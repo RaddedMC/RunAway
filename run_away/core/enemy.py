@@ -1,6 +1,7 @@
 import pygame
 from core.entity import AnimatedEntity
 from core.entity import Directions
+from config import DEBUG_VERBOSE_LOGGING
 
 class Enemy(AnimatedEntity):
     def __init__(self, health, damage,
@@ -35,31 +36,39 @@ class Grunt(Enemy):
                 groups: pygame.sprite.Group,
                 collidable_sprites: pygame.sprite.Group,
                 pos: tuple,
-                root_dir: str,
                 speed: float = 5,
                 gravity: float = 0,
                 colour: str = "red"):
         health = 10 #FIXME: change once we have a combat system
         damage = 10 #FIXME: ^
-        self.root_dir = root_dir + "/" + colour
-        self.walk_direction = Directions.RIGHT
+        self.root_dir = "./run_away/resources/gfx/enemies/grunt" + "/" + colour
         super().__init__(health, damage, groups, collidable_sprites, pos, self.root_dir, speed, gravity)
         self.animation_speed = 6
+        self.direction.x = -1
+        self.desired_speed = speed
 
-    def collision(self):
-        if not self.test_collide_down():
-            print("doesn't collides down")
-            self.walk_direction = -1*self.walk_direction
+        if DEBUG_VERBOSE_LOGGING:
+            print(f"Grunt spawned!: speed:{speed}| colour:{colour}| pos:{pos}| gravity:{gravity}")
 
-        if self.walk_direction == Directions.LEFT:
-            if self.test_collide_left():
-                print("collides left")
-                self.walk_direction = Directions.RIGHT
+    def update(self, dt: float):
+        if DEBUG_VERBOSE_LOGGING:
+            print(f"Grunt - {self.direction.x}, {self.speed.x}")
+        super().update(dt)
+        self.handle_directions(dt)
+    
+    def handle_directions(self, dt:float):
+        # Handle sprite direction
+        self.flip_sprite = self.direction.x == 1
 
-        if self.walk_direction == Directions.RIGHT:
-            if self.test_collide_right():
-                print("collides right")
-                self.walk_direction = Directions.LEFT
+        # Revert the collision system's speed reset
+        # TODO: handle differently..?
+        if self.speed.x == 0:
+            self.speed.x = self.desired_speed
+
+        # If it stops moving, it is likely because it can't move
+        if self.pixels_buffer.x == 0:
+            # Horizontal collision
+            self.direction.x *= -1
 
 class Flying(Enemy):
     pass

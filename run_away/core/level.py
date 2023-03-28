@@ -220,19 +220,21 @@ class Level:
         self.all_sprites.update(dt)
         self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
         
+        if self.is_end_cutscene: self.update_end_cutscene(dt)
+
+        scaled_display = pygame.transform.scale(
+            self.render_surface,
+            (self.display_surface.get_width(), self.display_surface.get_height()),
+        )
+
         # Handle end cutscene
         if self.is_end_cutscene:
-            self.update_end_cutscene(dt)
             self.display_surface.blit(scaled_display, (0, 150))
         else:
             self.display_surface.blit(scaled_display, (0, 0))
             # TODO update entire stats dictionary at once?
             self.stats["coins"] = self.player.sprite.coins
 
-        scaled_display = pygame.transform.scale(
-            self.render_surface,
-            (self.display_surface.get_width(), self.display_surface.get_height()),
-        )
         self.check_coins()
         
         if config.DEBUG_UI:
@@ -261,8 +263,6 @@ class Level:
 
     def update_end_cutscene(self, dt):
 
-        print(self.home.sprite.rect)
-
         # Create timer if doesn't exist
         if not hasattr(self, "timer"):
                 self.timer = dt
@@ -282,23 +282,31 @@ class Level:
         self.player.sprite.flip_sprite = self.player.sprite.speed.x > 0
 
         # Reveal text
-        if self.timer >= 19:
+        cutscene_end_time = 23
+        text_reveal_time = 18
+        if self.timer >= text_reveal_time:
 
             # Opacity should range from 0 to 1
-            opacity = (self.timer - 19)/4
+            opacity = (self.timer - text_reveal_time)/(cutscene_end_time-text_reveal_time)
 
-            # Create font if it doesn't exist
-            if not hasattr(self, "end_font"):
-                self.end_font = pygame.font.Font("run_away/resources/font/Renogare-Regular.otf", 128)
-                self.font_disp = self.end_font.render("Run Away", True, (255, 255, 255))
+            if opacity < 1/5:
+                self.font_disp = config.BIG_FONT.render("Run Away", False, (255, 255, 255))
+            elif opacity < 2/5:
+                self.font_disp = config.BIG_FONT.render("Run Away >", False, (255, 255, 255))
+            elif opacity < 3/5:
+                self.font_disp = config.BIG_FONT.render("Run Away ->", False, (255, 255, 255))
+            elif opacity < 4/5:
+                self.font_disp = config.BIG_FONT.render("Run Away -->", False, (255, 255, 255))
+            else:
+                self.font_disp = config.BIG_FONT.render("Run Away --->", False, (255, 255, 255))
 
             self.font_disp.set_alpha(opacity*255) # Set opacity of text
 
             # Draw font onto the render surface
-            self.render_surface.blit(self.font_disp, (0,10))
+            self.render_surface.blit(self.font_disp, (40,10))
 
         # End game 
-        if self.timer >= 23:
+        if self.timer >= cutscene_end_time:
             pygame.quit()
             exit()
 

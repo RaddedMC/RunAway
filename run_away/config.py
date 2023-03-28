@@ -9,7 +9,7 @@ import pygame
 ### DEBUG FLAG ###
 DEBUG_VERBOSE_LOGGING = False
 DEBUG_UI = False
-DEBUG_ZOOM = False
+DEBUG_ZOOM = True
 DEBUG_SHOW_HITBOXES = False
 
 BASE_PATH = "run_away/resources"
@@ -68,4 +68,5 @@ def change_render_area():
 pygame.font.init()
 DEBUG_FONT = pygame.font.Font(None, 30)
 
-GAME_FONT = pygame.font.Font("run_away\\resources\\font\BitFont.ttf", 30)
+GAME_FONT = pygame.font.Font("run_away/resources/font/BitFont.ttf", 30)
+BIG_FONT = pygame.font.Font("run_away/resources/font/ROGFonts-Regular.otf", 20)

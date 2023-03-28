@@ -9,3 +9,20 @@ This repo is MIRRORED to two different repositories
 
 
 This is because we may wish to work on this project after we complete SE 2250 and would like to maintain control of the source code.
+
+## How to Run Our Game
+1. Install poetry
+    ```cmd
+    pip install poetry
+    ```
+
+2. Install dependencies
+    ```cmd
+    poetry install
+    ```
+
+3. Execute the batch file in the root directory
+    ```cmd
+    .\RunGame.bat
+    ```
+    

@@ -1,11 +1,12 @@
 # Contains common operations used by multiple classes
 
+import os
 import pprint
+from math import sin
 from pathlib import Path
 from typing import Optional
 
 import pygame
-import os
 
 from run_away import config
 
@@ -21,13 +22,23 @@ def import_folder(folder_path: str):
 
     return folder_dict
 
+
 def get_sounds_by_key(key: str):
     path = "./run_away/resources/sfx/" + key + "/"
     files = os.listdir(path)
-    return [pygame.mixer.Sound(path+file) for file in files]
+    return [pygame.mixer.Sound(path + file) for file in files]
+
 
 def import_animations(folder_path: str):
     return import_folder(folder_path)
+
+
+def get_wave_value():
+    value = sin(pygame.time.get_ticks())
+    if value >= 0:
+        return 255
+    else:
+        return 0
 
 
 def debug(info, y: int = 10, x: Optional[int] = 10):

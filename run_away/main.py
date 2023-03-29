@@ -3,7 +3,7 @@ import sys
 import pygame
 
 import config
-from core.level import Level
+from core.level import Level, LevelType
 from core.player import Player
 
 
@@ -14,7 +14,7 @@ class Game:
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
         self.player_stats = {"coins": 1}
-        self.level = Level(config.STARTING_LEVEL_PATH, self.player_stats)
+        self.level = Level(LevelType.RAIN.value, self.player_stats)
         self.running = True
         self.lightning_clear = False
         self.snow_clear = False
@@ -29,11 +29,11 @@ class Game:
                     keys = pygame.key.get_pressed()
                     if True in [keys[key] for key in config.KEYS_QUIT]:
                         self.running = False
-                
+
                 # For mouse wheel zooming
                 if event.type == pygame.MOUSEWHEEL:
                     if config.DEBUG_ZOOM:
-                        config.DISP_ZOOM += event.y*2/3*0.1
+                        config.DISP_ZOOM += event.y * 2 / 3 * 0.1
                         print(event.y)
                         config.change_render_area()
                         self.level.resize_render_surface()
@@ -50,19 +50,21 @@ class Game:
             next_level = self.level.run(dt)
             pygame.display.flip()
             if next_level:
-                if "hub" in next_level.level_path:
-                    if "lightning" in self.level.lvl_path:
+                if next_level.level_path is LevelType.HUB:
+                    if self.level.lvl_path is LevelType.LIGHTNING:
                         self.lightning_clear = True
-                    elif "snow" in self.level.lvl_path:
-                        self.snow_clear = True 
-                    elif "wind" in self.level.lvl_path:
+                    elif self.level.lvl_path is LevelType.SNOW:
+                        self.snow_clear = True
+                    elif self.level.lvl_path is LevelType.WIND:
                         self.wind_clear = True
 
                 if self.lightning_clear and self.snow_clear and self.wind_clear:
-                    if "hub" in next_level.level_path:
-                        next_level.level_path = "run_away/resources/levels/level_hub_rainaccess.tmx"
+                    if next_level.level_path is LevelType.HUB:
+                        next_level.level_path = LevelType.HUB_RAIN_ACCESS
 
                 self.level = Level(next_level.level_path, self.player_stats)
+
+            print(f"({self.wind_clear}, {self.lightning_clear}, {self.snow_clear})")
 
         pygame.quit()
         sys.exit(0)

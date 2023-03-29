@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pygame
 
 # Run Away
@@ -12,14 +14,16 @@ DEBUG_UI = False
 DEBUG_ZOOM = False
 DEBUG_SHOW_HITBOXES = False
 
-BASE_PATH = "run_away/resources"
-STARTING_LEVEL_PATH = f"{BASE_PATH}/levels/level_rain.tmx"
+BASE_PATH = Path.cwd().absolute().joinpath("run_away", "resources")
+LEVELS_PATH = BASE_PATH.joinpath("levels")
+
 
 ### GAME WORLD ###
 TILE_SIZE = 16
 
 ### ENTITY CONSTANTS ###
 HAZARD_DATA = {
+    "damage": 1,
     "top": {"scale": (0, -0.65), "offset": pygame.math.Vector2(0, -6)},
     "bottom": {"scale": (0, -0.65), "offset": pygame.math.Vector2(0, 6)},
     "left": {"scale": (-0.65, 0), "offset": pygame.math.Vector2(-6, 0)},
@@ -29,11 +33,12 @@ PLAYER_DATA = {
     "animation_speed": 9,
     "jump_speed": 175,
     "gravity": 275,
-    "stats": {"speed": 120, "health": 10, "damage": 10},
+    "stats": {"speed": 120, "health": 20, "damage": 10},
 }
 ENEMY_DATA = {"grunt": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}}}
 WEAPON_DATA = {}
 PORTAL_DATA = {"animation_speed": 10}
+LEVEL_DATA = {"damage_factor": [1.2, 1.4, 1.6, 1.8]}
 
 ### CONTROLS ###
 KEYS_LEFT = [pygame.K_LEFT, pygame.K_a]

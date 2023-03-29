@@ -246,10 +246,9 @@ class AnimatedEntity(Entity):
                 (sprite for sprite in collided if sprite.hitbox.right == rect_pos), None
             )
 
-        if type(s) is Hazard:
-            self.on_hazard = True
-        else:
-            self.on_hazard = False
+        from core.enemy import Enemy
+        if type(s) is Hazard or isinstance(s, Enemy):
+            self.apply_damage(s.get_damage())
 
 
 class InteractableEntity(AnimatedEntity):
@@ -282,6 +281,7 @@ class Hazard(Entity):
         image: pygame.Surface,
         type: str,
     ):
+        self.config = config.HAZARD_DATA
         super().__init__(groups, collidable_sprites, pos, image)
         self.type = type
         self.hitbox = (
@@ -296,3 +296,7 @@ class Hazard(Entity):
             )
             .move(config.HAZARD_DATA[self.type]["offset"])
         )
+        self.damage = self.config["damage"]
+
+    def get_damage(self):
+        return self.damage

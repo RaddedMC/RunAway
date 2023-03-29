@@ -1,17 +1,32 @@
+import os
+import random
+from enum import Enum
 from pathlib import Path
 
 import config
 import pygame
+from config import LEVELS_PATH
 from core.camera import CameraGroup
-from core.entity import Entity, AnimatedEntity, Hazard
-from core.player import Player
 from core.enemy import Grunt
+from core.entity import AnimatedEntity, Entity, Hazard
+from core.player import Player
 from core.portal import Portal
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
-import os
-import random
 
+
+class LevelType(Enum):
+    RAIN = LEVELS_PATH.joinpath("level_rain.tmx").resolve()
+    WIND = LEVELS_PATH.joinpath("level_wind.tmx").resolve()
+    LIGHTNING = LEVELS_PATH.joinpath("level_lightning.tmx").resolve()
+    SNOW = LEVELS_PATH.joinpath("level_snow.tmx").resolve()
+    HUB = LEVELS_PATH.joinpath("level_hub.tmx").resolve()
+    HUB_RAIN_ACCESS = LEVELS_PATH.joinpath("level_hub_rainaccess.tmx").resolve()
+    RAIN_RETURN = LEVELS_PATH.joinpath("level_rainreturn.tmx").resolve()
+
+    @classmethod
+    def list(cls):
+        return list(map(lambda e: e.value, cls))
 
 class Level:
     def __init__(self, level_path, stats) -> None:
@@ -35,7 +50,7 @@ class Level:
         self.player = pygame.sprite.GroupSingle()
         self.coins = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
-        
+
         self.stats = stats
         # TODO create dictionary with all player possessions and attributes to pass down?
         # self.items = {coins :0, }
@@ -120,17 +135,16 @@ class Level:
                     speed=120,
                     gravity=275,
                     jump_speed=175,
-                    coins = self.stats["coins"]
+                    coins=self.stats["coins"],
                 )
-
 
         # Select grunt colour
         grunt_colour = "green"
-        if "lightning" in level_path:
+        if level_path is LevelType.LIGHTNING:
             grunt_colour = "yellow"
-        elif "snow" in level_path:
+        elif level_path is LevelType.SNOW:
             grunt_colour = "blue"
-        elif "rain" in level_path:
+        elif level_path is LevelType.RAIN:
             grunt_colour = "red"
 
         # Spawn grunts, if any exist
@@ -141,6 +155,11 @@ class Level:
                         [self.all_sprites, self.enemies],
                         [self.collidable_sprites, self.player],
                         (obj.x, obj.y),
+                        (
+                            False,
+                            False,
+                            False,
+                        ),  # FIXME: temporary, figure out way to determine this based on current level?
                         speed=40,
                         gravity=100,  # FIXME: hardcoded for now, make world property?
                         colour=grunt_colour,
@@ -148,6 +167,15 @@ class Level:
         except ValueError:
             # This level probably has no enemies
             pass
+
+        print(LevelType.list())
+        print(next(
+                            (
+                                level
+                                for level in LevelType.list()
+                                if obj.name[0 : obj.name.find("_")].lower()
+                                in str(level)
+                            )))
 
         try:
             for obj in tmx_data.get_layer_by_name("Interactables"):
@@ -158,7 +186,14 @@ class Level:
                         None,
                         (obj.x, obj.y),
                         colour="blue",
-                        level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                        level_path=next(
+                            (
+                                level
+                                for level in LevelType.list()
+                                if obj.name[0 : obj.name.find("_")].lower()
+                                in str(level)
+                            )
+                        ),
                     )
         except ValueError:
             pass
@@ -168,14 +203,14 @@ class Level:
                 if obj.type == "Coin":
                     AnimatedEntity(
                         [self.all_sprites, self.coins],
-                        [self.player], 
+                        [self.player],
                         (obj.x, obj.y),
                         "./run_away/resources/gfx/objects/coins",
                     )
         except ValueError:
             # level has no coins
             pass
-        
+
     def check_portals(self):
         collided = pygame.sprite.groupcollide(self.player, self.portals, False, False)
         if self.player.sprite in collided:
@@ -184,7 +219,7 @@ class Level:
                 return collided[self.player.sprite][0]
         else:
             return False
-    
+
     def check_coins(self):
         for coin in pygame.sprite.groupcollide(self.coins, self.player, True, False):
             # TODO add sfx
@@ -194,7 +229,7 @@ class Level:
         if pygame.sprite.collide_rect(self.player.sprite, self.npcs):
             if self.player.sprite.status == "interacting":
                 self.npcs.sprite.interact()
-        
+
     def run(self, dt):
         # Draw sprites, upscale the render surface and display to the user's screen
         self.render_surface.fill("black")
@@ -223,9 +258,8 @@ class Level:
                 140,
             )
             debug(f"Player Health: {self.player.sprite.health}", 160)
-            debug(f"On Spikes: {self.player.sprite.on_hazard}", 180)
-            debug(f"Player Coins: {self.player.sprite.coins}", 200)
+            debug(f"Player Coins: {self.player.sprite.coins}", 180)
             self.check_portals()
-            
+
         pygame.display.flip()
         return self.check_portals()

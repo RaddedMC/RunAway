@@ -16,7 +16,7 @@ class Player(AnimatedEntity):
         speed: int,  # Measured in PIXELS per SECOND
         gravity: int,
         jump_speed: int,
-        coins: int
+        coins: int,
     ):
         self.config = config.PLAYER_DATA
         self.stats = self.config["stats"]
@@ -30,9 +30,7 @@ class Player(AnimatedEntity):
         )
 
         # Animation
-        self.animation_speed = self.config[
-            "animation_speed"
-        ]  # FIXME: hardcoded for now, this should be loaded from the config
+        self.animation_speed = self.config["animation_speed"]
 
         # Player stats
         self.health = self.stats["health"]
@@ -50,9 +48,9 @@ class Player(AnimatedEntity):
         # Track player states/actions
         self.attacking = False
         self.attack_cooldown = None
+        self.attack_time = None
 
         # Invincibility frames
-        self.on_hazard = False
         self.vulnerable = True
         self.invulnerable_duration = 500  # Note: time is in milliseconds
         self.hurt_time = None
@@ -63,7 +61,6 @@ class Player(AnimatedEntity):
         self.coin_sounds = get_sounds_by_key("coin_pick")
 
         self.coins = coins
-
 
     def get_inputs(self):
         """
@@ -118,11 +115,10 @@ class Player(AnimatedEntity):
                 self.vulnerable = True
                 self.hurt_time = None
 
-    def get_damage(self):
-        if self.vulnerable and self.on_hazard:
-            self.health -= 1  # FIXME: hardcoded for now
+    def apply_damage(self, amount: int):
+        if self.vulnerable:
+            self.health -= amount
             self.vulnerable = False
-            self.on_hazard = False
             self.hurt_time = pygame.time.get_ticks()
 
     def check_death(self):
@@ -137,7 +133,6 @@ class Player(AnimatedEntity):
             # Reset player status
             self.status = "idle"
             self.on_ground = False
-            self.on_hazard = False
             self.vulnerable = True
 
             # Restore player health back to its base value
@@ -150,7 +145,7 @@ class Player(AnimatedEntity):
     def get_coin(self):
         self.coins += 1
         self.coin_sounds[0].play()
-    
+
     def spend_coins(self, price: int):
         self.coins -= price
 
@@ -159,5 +154,4 @@ class Player(AnimatedEntity):
         self.cooldowns()
         # self.get_status()
         super().update(dt)
-        self.get_damage()
         self.check_death()

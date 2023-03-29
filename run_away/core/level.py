@@ -10,7 +10,6 @@ from core.camera import CameraGroup
 from core.enemy import Grunt
 from core.entity import AnimatedEntity, Entity, Hazard
 from core.player import Player
-from core.portal import Portal
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 
@@ -28,8 +27,12 @@ class LevelType(Enum):
     def list(cls):
         return list(map(lambda e: e.value, cls))
 
+
+from core.portal import Portal
+
+
 class Level:
-    def __init__(self, level_path, stats) -> None:
+    def __init__(self, kind: LevelType, stats) -> None:
         """
         To solve the issue of resolution scaling, this game draws all of its sprites to a
         small (256px by 144px) surface, then upscales this surface to the resolution of the
@@ -39,7 +42,6 @@ class Level:
         aspect ratio with the added benefit being that our game will also look the same to all
         players.
         """
-        self.lvl_path = level_path
         self.render_surface = pygame.Surface(config.RENDER_AREA)
         self.display_surface = pygame.display.get_surface()
 
@@ -55,14 +57,17 @@ class Level:
         # TODO create dictionary with all player possessions and attributes to pass down?
         # self.items = {coins :0, }
 
-        self.import_assets(level_path)
+        self.kind = kind
+        self.path: Path = self.kind.value
+
+        self.import_assets()
 
     def resize_render_surface(self):
         self.render_surface = pygame.Surface(config.RENDER_AREA)
 
     # Load level items
-    def import_assets(self, level_path):
-        tmx_data = load_pygame(Path(level_path).resolve())
+    def import_assets(self):
+        tmx_data = load_pygame(self.path.resolve())
 
         # Load blocks
         for layer in tmx_data.visible_layers:
@@ -140,11 +145,11 @@ class Level:
 
         # Select grunt colour
         grunt_colour = "green"
-        if level_path is LevelType.LIGHTNING:
+        if self.kind is LevelType.LIGHTNING:
             grunt_colour = "yellow"
-        elif level_path is LevelType.SNOW:
+        elif self.kind is LevelType.SNOW:
             grunt_colour = "blue"
-        elif level_path is LevelType.RAIN:
+        elif self.kind is LevelType.RAIN:
             grunt_colour = "red"
 
         # Spawn grunts, if any exist
@@ -168,15 +173,6 @@ class Level:
             # This level probably has no enemies
             pass
 
-        print(LevelType.list())
-        print(next(
-                            (
-                                level
-                                for level in LevelType.list()
-                                if obj.name[0 : obj.name.find("_")].lower()
-                                in str(level)
-                            )))
-
         try:
             for obj in tmx_data.get_layer_by_name("Interactables"):
                 # Load portals
@@ -186,13 +182,14 @@ class Level:
                         None,
                         (obj.x, obj.y),
                         colour="blue",
-                        level_path=next(
+                        target_level=next(
                             (
                                 level
-                                for level in LevelType.list()
+                                for level in LevelType
                                 if obj.name[0 : obj.name.find("_")].lower()
-                                in str(level)
-                            )
+                                in str(level.value)
+                            ),
+                            None,  # TODO: this will need to be changed/removed once the final portal is implemented
                         ),
                     )
         except ValueError:

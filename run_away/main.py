@@ -1,8 +1,7 @@
 import sys
 
-import pygame
-
 import config
+import pygame
 from core.level import Level, LevelType
 from core.player import Player
 
@@ -14,7 +13,7 @@ class Game:
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
         self.player_stats = {"coins": 1}
-        self.level = Level(LevelType.RAIN.value, self.player_stats)
+        self.level = Level(LevelType.HUB_RAIN_ACCESS, self.player_stats)
         self.running = True
         self.lightning_clear = False
         self.snow_clear = False
@@ -50,21 +49,20 @@ class Game:
             next_level = self.level.run(dt)
             pygame.display.flip()
             if next_level:
-                if next_level.level_path is LevelType.HUB:
-                    if self.level.lvl_path is LevelType.LIGHTNING:
+                print(next_level.target_level)
+                if next_level.target_level is LevelType.HUB:
+                    if self.level.kind is LevelType.LIGHTNING:
                         self.lightning_clear = True
-                    elif self.level.lvl_path is LevelType.SNOW:
+                    elif self.level.kind is LevelType.SNOW:
                         self.snow_clear = True
-                    elif self.level.lvl_path is LevelType.WIND:
+                    elif self.level.kinda is LevelType.WIND:
                         self.wind_clear = True
 
                 if self.lightning_clear and self.snow_clear and self.wind_clear:
-                    if next_level.level_path is LevelType.HUB:
-                        next_level.level_path = LevelType.HUB_RAIN_ACCESS
+                    if next_level.target_level is LevelType.HUB:
+                        next_level.target_level = LevelType.HUB_RAIN_ACCESS
 
-                self.level = Level(next_level.level_path, self.player_stats)
-
-            print(f"({self.wind_clear}, {self.lightning_clear}, {self.snow_clear})")
+                self.level = Level(next_level.target_level, self.player_stats)
 
         pygame.quit()
         sys.exit(0)

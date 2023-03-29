@@ -35,6 +35,7 @@ class Level:
         self.player = pygame.sprite.GroupSingle()
         self.coins = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
+        self.gruntTiles = pygame.sprite.Group()
         
         self.stats = stats
         # TODO create dictionary with all player possessions and attributes to pass down?
@@ -50,8 +51,7 @@ class Level:
         tmx_data = load_pygame(Path(level_path).resolve())
 
         # Load blocks
-        for layer in tmx_data.visible_layers:
-            # Only get tile layers
+        for layer in tmx_data.layers:
             if hasattr(layer, "data"):
                 for x, y, surf in layer.tiles():
                     if layer.name == "Ground":
@@ -107,6 +107,13 @@ class Level:
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
                         )
+                    elif layer.name == "GruntTiles":
+                        self.gruntTiles.add(Entity(
+                            [self.all_sprites],
+                            None,
+                            (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                            surf,
+                        ))                
 
         # Spawn player
         for obj in tmx_data.get_layer_by_name("Player"):
@@ -137,9 +144,10 @@ class Level:
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):
                 if obj.type == "Grunt":
+                    #add the gruntTiles in the second []
                     Grunt(
                         [self.all_sprites, self.enemies],
-                        [self.collidable_sprites, self.player],
+                        [self.collidable_sprites, self.player, self.gruntTiles],
                         (obj.x, obj.y),
                         speed=40,
                         gravity=100,  # FIXME: hardcoded for now, make world property?

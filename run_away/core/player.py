@@ -59,6 +59,9 @@ class Player(AnimatedEntity):
         self.jump_sounds = get_sounds_by_key("player_jump")
         self.land_sounds = get_sounds_by_key("player_land")
         self.coin_sounds = get_sounds_by_key("coin_pick")
+        self.hit_sounds  = get_sounds_by_key("player_hit")
+        self.iframe_sfx  = get_sounds_by_key("player_iframe_tone")
+        self.die_sfx     = get_sounds_by_key("player_die")
 
         self.coins = coins
 
@@ -120,6 +123,8 @@ class Player(AnimatedEntity):
             self.health -= amount
             self.vulnerable = False
             self.hurt_time = pygame.time.get_ticks()
+            random.choice(self.hit_sounds).play()
+            random.choice(self.iframe_sfx).play()
 
     def check_death(self):
         """
@@ -127,6 +132,8 @@ class Player(AnimatedEntity):
         """
         if self.health <= 0:
             print("You Died!")
+
+            self.die_sfx[0].play()
 
             # FIXME: make a respawn method that resets all booleans, position, etc.?
 

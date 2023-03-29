@@ -5,6 +5,8 @@ from typing import Optional
 import config
 import pygame
 from utils.tools import get_wave_value, import_animations
+import random
+from config import GAME_FONT
 
 
 class Directions:
@@ -89,7 +91,8 @@ class AnimatedEntity(Entity):
 
     def update(self, dt: float):
         super().update(dt)
-        self.apply_gravity(dt)
+        if not self.gravity == 0:
+            self.apply_gravity(dt)
         self.move(dt)
         self.animate(dt)
 
@@ -193,11 +196,12 @@ class AnimatedEntity(Entity):
                 else:
                     self.direction.y = 0
                     self.speed.y = 0
-                    if self.on_ground == False:
-                        try:
-                            random.choice(self.land_sounds).play()
-                        except AttributeError:
-                            pass
+                    if not self.gravity == 0:
+                        if self.on_ground == False:
+                            try:
+                                random.choice(self.land_sounds).play()
+                            except AttributeError:
+                                pass
 
                     self.on_ground = True
 
@@ -262,15 +266,6 @@ class InteractableEntity(AnimatedEntity):
         gravity: float = 0,
     ):
         super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
-
-
-class Portal(InteractableEntity):
-    pass
-
-
-class NPC(InteractableEntity):
-    pass
-
 
 class Hazard(Entity):
     def __init__(

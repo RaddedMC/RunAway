@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import math
 import random
-from typing import Optional
+from pathlib import Path
+from typing import Union
 
 import config
 import pygame
@@ -18,7 +19,7 @@ class Entity(pygame.sprite.Sprite):
         image: pygame.Surface,
         speed: float = 0,
         gravity: float = 0,
-    ):
+    ) -> None:
         super().__init__(groups)
         self.image = image
         self.rect = self.image.get_rect(topleft=pos)
@@ -33,7 +34,7 @@ class Entity(pygame.sprite.Sprite):
         self.max_gravity = gravity
         self.direction = pygame.math.Vector2(0, 0)
 
-    def apply_gravity(self, dt: float):
+    def apply_gravity(self, dt: float) -> None:
         # if not self.on_ground:
         self.speed.y += self.gravity * dt
 
@@ -45,7 +46,7 @@ class Entity(pygame.sprite.Sprite):
         if self.speed.y > 30:
             self.direction.y = 1
 
-    def move(self, dt: float):
+    def move(self, dt: float) -> None:
         # Calculate the position the entity will attempt to move to
         self.pixels_buffer.x += self.direction.x * self.speed.x * dt
         self.pixels_buffer.y += self.speed.y * dt
@@ -73,7 +74,7 @@ class Entity(pygame.sprite.Sprite):
         if self.direction.y != 0:
             self.on_ground = False
 
-    def horizontal_collision(self, dx: float):
+    def horizontal_collision(self, dx: float) -> None:
         from core.player import Player
 
         if dx != 0:
@@ -108,7 +109,7 @@ class Entity(pygame.sprite.Sprite):
                 # No collisions, the entity can move the full distance
                 return dx
 
-    def vertical_collision(self, dy: float):
+    def vertical_collision(self, dy: float) -> None:
         from core.player import Player
 
         if dy != 0:
@@ -167,7 +168,9 @@ class Entity(pygame.sprite.Sprite):
 
         return collided
 
-    def check_hazards(self, collided: list[Entity], rect_pos: int, rect_pos_attr: str):
+    def check_hazards(
+        self, collided: list[Entity], rect_pos: int, rect_pos_attr: str
+    ) -> None:
         if rect_pos_attr == "top":
             s = next(
                 (sprite for sprite in collided if sprite.hitbox.top == rect_pos), None
@@ -191,7 +194,7 @@ class Entity(pygame.sprite.Sprite):
         if type(s) is Hazard or isinstance(s, Enemy):
             self.apply_damage(s.get_damage())
 
-    def update(self, dt: float):
+    def update(self, dt: float) -> None:
         if not self.gravity == 0:
             self.apply_gravity(dt)
         self.move(dt)
@@ -202,12 +205,12 @@ class AnimatedEntity(Entity):
         self,
         groups: pygame.sprite.Group,
         collidable_sprites: pygame.sprite.Group,
-        pos: tuple,
-        root_dir: str,
+        pos: tuple[int, int],
+        root_dir: Union[str, Path],
         animation_speed: int = 18,  # FIXME: should this even have a default?
         speed: float = 0,
         gravity: float = 0,
-    ):
+    ) -> None:
         # Animations
         self.status = "idle"  # FIXME: hardcoded for now
         self.animation_speed = animation_speed
@@ -226,7 +229,7 @@ class AnimatedEntity(Entity):
 
         super().__init__(groups, collidable_sprites, pos, image, speed, gravity)
 
-    def animate(self, dt: float):
+    def animate(self, dt: float) -> None:
         animation = self.animations[self.status]
 
         # Increment to the next frame in the animation
@@ -249,7 +252,7 @@ class AnimatedEntity(Entity):
         else:
             self.image.set_alpha(255)
 
-    def update(self, dt: float):
+    def update(self, dt: float) -> None:
         super().update(dt)
         self.animate(dt)
 
@@ -260,11 +263,14 @@ class InteractableEntity(AnimatedEntity):
         groups: pygame.sprite.Group,
         collidable_sprites: pygame.sprite.Group,
         pos: tuple[int, int],
-        root_dir: str,
+        root_dir: Union[str, Path],
+        animation_speed: int,
         speed: float = 0,
         gravity: float = 0,
-    ):
-        super().__init__(groups, collidable_sprites, pos, root_dir, speed, gravity)
+    ) -> None:
+        super().__init__(
+            groups, collidable_sprites, pos, root_dir, animation_speed, speed, gravity
+        )
 
 
 class Hazard(Entity):
@@ -272,26 +278,26 @@ class Hazard(Entity):
         self,
         groups: pygame.sprite.Group,
         collidable_sprites: pygame.sprite.Group,
-        pos: tuple,
+        pos: tuple[int, int],
         image: pygame.Surface,
-        type: str,
-    ):
+        kind: str,
+    ) -> None:
         super().__init__(groups, collidable_sprites, pos, image)
         self.config = config.HAZARD_DATA
-        self.type = type
+        self.kind = kind
         self.hitbox = (
             self.rect.copy()
             .inflate(
                 tuple(
                     l * r
                     for l, r in zip(
-                        self.rect.size, config.HAZARD_DATA[self.type]["scale"]
+                        self.rect.size, config.HAZARD_DATA[self.kind]["scale"]
                     )
                 )
             )
-            .move(config.HAZARD_DATA[self.type]["offset"])
+            .move(config.HAZARD_DATA[self.kind]["offset"])
         )
-        self.damage = self.config["damage"]
+        self.damage: int = self.config["damage"]
 
-    def get_damage(self):
+    def get_damage(self) -> int:
         return self.damage

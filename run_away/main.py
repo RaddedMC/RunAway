@@ -14,14 +14,14 @@ class Game:
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
         self.player_stats = {"coins": 1}
-        self.level = Level(LevelType.HUB_RAIN_ACCESS, self.player_stats)
+        self.level = Level(LevelType.RAIN, self.player_stats)
         self.running = True
         self.lightning_clear = False
         self.snow_clear = False
         self.wind_clear = False
         self.load_sfx = get_sounds_by_key("portal")
 
-    def run(self):
+    def run(self) -> None:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -57,7 +57,7 @@ class Game:
                         self.lightning_clear = True
                     elif self.level.kind is LevelType.SNOW:
                         self.snow_clear = True
-                    elif self.level.kinda is LevelType.WIND:
+                    elif self.level.kind is LevelType.WIND:
                         self.wind_clear = True
 
                 if self.lightning_clear and self.snow_clear and self.wind_clear:

@@ -10,12 +10,18 @@ import pygame
 
 ### DEBUG FLAG ###
 DEBUG_VERBOSE_LOGGING = False
-DEBUG_UI = False
+DEBUG_UI = True
 DEBUG_ZOOM = True
 DEBUG_SHOW_HITBOXES = False
 
-BASE_PATH = Path.cwd().absolute().joinpath("run_away", "resources")
-LEVELS_PATH = BASE_PATH.joinpath("levels")
+### FOLDER PATHS ###
+BASE_PATH = Path.cwd().absolute().joinpath("run_away")
+RESOURCES_PATH = BASE_PATH.joinpath("resources")
+FONT_PATH = RESOURCES_PATH.joinpath("font")
+GFX_PATH = RESOURCES_PATH.joinpath("gfx")
+LEVELS_PATH = RESOURCES_PATH.joinpath("levels")
+MUSIC_PATH = RESOURCES_PATH.joinpath("music")
+SFX_PATH = RESOURCES_PATH.joinpath("sfx")
 
 
 ### GAME WORLD ###
@@ -36,12 +42,15 @@ PLAYER_DATA = {
     "stats": {"speed": 120, "health": 20, "damage": 10},
 }
 ENEMY_DATA = {
-    "grunt": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}},
-    "flying": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}},
+    "grunt": {"animation_speed": 6, "stats": {"speed": 40, "health": 10, "damage": 10}},
+    "flying": {
+        "animation_speed": 6,
+        "stats": {"speed": 100, "health": 10, "damage": 10},
+    },
 }
 WEAPON_DATA = {}
-PORTAL_DATA = {"animation_speed": 10}
-LEVEL_DATA = {"damage_factor": [1.2, 1.4, 1.6, 1.8]}
+PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}
+LEVEL_DATA = {"damage_factor": [1, 1.2, 1.4, 1.6, 1.8]}
 
 ### CONTROLS ###
 KEYS_LEFT = [pygame.K_LEFT, pygame.K_a]
@@ -76,5 +85,5 @@ def change_render_area():
 pygame.font.init()
 DEBUG_FONT = pygame.font.Font(None, 30)
 
-GAME_FONT = pygame.font.Font("run_away/resources/font/BitFont.ttf", 30)
-BIG_FONT = pygame.font.Font("run_away/resources/font/ROGFonts-Regular.otf", 20)
+GAME_FONT = pygame.font.Font(FONT_PATH.joinpath("BitFont.ttf"), 30)
+BIG_FONT = pygame.font.Font(FONT_PATH.joinpath("ROGFonts-Regular.otf"), 20)

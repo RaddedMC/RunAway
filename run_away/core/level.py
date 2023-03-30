@@ -13,8 +13,7 @@ from core.enemy import Grunt
 from core.enemy import Flying
 
 from core.portal import Portal
-
-
+from core.NPC import NPC
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 
@@ -115,6 +114,29 @@ class Level:
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
                         )
+
+        try:
+            for obj in tmx_data.get_layer_by_name("Interactables"):
+                # Load portals
+                if obj.type == "Portal":
+                    Portal(
+                        [self.all_sprites, self.portals],
+                        None,
+                        (obj.x, obj.y),
+                        colour="blue",
+                        level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
+                    )
+
+                # if obj.type == "NPC":
+                #     NPC(
+                #         [self.all_sprites, self.npcs],
+                #         None,
+                #         (obj.x, obj.y),
+                #         "./run_away/resources/gfx/NPCs/" + obj.name[0:obj.name.find("_")].lower() + "NPC",
+                #         dialogue = ["get dunked on lol"]
+                #     )
+        except ValueError:
+            pass
 
         # Spawn player
         for obj in tmx_data.get_layer_by_name("Player"):
@@ -272,7 +294,7 @@ class Level:
             debug(f"On Spikes: {self.player.sprite.on_hazard}", 180)
             debug(f"Player Coins: {self.player.sprite.coins}", 200)
             self.check_portals()
-            
+        self.check_portals()
         pygame.display.flip()
         return self.check_portals()
 

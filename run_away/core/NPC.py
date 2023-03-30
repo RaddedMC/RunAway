@@ -23,14 +23,16 @@ class NPC(InteractableEntity):
         )
         self.dialogue = dialogue
         self.msg_index = 0
-        self.message = config.GAME_FONT.render(f"{self.dialogue[self.msg_index]}", True, (255, 255, 255))
+        self.message = config.GAME_FONT.render(
+            f"{self.dialogue[self.msg_index]}", True, (255, 255, 255)
+        )
         display_rect = pygame.display.get_surface().get_rect()
-        self.message_rect = self.message.get_rect(midtop = (display_rect.centerx, 50))
-
-        
+        self.message_rect = self.message.get_rect(midtop=(display_rect.centerx, 50))
 
     def interact(self):
-        self.message = config.GAME_FONT.render(f"{self.dialogue[self.msg_index]}", True, (255, 255, 255))
+        self.message = config.GAME_FONT.render(
+            f"{self.dialogue[self.msg_index]}", True, (255, 255, 255)
+        )
         display_surface = pygame.display.get_surface()
         display_surface.blit(self.message, self.message_rect)
         self.msg_index += 1

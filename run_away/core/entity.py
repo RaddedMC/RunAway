@@ -75,8 +75,8 @@ class Entity(pygame.sprite.Sprite):
             self.on_ground = False
 
     def horizontal_collision(self, dx: float) -> Union[None, float]:
-        from core.player import Player
         from core.enemy import Enemy
+        from core.player import Player
 
         if dx != 0:
             # Move a copy of the entity and check for collisions
@@ -111,8 +111,8 @@ class Entity(pygame.sprite.Sprite):
                 return dx
 
     def vertical_collision(self, dy: float) -> Union[None, float]:
-        from core.player import Player
         from core.enemy import Enemy
+        from core.player import Player
 
         if dy != 0:
             # Move a copy of the entity and check for collisions

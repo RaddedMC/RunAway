@@ -7,13 +7,8 @@ from config import LEVELS_PATH
 from core.camera import CameraGroup
 from core.enemy import Flying, Grunt
 from core.entity import AnimatedEntity, Entity, Hazard
+from core.npc import NPC
 from core.player import Player
-
-from core.enemy import Grunt
-from core.enemy import Flying
-
-from core.portal import Portal
-from core.NPC import NPC
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 

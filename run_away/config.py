@@ -35,7 +35,10 @@ PLAYER_DATA = {
     "gravity": 275,
     "stats": {"speed": 120, "health": 20, "damage": 10},
 }
-ENEMY_DATA = {"grunt": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}}}
+ENEMY_DATA = {
+    "grunt": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}},
+    "flying": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}},
+}
 WEAPON_DATA = {}
 PORTAL_DATA = {"animation_speed": 10}
 LEVEL_DATA = {"damage_factor": [1.2, 1.4, 1.6, 1.8]}

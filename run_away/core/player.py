@@ -2,7 +2,7 @@ import random
 
 import config
 import pygame
-from core.entity import AnimatedEntity, Directions, Hazard
+from core.entity import AnimatedEntity, Hazard
 from utils.tools import get_sounds_by_key
 
 

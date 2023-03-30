@@ -2,7 +2,7 @@ import random
 
 import pygame
 from config import DEBUG_VERBOSE_LOGGING, LEVEL_DATA
-from core.entity import AnimatedEntity, Directions
+from core.entity import AnimatedEntity
 
 
 class Enemy(AnimatedEntity):
@@ -112,14 +112,13 @@ class Flying(Enemy):
     ):
         health = 10  # FIXME: see grunt
         damage = 10
-        self.root_dir = "./run_away/resources/gfx/enemies/flying/"
         super().__init__(
             health,
             damage,
             groups,
             collidable_sprites,
             pos,
-            self.root_dir,
+            "./run_away/resources/gfx/enemies/flying/",
             level_progress,
             speed,
             0,

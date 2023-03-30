@@ -121,14 +121,14 @@ class Level:
                         level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
                     )
 
-                if obj.type == "NPC":
-                    NPC(
-                        [self.all_sprites, self.npcs],
-                        None,
-                        (obj.x, obj.y),
-                        "./run_away/resources/gfx/NPCs/" + obj.name[0:obj.name.find("_")].lower() + "NPC",
-                        dialogue = ["get dunked on lol"]
-                    )
+                # if obj.type == "NPC":
+                #     NPC(
+                #         [self.all_sprites, self.npcs],
+                #         None,
+                #         (obj.x, obj.y),
+                #         "./run_away/resources/gfx/NPCs/" + obj.name[0:obj.name.find("_")].lower() + "NPC",
+                #         dialogue = ["get dunked on lol"]
+                #     )
         except ValueError:
             pass
 

@@ -126,7 +126,14 @@ class Level:
                         colour="blue",
                         level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
                     )
-
+                if self.is_end_cutscene:
+                    if getattr(obj, "class") == "Home":
+                        from core.home import Home
+                        Home(
+                            [self.all_sprites, self.home],
+                            None,
+                            (obj.x, obj.y)
+                        )
                 # if obj.type == "NPC":
                 #     NPC(
                 #         [self.all_sprites, self.npcs],
@@ -199,27 +206,6 @@ class Level:
             # This level probably has no enemies
             pass
 
-        try:
-            for obj in tmx_data.get_layer_by_name("Interactables"):
-                # Load portals
-                if obj.type == "Portal":
-                    Portal(
-                        [self.all_sprites, self.portals],
-                        None,
-                        (obj.x, obj.y),
-                        colour="blue",
-                        level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
-                    )
-                if self.is_end_cutscene:
-                    if getattr(obj, "class") == "Home":
-                        from core.home import Home
-                        Home(
-                            [self.all_sprites, self.home],
-                            None,
-                            (obj.x, obj.y)
-                        )
-        except ValueError:
-            pass
 
         try:
             for obj in tmx_data.get_layer_by_name("Consumables"):

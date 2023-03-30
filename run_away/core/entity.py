@@ -74,8 +74,9 @@ class Entity(pygame.sprite.Sprite):
         if self.direction.y != 0:
             self.on_ground = False
 
-    def horizontal_collision(self, dx: float) -> None:
+    def horizontal_collision(self, dx: float) -> Union[None, float]:
         from core.player import Player
+        from core.enemy import Enemy
 
         if dx != 0:
             # Move a copy of the entity and check for collisions
@@ -91,8 +92,8 @@ class Entity(pygame.sprite.Sprite):
                     # The x-coordinate of the closest (leftmost) entity we collided with
                     min_left = min([sprite.hitbox.left for sprite in collided])
 
-                    if type(self) is Player:
-                        self.check_hazards(collided, min_left, "left")
+                    if type(self) is Player or isinstance(self, Enemy):
+                        self.check_damage(collided, min_left, "left")
 
                     # The max distance that this entity can move without causing collision
                     return min_left - self.hitbox.right
@@ -100,8 +101,8 @@ class Entity(pygame.sprite.Sprite):
                     # The x-coordinate of the closest (rightmost) entity we collided with
                     max_right = max([sprite.hitbox.right for sprite in collided])
 
-                    if type(self) is Player:
-                        self.check_hazards(collided, max_right, "right")
+                    if type(self) is Player or isinstance(self, Enemy):
+                        self.check_damage(collided, max_right, "right")
 
                     # The max distance that this entity can move without causing collision
                     return max_right - self.hitbox.left
@@ -109,8 +110,9 @@ class Entity(pygame.sprite.Sprite):
                 # No collisions, the entity can move the full distance
                 return dx
 
-    def vertical_collision(self, dy: float) -> None:
+    def vertical_collision(self, dy: float) -> Union[None, float]:
         from core.player import Player
+        from core.enemy import Enemy
 
         if dy != 0:
             # Move a copy of the entity and check for collisions
@@ -126,8 +128,8 @@ class Entity(pygame.sprite.Sprite):
                     # The y-coordinate of the closest (bottommost) entity we collided with
                     lowest_bottom = max([sprite.hitbox.bottom for sprite in collided])
 
-                    if type(self) is Player:
-                        self.check_hazards(collided, lowest_bottom, "bottom")
+                    if type(self) is Player or isinstance(self, Enemy):
+                        self.check_damage(collided, lowest_bottom, "bottom")
 
                     # The max distance that this entity can move without causing collision
                     return lowest_bottom - self.hitbox.top
@@ -145,8 +147,8 @@ class Entity(pygame.sprite.Sprite):
                     # The y-coordinate of the closest (topmost) entity we collided with
                     max_top = min([sprite.hitbox.top for sprite in collided])
 
-                    if type(self) is Player:
-                        self.check_hazards(collided, max_top, "top")
+                    if type(self) is Player or isinstance(self, Enemy):
+                        self.check_damage(collided, max_top, "top")
 
                     # The max distance that this entity can move without causing collision
                     return max_top - self.hitbox.bottom
@@ -168,7 +170,7 @@ class Entity(pygame.sprite.Sprite):
 
         return collided
 
-    def check_hazards(
+    def check_damage(
         self, collided: list[Entity], rect_pos: int, rect_pos_attr: str
     ) -> None:
         if rect_pos_attr == "top":

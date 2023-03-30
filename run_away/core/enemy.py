@@ -6,7 +6,8 @@ from typing import Union
 import config
 import pygame
 from config import DEBUG_VERBOSE_LOGGING
-from core.entity import AnimatedEntity
+from core.entity import AnimatedEntity, Entity
+from core.player import Player
 
 
 class Enemy(AnimatedEntity):
@@ -21,6 +22,7 @@ class Enemy(AnimatedEntity):
         gravity: float,
         health: float,
         damage: float,
+        player: Player,
     ) -> None:
         super().__init__(
             groups,
@@ -34,11 +36,7 @@ class Enemy(AnimatedEntity):
         self.max_speed = speed
         self.health = health
         self.damage = damage
-
-    def update(self, dt: float) -> None:
-        super().update(dt)
-        self.run_behaviour()
-        self.check_death()
+        self.player = player
 
     def run_behaviour(self) -> None:
         """
@@ -58,6 +56,35 @@ class Enemy(AnimatedEntity):
         if self.health <= 0:
             pass  # FIXME: DIE
 
+    def update(self, dt: float) -> None:
+        super().update(dt)
+        self.run_behaviour()
+        self.check_death()
+
+    def check_damage(
+        self, collided: list[Entity], rect_pos: int, rect_pos_attr: str
+    ) -> None:
+        if rect_pos_attr == "top":
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.top == rect_pos), None
+            )
+        elif rect_pos_attr == "bottom":
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.bottom == rect_pos),
+                None,
+            )
+        elif rect_pos_attr == "left":
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.left == rect_pos), None
+            )
+        else:
+            s = next(
+                (sprite for sprite in collided if sprite.hitbox.right == rect_pos), None
+            )
+
+        if type(s) is Player:
+            s.apply_damage(self.get_damage())
+
 
 class Grunt(Enemy):
     def __init__(
@@ -71,6 +98,7 @@ class Grunt(Enemy):
         gravity: float,
         health: float,
         damage: float,
+        player: Player,
         colour: str = "red",
     ) -> None:
         if type(root_dir) is Path:
@@ -88,6 +116,7 @@ class Grunt(Enemy):
             gravity,
             health,
             damage,
+            player,
         )
         self.direction.x = -1
 
@@ -128,7 +157,7 @@ class Flying(Enemy):
         speed: float,
         health: float,
         damage: float,
-        target: pygame.sprite.GroupSingle,
+        player: Player,
     ) -> None:
         super().__init__(
             groups,
@@ -140,9 +169,9 @@ class Flying(Enemy):
             0,
             health,
             damage,
+            player,
         )
         self.direction.x = 1
-        self.target = target
         self.launched = False
 
     def update(self, dt: float) -> None:
@@ -177,31 +206,31 @@ class Flying(Enemy):
                 print(f"Not a launch frame. ({self.speed.x}, {self.speed.y})")
 
     def launch(self) -> None:
-        x_diff = abs(self.target.sprite.rect.x - self.rect.x)
+        x_diff = abs(self.player.rect.x - self.rect.x)
         x_launch = 0
         if x_diff < self.max_speed:
             x_launch = x_diff * 2
         else:
             x_launch = self.max_speed
 
-        y_diff = abs(self.target.sprite.rect.y - self.rect.y)
+        y_diff = abs(self.player.rect.y - self.rect.y)
         y_launch = 0
         if y_diff < self.max_speed:
             y_launch = y_diff * 2
         else:
             y_launch = self.max_speed
 
-        if self.target.sprite.rect.x > self.rect.x:
+        if self.player.rect.x > self.rect.x:
             self.speed.x = x_launch + random.randrange(0, self.max_speed * 0.1)
-        elif self.target.sprite.rect.x < self.rect.x:
+        elif self.player.rect.x < self.rect.x:
             self.flip_sprite = True
             self.speed.x = -(x_launch + random.randrange(0, self.max_speed * 0.1))
         else:
             self.speed.x = 0
 
-        if self.target.sprite.rect.y > self.rect.y:
+        if self.player.rect.y > self.rect.y:
             self.speed.y = y_launch + random.randrange(0, self.max_speed * 0.1)
-        elif self.target.sprite.rect.y < self.rect.y:
+        elif self.player.rect.y < self.rect.y:
             self.speed.y = -(y_launch + random.randrange(0, self.max_speed * 0.1))
         else:
             self.speed.y = 0

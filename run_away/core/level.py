@@ -184,6 +184,7 @@ class Level:
                         gravity=100,  # FIXME: hardcoded for now, make world property?
                         health=config.ENEMY_DATA["grunt"]["stats"]["health"],
                         damage=config.ENEMY_DATA["grunt"]["stats"]["damage"],
+                        player=self.player.sprite,
                         colour=grunt_colour,
                     )
                 elif obj.type == "Flying":
@@ -196,7 +197,7 @@ class Level:
                         speed=config.ENEMY_DATA["flying"]["stats"]["speed"],
                         health=config.ENEMY_DATA["flying"]["stats"]["health"],
                         damage=config.ENEMY_DATA["flying"]["stats"]["damage"],
-                        target=self.player,
+                        player=self.player.sprite,
                     )
         except ValueError:
             # This level probably has no enemies

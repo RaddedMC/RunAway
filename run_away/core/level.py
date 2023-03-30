@@ -20,6 +20,7 @@ class LevelType(Enum):
     HUB = LEVELS_PATH.joinpath("level_hub.tmx").resolve()
     HUB_RAIN_ACCESS = LEVELS_PATH.joinpath("level_hub_rainaccess.tmx").resolve()
     RAIN_RETURN = LEVELS_PATH.joinpath("level_rainreturn.tmx").resolve()
+    HOME = LEVELS_PATH.joinpath("level_home.tmx").resolve()
 
     @classmethod
     def list(cls):
@@ -220,7 +221,6 @@ class Level:
                                 if obj.name[0 : obj.name.find("_")].lower()
                                 in str(level.value)
                             ),
-                            None,  # TODO: this will need to be changed/removed once the final portal is implemented
                         ),
                     )
                 if self.is_end_cutscene:

@@ -53,7 +53,8 @@ class Player(AnimatedEntity):
 
         # Track player states/actions
         self.attacking = False
-        self.attack_cooldown = None
+        self.attack_cooldown = 250
+        self.attackCoolingDown = False
 
         # Invincibility frames
         self.on_hazard = False
@@ -106,22 +107,28 @@ class Player(AnimatedEntity):
             self.attack()
 
 
+# current issue: after attacking once in a level, cannot attack again. Collisions not implemented yet
+
     def attack(self):
-        #need player direction, position for offset, calc and pass that here
-        #use test_stick.png
-        #init the weapon here
-        if self.lastDirection < 0:
-            #player facing left
-            #keeping in mind that pos is top left
-            weaponPosition = (self.rect.x - 15, self.rect.y - 2)
+        if self.attackCoolingDown:
+            pass
         else:
-            #player facing right
-             weaponPosition = (self.rect.x + 15, self.rect.y - 2)
-        #arbitrary damage for now
-        Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",2)
-            
-
-
+            self.attacking = True
+            #need player direction, position for offset, calc and pass that here
+            #use test_stick.png
+            #init the weapon here
+            if self.lastDirection < 0:
+                #player facing left
+                #keeping in mind that pos is top left
+                weaponPosition = (self.rect.x - 15, self.rect.y + 8)
+            else:
+                #player facing right
+                weaponPosition = (self.rect.x + 15, self.rect.y + 8)
+            #arbitrary damage for now
+            self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",2)
+            self.attack_time = pygame.time.get_ticks()
+            self.attackCoolingDown = True
+        
     def jump(self):
         """
         Make the player jump
@@ -145,6 +152,18 @@ class Player(AnimatedEntity):
             if now - self.hurt_time >= self.invulnerable_duration:
                 self.vulnerable = True
                 self.hurt_time = None
+
+        if self.attacking:
+            # Attack has reached end
+            if now - self.attack_time >= 250:
+                self.attacking = False
+                self.attack_time = None
+                self.weaponOut.image.fill((0,0,0,0))
+                del self.weaponOut
+            elif now - self.attack_time < self.attack_cooldown:
+                self.attackCoolingDown = True
+            elif now - self.attack_time >= self.attack_cooldown:
+                self.attackCoolingDown = False
 
     def get_damage(self):
         if self.vulnerable and self.on_hazard:
@@ -193,3 +212,4 @@ class Player(AnimatedEntity):
         super().update(dt)
         self.get_damage()
         self.check_death()
+        

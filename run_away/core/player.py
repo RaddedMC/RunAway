@@ -3,6 +3,7 @@ import random
 import config
 import pygame
 from core.entity import AnimatedEntity, Directions, Hazard
+from core.weapon import Weapon
 from utils.tools import get_sounds_by_key
 
 
@@ -18,6 +19,8 @@ class Player(AnimatedEntity):
         jump_speed: int,
         coins: int
     ):
+        self.playerGroups = groups
+        self.collidable_sprites = collidable_sprites
         self.config = config.PLAYER_DATA
         self.stats = self.config["stats"]
         super().__init__(
@@ -43,6 +46,7 @@ class Player(AnimatedEntity):
         self.spawn_point = pos
         self.jump_speed = self.config["jump_speed"]
         self.on_ground = False
+        self.lastDirection = 0
 
         # Weapon
         self.weapon_data = None
@@ -79,11 +83,13 @@ class Player(AnimatedEntity):
         if True in [keys[key] for key in config.KEYS_RIGHT]:
             self.status = "run"
             self.direction.x = 1
+            self.lastDirection = self.direction.x
             self.speed.x = self.stats["speed"]
             self.flip_sprite = False
         elif True in [keys[key] for key in config.KEYS_LEFT]:
             self.status = "run"
             self.direction.x = -1
+            self.lastDirection = self.direction.x
             self.speed.x = self.stats["speed"]
             self.flip_sprite = True
         else:
@@ -96,6 +102,25 @@ class Player(AnimatedEntity):
 
         if True in [keys[key] for key in config.KEYS_INTERACT]:
             self.status = "interacting"
+        if True in [keys[key] for key in config.KEYS_ATTACK]:
+            self.attack()
+
+
+    def attack(self):
+        #need player direction, position for offset, calc and pass that here
+        #use test_stick.png
+        #init the weapon here
+        if self.lastDirection < 0:
+            #player facing left
+            #keeping in mind that pos is top left
+            weaponPosition = (self.rect.x - 15, self.rect.y - self.rect.y/2)
+        else:
+            #player facing right
+             weaponPosition = (self.rect.x + 15, self.rect.y - self.rect.y/2)
+        #arbitrary damage for now
+        Weapon(self.playerGroups, self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",2)
+            
+
 
     def jump(self):
         """
@@ -113,7 +138,7 @@ class Player(AnimatedEntity):
         pass
 
     def cooldowns(self):
-        now = pygame.time.get_ticks()
+        now = pygame.time.get_ticks() #returns time in milliseconds
 
         if not self.vulnerable:
             # Invincibility frame has expired

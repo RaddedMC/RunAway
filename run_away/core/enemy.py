@@ -93,7 +93,7 @@ class Flying(Enemy):
     
     def update(self, dt: float):
         super().update(dt)
-        print(f"Frame: {int(self.frame_index)} ", end="")
+        # print(f"Frame: {int(self.frame_index)} ", end="")
 
         if int(self.frame_index) == 5 and not self.launched:
             self.launch()
@@ -119,7 +119,7 @@ class Flying(Enemy):
                     self.speed.y = 0
 
             
-            print(f"Not a launch frame. ({self.speed.x}, {self.speed.y})")
+            # print(f"Not a launch frame. ({self.speed.x}, {self.speed.y})")
 
     def launch(self):
         x_diff = abs(self.target.sprite.rect.x - self.rect.x)
@@ -151,4 +151,4 @@ class Flying(Enemy):
         else:
             self.speed.y = 0
 
-        print(f"Launch! ({self.speed.x}, {self.speed.y})")
+        # print(f"Launch! ({self.speed.x}, {self.speed.y})")

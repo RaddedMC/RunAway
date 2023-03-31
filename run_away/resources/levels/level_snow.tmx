@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="64" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="48">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="64" height="44" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="49">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_snow.tsx"/>
  <tileset firstgid="281" source="../gfx/tilesets/terrain_objects.tsx"/>
  <tileset firstgid="443" source="../gfx/tilesets/terrain_rain.tsx"/>
@@ -387,12 +387,13 @@
   <object id="12" name="Hub_Portal" type="Portal" x="112" y="432">
    <point/>
   </object>
-  <object id="26" name="SnowShop" type="Shop" x="928" y="144">
+  <object id="26" name="SnowShop" type="Shop" x="867" y="99.6667">
    <point/>
   </object>
   <object id="39" name="Snow_NPC" type="NPC" x="96" y="80">
    <point/>
   </object>
+  <object id="48" name="SnowShop" type="Shop" x="912" y="112" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="5" name="Consumables">
   <object id="43" name="Coin" type="Coin" x="912" y="80">

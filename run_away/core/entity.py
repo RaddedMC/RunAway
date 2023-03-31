@@ -13,6 +13,17 @@ class Directions:
     LEFT = -1
     RIGHT = 1
 
+class Block(pygame.sprite.Sprite):
+    def __init__(
+        self,
+        groups: pygame.sprite.Group,
+        pos: tuple,
+        image: pygame.Surface,
+    ):
+        super().__init__(groups)
+        self.image = image
+        self.rect = self.image.get_rect(topleft=pos)
+        
 
 class Entity(pygame.sprite.Sprite):
     def __init__(

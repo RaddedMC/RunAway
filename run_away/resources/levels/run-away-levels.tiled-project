@@ -6,7 +6,8 @@
     "extensionsPath": "extensions",
     "folders": [
         ".",
-        "../gfx/tilesets"
+        "../gfx/tilesets",
+        "../gfx/tilesets/gui_tilesets"
     ],
     "propertyTypes": [
     ]

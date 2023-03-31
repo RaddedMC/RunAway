@@ -17,6 +17,8 @@ from core.NPC import NPC
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 
+from core.shop import Shop
+
 
 class Level:
     def __init__(self, level_path, stats) -> None:
@@ -42,6 +44,9 @@ class Level:
         self.is_end_cutscene = False
         self.coins = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
+
+        self.in_shop = False
+        self.shop = None    
         
         self.stats = stats
         # TODO create dictionary with all player possessions and attributes to pass down?

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="34">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="35">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_lightning.tsx"/>
  <tileset firstgid="281" source="../gfx/tilesets/terrain_objects.tsx"/>
  <layer id="6" name="vLayer1" width="30" height="85">
@@ -670,9 +670,7 @@
   <object id="26" name="Hub_Portal" type="Portal" x="416" y="1264">
    <point/>
   </object>
-  <object id="33" name="LightningShop" type="Shop" x="304" y="608">
-   <point/>
-  </object>
+  <object id="34" name="LightningShop" x="288" y="576" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="8" name="Consumables">
   <object id="28" name="Coin" type="Coin" x="288" y="544">

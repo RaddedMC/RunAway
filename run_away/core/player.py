@@ -113,12 +113,12 @@ class Player(AnimatedEntity):
         if self.lastDirection < 0:
             #player facing left
             #keeping in mind that pos is top left
-            weaponPosition = (self.rect.x - 15, self.rect.y - self.rect.y/2)
+            weaponPosition = (self.rect.x - 15, self.rect.y - 2)
         else:
             #player facing right
-             weaponPosition = (self.rect.x + 15, self.rect.y - self.rect.y/2)
+             weaponPosition = (self.rect.x + 15, self.rect.y - 2)
         #arbitrary damage for now
-        Weapon(self.playerGroups, self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",2)
+        Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",2)
             
 
 

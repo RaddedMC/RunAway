@@ -33,6 +33,9 @@ class Player(AnimatedEntity):
             speed,
             gravity,
         )
+
+        self.playerGroups = groups  # TODO: Clear Code weapon solution
+
         # Player stats
         self.health = health
         self.max_health = health

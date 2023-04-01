@@ -11,8 +11,8 @@ from utils.tools import get_sounds_by_key
 class Player(AnimatedEntity):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: list[pygame.sprite.Group],
         pos: tuple[int, int],
         root_dir: Union[str, Path],
         animation_speed: int,

@@ -13,8 +13,8 @@ from core.player import Player
 class Enemy(AnimatedEntity):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: list[pygame.sprite.Group],
         pos: tuple[int, int],
         root_dir: Union[str, Path],
         animation_speed: int,
@@ -89,8 +89,8 @@ class Enemy(AnimatedEntity):
 class Grunt(Enemy):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: list[pygame.sprite.Group],
         pos: tuple[int, int],
         root_dir: Union[str, Path],
         animation_speed: int,
@@ -149,8 +149,8 @@ class Grunt(Enemy):
 class Flying(Enemy):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: list[pygame.sprite.Group],
         pos: tuple[int, int],
         root_dir: Union[str, Path],
         animation_speed: int,

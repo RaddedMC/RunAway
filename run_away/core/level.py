@@ -32,7 +32,7 @@ from core.portal import Portal
 
 
 class Level:
-    def __init__(self, kind: LevelType, stats) -> None:
+    def __init__(self, kind: LevelType, stats: dict) -> None:
         """
         To solve the issue of resolution scaling, this game draws all of its sprites to
         a small (256px by 144px) surface, then upscales this surface to the resolution

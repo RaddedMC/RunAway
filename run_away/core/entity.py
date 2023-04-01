@@ -3,18 +3,31 @@ from __future__ import annotations
 import math
 import random
 from pathlib import Path
-from typing import Union
+from typing import Union, Optional
 
 import config
 import pygame
 from utils.tools import get_wave_value, import_animations
 
 
+class Block(pygame.sprite.Sprite):
+    def __init__(
+        self,
+        groups: list[pygame.sprite.Group],
+        pos: tuple[int, int],
+        image: Optional[pygame.Surface] = None,
+    ):
+        super().__init__(groups)
+        self.image = image
+        self.rect = self.image.get_rect(topleft=pos)
+        self.hitbox = self.rect.copy()
+
+
 class Entity(pygame.sprite.Sprite):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: Optional[list[pygame.sprite.Group]],
         pos: tuple[int, int],
         image: pygame.Surface,
         speed: float = 0,
@@ -205,8 +218,8 @@ class Entity(pygame.sprite.Sprite):
 class AnimatedEntity(Entity):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: Optional[list[pygame.sprite.Group]],
         pos: tuple[int, int],
         root_dir: Union[str, Path],
         animation_speed: int = 18,  # FIXME: should this even have a default?
@@ -262,8 +275,8 @@ class AnimatedEntity(Entity):
 class InteractableEntity(AnimatedEntity):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: Optional[list[pygame.sprite.Group]],
         pos: tuple[int, int],
         root_dir: Union[str, Path],
         animation_speed: int,
@@ -278,8 +291,8 @@ class InteractableEntity(AnimatedEntity):
 class Hazard(Entity):
     def __init__(
         self,
-        groups: pygame.sprite.Group,
-        collidable_sprites: pygame.sprite.Group,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: Optional[list[pygame.sprite.Group]],
         pos: tuple[int, int],
         image: pygame.Surface,
         kind: str,

@@ -4,7 +4,7 @@ from typing import Union
 
 import config
 import pygame
-from core.entity import AnimatedEntity, Hazard
+from core.entity import AnimatedEntity
 from utils.tools import get_sounds_by_key
 
 

@@ -6,7 +6,7 @@ import pygame
 from config import LEVELS_PATH
 from core.camera import CameraGroup
 from core.enemy import Flying, Grunt
-from core.entity import AnimatedEntity, Block, Entity, Hazard
+from core.entity import AnimatedEntity, Block, Hazard
 from core.npc import NPC
 from core.player import Player
 from pytmx.util_pygame import load_pygame
@@ -225,7 +225,6 @@ class Level:
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):
                 if obj.type == "Grunt":
-                    # add the grunt_tiles in the second []
                     Grunt(
                         [self.all_sprites, self.enemies],
                         [self.collidable_sprites, self.player, self.grunt_tiles],

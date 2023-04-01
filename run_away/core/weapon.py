@@ -12,5 +12,3 @@ class Weapon(Entity):
         ):
         super().__init__(groups, collidable_sprites, pos, pygame.image.load(image))
         self.damage = damage
-        #get rid of below later
-        self.coins = None

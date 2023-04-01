@@ -54,7 +54,7 @@ class Player(AnimatedEntity):
 
         # Track player states/actions
         self.attacking = False
-        self.attack_cooldown = 250
+        self.attack_cooldown = 1000
         self.attackCoolingDown = False
         self.attack_time = None
 
@@ -120,10 +120,10 @@ class Player(AnimatedEntity):
             if self.lastDirection < 0:
                 #player facing left
                 #keeping in mind that pos is top left
-                weaponPosition = (self.rect.x - 15, self.rect.y + 8)
+                weaponPosition = (self.rect.x - 15, self.rect.y + 10)
             else:
                 #player facing right
-                weaponPosition = (self.rect.x + 15, self.rect.y + 8)
+                weaponPosition = (self.rect.x + 15, self.rect.y + 10)
             #arbitrary damage for now
             self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",2)
             self.attack_time = pygame.time.get_ticks()
@@ -157,13 +157,14 @@ class Player(AnimatedEntity):
             # Attack has reached end
             if now - self.attack_time >= 250:
                 self.attacking = False
-                self.attack_time = None
                 self.weaponOut.image.fill((0,0,0,0))
                 del self.weaponOut
-            elif now - self.attack_time < self.attack_cooldown:
+            if now - self.attack_time < self.attack_cooldown:
                 self.attackCoolingDown = True
-            elif now - self.attack_time >= self.attack_cooldown:
+        if self.attackCoolingDown:
+            if now - self.attack_time >= self.attack_cooldown:
                 self.attackCoolingDown = False
+            
 
     def apply_damage(self, amount: int) -> None:
         if self.vulnerable:

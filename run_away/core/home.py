@@ -1,31 +1,36 @@
-from core.entity import AnimatedEntity
+from pathlib import Path
+from typing import Union
+
 import pygame
+from core.entity import AnimatedEntity
+
 
 class Home(AnimatedEntity):
     def __init__(
         self,
         groups: pygame.sprite.Group,
-        collitable_sprites: pygame.sprite.Group,
-        pos: tuple
-    ):
+        collidable_sprites: pygame.sprite.Group,
+        pos: tuple[int, int],
+        root_dir: Union[str, Path],
+    ) -> None:
         super().__init__(
             groups=groups,
-            collidable_sprites=collitable_sprites,
+            collidable_sprites=collidable_sprites,
             pos=pos,
-            root_dir="./run_away/resources/gfx/objects/home/",
+            root_dir=root_dir,
+            animation_speed=0,
             speed=0,
-            gravity=0
+            gravity=0,
         )
-        self.animation_speed = 0
 
-    def set_frame_by_percent(self, per):
+    def set_frame_by_percent(self, per: float) -> None:
         # FIXME: this number keeps jumping to something random and strange
-        potential_frame = round(per*9)
-        if not round(per*9) > 9 and not potential_frame < 0:
+        potential_frame = round(per * 9)
+        if not round(per * 9) > 9 and not potential_frame < 0:
             self.index_i_want = potential_frame
 
-    def animate(self, dt: float):
-        if not hasattr(self,"index_i_want"):
+    def animate(self, dt: float) -> None:
+        if not hasattr(self, "index_i_want"):
             self.index_i_want = 0
 
         animation = self.animations[self.status]

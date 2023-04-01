@@ -34,6 +34,7 @@ PLAYER_DATA = {
 ENEMY_DATA = {"grunt": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}}}
 WEAPON_DATA = {}
 PORTAL_DATA = {"animation_speed": 10}
+SHOP_DATA = {"price" : 7}
 
 ### CONTROLS ###
 KEYS_LEFT = [pygame.K_LEFT, pygame.K_a]

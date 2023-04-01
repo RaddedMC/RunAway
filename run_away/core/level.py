@@ -44,13 +44,12 @@ class Level:
         self.is_end_cutscene = False
         self.coins = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
-
-        self.in_shop = False
-        self.shop = None    
+ 
         
         self.stats = stats
-        # TODO create dictionary with all player possessions and attributes to pass down?
-        # self.items = {coins :0, }
+
+        self.in_shop = False
+        self.shop = None
 
         self.import_assets(level_path)
 
@@ -131,6 +130,14 @@ class Level:
                         colour="blue",
                         level_path="run_away/resources/levels/level_"+obj.name[0:obj.name.find("_")].lower()+".tmx"
                     )
+                
+                if obj.type == "Shop":
+                    self.shop = Shop(
+                        pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height),
+                        self.stats,
+                        self.in_shop
+                    )
+
                 if self.is_end_cutscene:
                     if getattr(obj, "class") == "Home":
                         from core.home import Home
@@ -244,47 +251,60 @@ class Level:
             if self.player.sprite.status == "interacting":
                 self.npcs.sprite.interact()
         
+    def check_shop(self):
+        if self.shop == None:
+            return
+        elif self.shop.rect.colliderect(self.player.sprite) and self.player.sprite.status == "interacting":
+            self.in_shop = True
+            
     def run(self, dt):
-        # Draw sprites, upscale the render surface and display to the user's screen
-        self.render_surface.fill("black")
-        self.all_sprites.update(dt)
-        self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
-        
-        if self.is_end_cutscene: self.update_end_cutscene(dt)
 
-        scaled_display = pygame.transform.scale(
-            self.render_surface,
-            (self.display_surface.get_width(), self.display_surface.get_height()),
-        )
+        self.check_shop()
 
-        # Handle end cutscene
-        if self.is_end_cutscene:
-            self.display_surface.blit(scaled_display, (0, 150))
-        else:
-            self.display_surface.blit(scaled_display, (0, 0))
-            # TODO update entire stats dictionary at once?
-            self.stats["coins"] = self.player.sprite.coins
+        if self.in_shop:
+            self.in_shop = self.shop.interact()
+            print(self.in_shop)
+        else:        
+            # Draw sprites, upscale the render surface and display to the user's screen
+            self.render_surface.fill("black")
+            self.all_sprites.update(dt)
+            self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
+            
+            if self.is_end_cutscene: self.update_end_cutscene(dt)
 
-        self.check_coins()
-        
-        if config.DEBUG_UI:
-            debug(self.player.sprite.status)
-            debug(f"Direction: {self.player.sprite.direction}", 40)
-            debug(f"Speed: {self.player.sprite.speed}", 60)
-            debug(
-                f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}",
-                80,
+            scaled_display = pygame.transform.scale(
+                self.render_surface,
+                (self.display_surface.get_width(), self.display_surface.get_height()),
             )
-            debug(f"On Ground: {self.player.sprite.on_ground}", 100)
-            debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
-            debug(
-                f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})",
-                140,
-            )
-            debug(f"Player Health: {self.player.sprite.health}", 160)
-            debug(f"On Spikes: {self.player.sprite.on_hazard}", 180)
-            debug(f"Player Coins: {self.player.sprite.coins}", 200)
-            self.check_portals()
+
+            # Handle end cutscene
+            if self.is_end_cutscene:
+                self.display_surface.blit(scaled_display, (0, 150))
+            else:
+                self.display_surface.blit(scaled_display, (0, 0))
+                # TODO update entire stats dictionary at once?
+                self.stats["coins"] = self.player.sprite.coins
+
+            self.check_coins()
+            
+            if config.DEBUG_UI:
+                debug(self.player.sprite.status)
+                debug(f"Direction: {self.player.sprite.direction}", 40)
+                debug(f"Speed: {self.player.sprite.speed}", 60)
+                debug(
+                    f"Colliding: {pygame.sprite.spritecollide(self.player.sprite, self.collidable_sprites, False)}",
+                    80,
+                )
+                debug(f"On Ground: {self.player.sprite.on_ground}", 100)
+                debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
+                debug(
+                    f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})",
+                    140,
+                )
+                debug(f"Player Health: {self.player.sprite.health}", 160)
+                debug(f"On Spikes: {self.player.sprite.on_hazard}", 180)
+                debug(f"Player Coins: {self.player.sprite.coins}", 200)
+                debug(f"Shop?: {self.shop.stats} and {self.in_shop}", 220)
         self.check_portals()
         pygame.display.flip()
         return self.check_portals()

@@ -670,7 +670,7 @@
   <object id="26" name="Hub_Portal" type="Portal" x="416" y="1264">
    <point/>
   </object>
-  <object id="34" name="LightningShop" x="288" y="576" width="32" height="32"/>
+  <object id="34" name="LightningShop" type="Shop" x="288" y="576" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="8" name="Consumables">
   <object id="28" name="Coin" type="Coin" x="288" y="544">

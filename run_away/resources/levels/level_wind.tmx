@@ -755,7 +755,7 @@
   <object id="16" name="Hub_Portal" type="Portal" x="32" y="272">
    <point/>
   </object>
-  <object id="32" name="WindShop" x="464" y="576" width="32" height="32"/>
+  <object id="32" name="WindShop" type="Shop" x="464" y="576" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="2" name="Player">
   <object id="1" name="Start" x="128" y="1136">

@@ -54,7 +54,7 @@ class Level:
         self.is_end_cutscene = False
         self.coins = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
-        self.gruntTiles = pygame.sprite.Group()
+        self.grunt_tiles = pygame.sprite.Group()
 
         self.stats = stats
         # TODO: create dictionary with all player possessions and attributes to pass down?
@@ -77,9 +77,8 @@ class Level:
             if hasattr(layer, "data"):
                 for x, y, surf in layer.tiles():
                     if layer.name == "Ground":
-                        Entity(
+                        Block(
                             [self.all_sprites, self.collidable_sprites],
-                            self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
                         )
@@ -116,30 +115,26 @@ class Level:
                             kind="right",
                         )
                     elif layer.name == "vLayer1":
-                        Entity(
+                        Block(
                             [self.all_sprites],
-                            None,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
                         )
                     elif layer.name == "vLayer2":
-                        Entity(
+                        Block(
                             [self.all_sprites],
-                            None,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
                         )
                     elif layer.name == "GruntTiles":
-                        self.gruntTiles.add(
-                            Block(
-                                [self.all_sprites],
-                                (
-                                    x * config.TILE_SIZE,
-                                    y * config.TILE_SIZE,
-                                    config.TILE_SIZE,
-                                    config.TILE_SIZE,
-                                ),
-                            )
+                        Block(
+                            [self.all_sprites, self.grunt_tiles],
+                            (
+                                x * config.TILE_SIZE,
+                                y * config.TILE_SIZE,
+                                config.TILE_SIZE,
+                                config.TILE_SIZE,
+                            ),
                         )
 
         try:
@@ -230,10 +225,10 @@ class Level:
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):
                 if obj.type == "Grunt":
-                    # add the gruntTiles in the second []
+                    # add the grunt_tiles in the second []
                     Grunt(
                         [self.all_sprites, self.enemies],
-                        [self.collidable_sprites, self.player, self.gruntTiles],
+                        [self.collidable_sprites, self.player, self.grunt_tiles],
                         (obj.x, obj.y),
                         config.GFX_PATH.joinpath("enemies", "grunt"),
                         config.ENEMY_DATA["grunt"]["animation_speed"],

@@ -6,7 +6,7 @@ import pygame
 from config import LEVELS_PATH
 from core.camera import CameraGroup
 from core.enemy import Flying, Grunt
-from core.entity import AnimatedEntity, Entity, Hazard
+from core.entity import AnimatedEntity, Block, Entity, Hazard
 from core.npc import NPC
 from core.player import Player
 from pytmx.util_pygame import load_pygame
@@ -131,11 +131,14 @@ class Level:
                         )
                     elif layer.name == "GruntTiles":
                         self.gruntTiles.add(
-                            Entity(
+                            Block(
                                 [self.all_sprites],
-                                None,
-                                (x * config.TILE_SIZE, y * config.TILE_SIZE),
-                                surf,
+                                (
+                                    x * config.TILE_SIZE,
+                                    y * config.TILE_SIZE,
+                                    config.TILE_SIZE,
+                                    config.TILE_SIZE,
+                                ),
                             )
                         )
 

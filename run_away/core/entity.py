@@ -14,12 +14,17 @@ class Block(pygame.sprite.Sprite):
     def __init__(
         self,
         groups: list[pygame.sprite.Group],
-        pos: tuple[int, int],
+        pos: Union[tuple[int, int], tuple[int, int, int, int]],
         image: Optional[pygame.Surface] = None,
     ):
         super().__init__(groups)
-        self.image = image
-        self.rect = self.image.get_rect(topleft=pos)
+
+        if image is None:  # pos is expected to have extra width and height dimensions
+            self.rect = pygame.rect.Rect(pos)
+        else:
+            self.image = image
+            self.rect = self.image.get_rect(topleft=pos)
+        
         self.hitbox = self.rect.copy()
 
 

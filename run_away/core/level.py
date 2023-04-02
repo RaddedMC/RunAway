@@ -52,7 +52,6 @@ class Level:
         self.portals = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
         self.home = pygame.sprite.GroupSingle()
-        self.is_end_cutscene = False
         self.coins = pygame.sprite.Group()
         self.npcs = pygame.sprite.Group()
         self.grunt_tiles = pygame.sprite.Group()
@@ -202,7 +201,9 @@ class Level:
                             ),
                         ),
                     )
-                if self.is_end_cutscene:
+                elif self.kind == LevelType.HOME:
+                    print("is end scene!")
+                    print(obj.name, ", ", obj.type)
                     if obj.type == "Home":
                         from core.home import Home
 
@@ -250,7 +251,6 @@ class Level:
                     speed=60,
                     gravity=275,
                 ).direction = pygame.Vector2(-1, 0)
-                self.is_end_cutscene = True
                 self.player.sprite.status = "run"
 
         # Select grunt colour
@@ -342,7 +342,7 @@ class Level:
         self.all_sprites.update(dt)
         self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
 
-        if self.is_end_cutscene:
+        if self.kind == LevelType.HOME:
             self.update_end_cutscene(dt)
 
         scaled_display = pygame.transform.scale(
@@ -350,15 +350,14 @@ class Level:
             (self.display_surface.get_width(), self.display_surface.get_height()),
         )
 
-        # End cutscene pan down
-        if self.is_end_cutscene:
-            self.display_surface.blit(scaled_display, (0, 150))
-        else:
-            self.display_surface.blit(scaled_display, (0, 0))
-            # TODO: update entire stats dictionary at once?
+        self.display_surface.blit(scaled_display, (0, 0))
+        # TODO: update entire stats dictionary at once?
+        try:
             self.stats["coins"] = self.player.sprite.coins
-
-        self.check_coins()
+            self.check_coins()
+        except:
+            # Above won't work in the end cutscene
+            pass
 
         if config.DEBUG_UI:
             debug(self.player.sprite.status)

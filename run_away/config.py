@@ -45,7 +45,7 @@ ENEMY_DATA = {
     "grunt": {"animation_speed": 6, "stats": {"speed": 40, "health": 10, "damage": 10}},
     "flying": {
         "animation_speed": 6,
-        "stats": {"speed": 100, "health": 10, "damage": 10},
+        "stats": {"speed": 100, "health": 5, "damage": 10},
     },
 }
 WEAPON_DATA = {}

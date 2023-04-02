@@ -51,6 +51,7 @@ class Player(AnimatedEntity):
 
         # Weapon
         self.weapon_data = None
+        self.weaponHitEnemy = False
 
         # Track player states/actions
         self.attacking = False
@@ -107,7 +108,22 @@ class Player(AnimatedEntity):
             self.attack()
 
 
-# current issue: after attacking once in a level, cannot attack again. Collisions not implemented yet
+    def updateWeaponPos(self):
+        if self.attacking:
+            self.weaponOut.destroy()
+            if self.lastDirection < 0:
+                #player facing left
+                #keeping in mind that pos is top left
+                weaponPosition = (self.rect.x - 15, self.rect.y + 10)
+            else:
+                #player facing right
+                weaponPosition = (self.rect.x + 15, self.rect.y + 10)
+                if self.weaponHitEnemy:
+                    self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",0)
+                else:
+                    self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",4)
+
+
 
     def attack(self):
         if self.attackCoolingDown:
@@ -124,8 +140,8 @@ class Player(AnimatedEntity):
             else:
                 #player facing right
                 weaponPosition = (self.rect.x + 15, self.rect.y + 10)
-            #arbitrary damage for now
-            self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",2)
+            #arbitrary damage for now, CHANGE FOR GETTING MORE ATTACK
+            self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",4)
             self.attack_time = pygame.time.get_ticks()
             self.attackCoolingDown = True
         
@@ -152,6 +168,7 @@ class Player(AnimatedEntity):
             if now - self.hurt_time >= self.invulnerable_duration:
                 self.vulnerable = True
                 self.hurt_time = None
+                self.weaponHitEnemy = False
 
         if self.attacking:
             # Attack has reached end
@@ -206,6 +223,7 @@ class Player(AnimatedEntity):
     def update(self, dt) -> None:
         self.get_inputs()
         self.cooldowns()
+        self.updateWeaponPos()
         # self.get_status()
         super().update(dt)
         self.check_death()

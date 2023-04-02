@@ -94,7 +94,8 @@ class Enemy(AnimatedEntity):
             collided = pygame.sprite.groupcollide(thisEnemy, weaponGroup, False, False)
             if collided:
                 self.enemyTakeDamage(self.player.weaponOut.damage)
-                self.player.weaponOut.stopDamage()
+                self.player.weaponHitEnemy = True
+                #self.player.weaponOut.stopDamage()
         
 
     def enemyTakeDamage(self, damageTaken : int) -> None:

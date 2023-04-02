@@ -12,11 +12,12 @@ from core.player import Player
 from core.enemy import Grunt
 from core.enemy import Flying
 
+from core.background import Background
+
 from core.portal import Portal
 from core.NPC import NPC
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
-
 
 class Level:
     def __init__(self, level_path, stats) -> None:
@@ -55,9 +56,29 @@ class Level:
     # Load level items
     def import_assets(self, level_path):
         tmx_data = load_pygame(Path(level_path).resolve())
+        self.backgrounds = []
+
+        self.screen_width = config.RENDER_AREA[0]
+        self.screen_height = config.RENDER_AREA[1]
+        print(f"{self.screen_width}, {self.screen_height}")
 
         # Load blocks
         for layer in tmx_data.visible_layers:
+
+            # Background test code
+            if "Background" in layer.name:
+                parallax_x = 1
+                if hasattr(layer, "parallaxx"):
+                    parallax_x = float(layer.parallaxx)
+
+                parallax_y = 1
+                if hasattr(layer, "parallaxy"):
+                    parallax_y = float(layer.parallaxy)
+
+                
+                self.backgrounds.append(Background(layer.source, parallax_x, parallax_y, self.screen_width, self.screen_height, tmx_data.width, tmx_data.height))
+
+
             # Only get tile layers
             if hasattr(layer, "data"):
                 for x, y, surf in layer.tiles():
@@ -240,8 +261,13 @@ class Level:
                 self.npcs.sprite.interact()
         
     def run(self, dt):
+
+        for background in self.backgrounds:
+            offset_x = -self.player.sprite.rect.x
+            offset_y = -self.player.sprite.rect.y
+            background.draw(offset_x,offset_y,self.render_surface)
+
         # Draw sprites, upscale the render surface and display to the user's screen
-        self.render_surface.fill("black")
         self.all_sprites.update(dt)
         self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
         
@@ -252,7 +278,7 @@ class Level:
             (self.display_surface.get_width(), self.display_surface.get_height()),
         )
 
-        # Handle end cutscene
+        # End cutscene pan down
         if self.is_end_cutscene:
             self.display_surface.blit(scaled_display, (0, 150))
         else:

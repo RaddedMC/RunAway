@@ -1,10 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="40" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="29">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="40" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="29">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_wind.tsx"/>
  <tileset firstgid="221" source="../gfx/tilesets/terrain_snow.tsx"/>
  <tileset firstgid="501" source="../gfx/tilesets/terrain_rain.tsx"/>
  <tileset firstgid="721" source="../gfx/tilesets/terrain_objects.tsx"/>
  <tileset firstgid="883" source="../gfx/tilesets/terrain_lightning.tsx"/>
+ <imagelayer id="16" name="Background_0" parallaxx="0" parallaxy="0" repeatx="1">
+  <image source="../gfx/bg/lighten_ing/set.png" width="320" height="126"/>
+ </imagelayer>
+ <imagelayer id="13" name="Background_1" offsetx="0" offsety="304" parallaxx="0.05" parallaxy="0.1" repeatx="1">
+  <image source="../gfx/bg/lighten_ing/sunset_mountains2.png" width="320" height="184"/>
+ </imagelayer>
+ <imagelayer id="14" name="Background_2" offsetx="0" offsety="350" parallaxx="0.1" parallaxy="0.15" repeatx="1">
+  <image source="../gfx/bg/lighten_ing/river.png" width="320" height="184"/>
+ </imagelayer>
+ <imagelayer id="15" name="Background_3" offsetx="0" offsety="350" parallaxx="0.07" parallaxy="0.15" repeatx="1">
+  <image source="../gfx/bg/lighten_ing/sunset_mountains_reflection2.png" width="320" height="184"/>
+ </imagelayer>
  <layer id="10" name="vLayer1" width="40" height="85">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

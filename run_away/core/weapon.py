@@ -12,3 +12,7 @@ class Weapon(Entity):
         ):
         super().__init__(groups, collidable_sprites, pos, pygame.image.load(image))
         self.damage = damage
+
+    def destroy(self):
+        self.image.fill((0,0,0,0))
+        del self

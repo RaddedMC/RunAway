@@ -157,8 +157,7 @@ class Player(AnimatedEntity):
             # Attack has reached end
             if now - self.attack_time >= 250:
                 self.attacking = False
-                self.weaponOut.image.fill((0,0,0,0))
-                del self.weaponOut
+                self.weaponOut.destroy()
             if now - self.attack_time < self.attack_cooldown:
                 self.attackCoolingDown = True
         if self.attackCoolingDown:

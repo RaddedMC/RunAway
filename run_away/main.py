@@ -14,7 +14,7 @@ class Game:
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
         self.player_stats = {"coins": 1}
-        self.level = Level(LevelType.HOME, self.player_stats)
+        self.level = Level(LevelType.RAIN, self.player_stats)
         self.running = True
         self.lightning_clear = False
         self.snow_clear = False

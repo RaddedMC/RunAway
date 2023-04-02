@@ -254,7 +254,7 @@ class Level:
                 self.player.sprite.status = "run"
 
         # Select grunt colour
-        if self.kind is LevelType.LIGHTNING:
+        if self.kind is LevelType.WIND:
             grunt_colour = "yellow"
         elif self.kind is LevelType.SNOW:
             grunt_colour = "blue"

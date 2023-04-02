@@ -55,7 +55,7 @@ class Enemy(AnimatedEntity):
 
     def check_death(self):
         if self.health <= 0:
-            print("enemy dieded rip bozo lmao")  # FIXME: DIE
+            pygame.sprite.Sprite.kill(self) # FIXME: DIE
 
     def update(self, dt: float) -> None:
         super().update(dt)
@@ -91,14 +91,14 @@ class Enemy(AnimatedEntity):
         if self.player.attacking:
             thisEnemy = pygame.sprite.GroupSingle(self)
             weaponGroup = pygame.sprite.GroupSingle(self.player.weaponOut)
-            collided = pygame.sprite.groupcollide(thisEnemy, weaponGroup, False, True)
+            collided = pygame.sprite.groupcollide(thisEnemy, weaponGroup, False, False)
             if collided:
-                self.enemyTakeDamage(self.player.weaponOut.damage)   
+                self.enemyTakeDamage(self.player.weaponOut.damage)
+                self.player.weaponOut.stopDamage()
         
 
     def enemyTakeDamage(self, damageTaken : int) -> None:
         self.health -= damageTaken
-        print("Current health =", self.health)
 
 #use enemy rectangle to spawn coin
 

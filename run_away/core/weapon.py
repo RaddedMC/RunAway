@@ -16,3 +16,6 @@ class Weapon(Entity):
     def destroy(self):
         self.image.fill((0,0,0,0))
         del self
+
+    def stopDamage(self):
+        self.damage=0

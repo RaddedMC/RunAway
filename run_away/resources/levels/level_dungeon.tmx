@@ -47,429 +47,429 @@
 </data>
  </layer>
  <objectgroup id="2" name="Enemies">
-  <object id="1" name="Flying1" class="Flying" x="226.5" y="230">
+  <object id="1" name="Flying1" type="Flying" x="226.5" y="230">
    <point/>
   </object>
-  <object id="2" name="Flying1" class="Flying" x="299.5" y="272">
+  <object id="2" name="Flying1" type="Flying" x="299.5" y="272">
    <point/>
   </object>
-  <object id="3" name="Flying1" class="Flying" x="205.5" y="322">
+  <object id="3" name="Flying1" type="Flying" x="205.5" y="322">
    <point/>
   </object>
-  <object id="4" name="Flying1" class="Flying" x="435" y="332.5">
+  <object id="4" name="Flying1" type="Flying" x="435" y="332.5">
    <point/>
   </object>
-  <object id="5" name="Flying1" class="Flying" x="408" y="233.5">
+  <object id="5" name="Flying1" type="Flying" x="408" y="233.5">
    <point/>
   </object>
-  <object id="6" name="Flying1" class="Flying" x="355.5" y="375.5">
+  <object id="6" name="Flying1" type="Flying" x="355.5" y="375.5">
    <point/>
   </object>
-  <object id="7" name="Flying1" class="Flying" x="340.5" y="188">
+  <object id="7" name="Flying1" type="Flying" x="340.5" y="188">
    <point/>
   </object>
-  <object id="8" name="Flying1" class="Flying" x="109" y="124.5">
+  <object id="8" name="Flying1" type="Flying" x="109" y="124.5">
    <point/>
   </object>
-  <object id="9" name="Flying1" class="Flying" x="228.5" y="129.5">
+  <object id="9" name="Flying1" type="Flying" x="228.5" y="129.5">
    <point/>
   </object>
-  <object id="10" name="Flying1" class="Flying" x="120.5" y="224">
+  <object id="10" name="Flying1" type="Flying" x="120.5" y="224">
    <point/>
   </object>
-  <object id="11" name="Flying1" class="Flying" x="132.5" y="362">
+  <object id="11" name="Flying1" type="Flying" x="132.5" y="362">
    <point/>
   </object>
-  <object id="12" name="Flying1" class="Flying" x="210" y="430.5">
+  <object id="12" name="Flying1" type="Flying" x="210" y="430.5">
    <point/>
   </object>
-  <object id="13" name="Flying1" class="Flying" x="304.5" y="446.5">
+  <object id="13" name="Flying1" type="Flying" x="304.5" y="446.5">
    <point/>
   </object>
-  <object id="14" name="Flying1" class="Flying" x="150.5" y="502.5">
+  <object id="14" name="Flying1" type="Flying" x="150.5" y="502.5">
    <point/>
   </object>
-  <object id="15" name="Flying1" class="Flying" x="260.5" y="516">
+  <object id="15" name="Flying1" type="Flying" x="260.5" y="516">
    <point/>
   </object>
-  <object id="16" name="Flying1" class="Flying" x="396" y="489">
+  <object id="16" name="Flying1" type="Flying" x="396" y="489">
    <point/>
   </object>
-  <object id="17" name="Flying1" class="Flying" x="471" y="407">
+  <object id="17" name="Flying1" type="Flying" x="471" y="407">
    <point/>
   </object>
-  <object id="18" name="Flying1" class="Flying" x="531" y="348.5">
+  <object id="18" name="Flying1" type="Flying" x="531" y="348.5">
    <point/>
   </object>
-  <object id="19" name="Flying1" class="Flying" x="523" y="229">
+  <object id="19" name="Flying1" type="Flying" x="523" y="229">
    <point/>
   </object>
-  <object id="20" name="Flying1" class="Flying" x="469.5" y="131.5">
+  <object id="20" name="Flying1" type="Flying" x="469.5" y="131.5">
    <point/>
   </object>
-  <object id="21" name="Flying1" class="Flying" x="266" y="267.5">
+  <object id="21" name="Flying1" type="Flying" x="266" y="267.5">
    <point/>
   </object>
-  <object id="22" name="Flying1" class="Flying" x="339" y="309.5">
+  <object id="22" name="Flying1" type="Flying" x="339" y="309.5">
    <point/>
   </object>
-  <object id="23" name="Flying1" class="Flying" x="245" y="359.5">
+  <object id="23" name="Flying1" type="Flying" x="245" y="359.5">
    <point/>
   </object>
-  <object id="24" name="Flying1" class="Flying" x="474.5" y="370">
+  <object id="24" name="Flying1" type="Flying" x="474.5" y="370">
    <point/>
   </object>
-  <object id="25" name="Flying1" class="Flying" x="447.5" y="271">
+  <object id="25" name="Flying1" type="Flying" x="447.5" y="271">
    <point/>
   </object>
-  <object id="26" name="Flying1" class="Flying" x="395" y="413">
+  <object id="26" name="Flying1" type="Flying" x="395" y="413">
    <point/>
   </object>
-  <object id="27" name="Flying1" class="Flying" x="380" y="225.5">
+  <object id="27" name="Flying1" type="Flying" x="380" y="225.5">
    <point/>
   </object>
-  <object id="28" name="Flying1" class="Flying" x="148.5" y="162">
+  <object id="28" name="Flying1" type="Flying" x="148.5" y="162">
    <point/>
   </object>
-  <object id="29" name="Flying1" class="Flying" x="268" y="167">
+  <object id="29" name="Flying1" type="Flying" x="268" y="167">
    <point/>
   </object>
-  <object id="30" name="Flying1" class="Flying" x="160" y="261.5">
+  <object id="30" name="Flying1" type="Flying" x="160" y="261.5">
    <point/>
   </object>
-  <object id="31" name="Flying1" class="Flying" x="172" y="399.5">
+  <object id="31" name="Flying1" type="Flying" x="172" y="399.5">
    <point/>
   </object>
-  <object id="32" name="Flying1" class="Flying" x="249.5" y="468">
+  <object id="32" name="Flying1" type="Flying" x="249.5" y="468">
    <point/>
   </object>
-  <object id="33" name="Flying1" class="Flying" x="344" y="484">
+  <object id="33" name="Flying1" type="Flying" x="344" y="484">
    <point/>
   </object>
-  <object id="34" name="Flying1" class="Flying" x="190" y="540">
+  <object id="34" name="Flying1" type="Flying" x="190" y="540">
    <point/>
   </object>
-  <object id="35" name="Flying1" class="Flying" x="300" y="553.5">
+  <object id="35" name="Flying1" type="Flying" x="300" y="553.5">
    <point/>
   </object>
-  <object id="36" name="Flying1" class="Flying" x="435.5" y="526.5">
+  <object id="36" name="Flying1" type="Flying" x="435.5" y="526.5">
    <point/>
   </object>
-  <object id="37" name="Flying1" class="Flying" x="510.5" y="444.5">
+  <object id="37" name="Flying1" type="Flying" x="510.5" y="444.5">
    <point/>
   </object>
-  <object id="38" name="Flying1" class="Flying" x="570.5" y="386">
+  <object id="38" name="Flying1" type="Flying" x="570.5" y="386">
    <point/>
   </object>
-  <object id="39" name="Flying1" class="Flying" x="562.5" y="266.5">
+  <object id="39" name="Flying1" type="Flying" x="562.5" y="266.5">
    <point/>
   </object>
-  <object id="40" name="Flying1" class="Flying" x="509" y="169">
+  <object id="40" name="Flying1" type="Flying" x="509" y="169">
    <point/>
   </object>
-  <object id="41" name="Flying1" class="Flying" x="203" y="279.5">
+  <object id="41" name="Flying1" type="Flying" x="203" y="279.5">
    <point/>
   </object>
-  <object id="42" name="Flying1" class="Flying" x="276" y="321.5">
+  <object id="42" name="Flying1" type="Flying" x="276" y="321.5">
    <point/>
   </object>
-  <object id="43" name="Flying1" class="Flying" x="182" y="371.5">
+  <object id="43" name="Flying1" type="Flying" x="182" y="371.5">
    <point/>
   </object>
-  <object id="44" name="Flying1" class="Flying" x="411.5" y="382">
+  <object id="44" name="Flying1" type="Flying" x="411.5" y="382">
    <point/>
   </object>
-  <object id="45" name="Flying1" class="Flying" x="384.5" y="283">
+  <object id="45" name="Flying1" type="Flying" x="384.5" y="283">
    <point/>
   </object>
-  <object id="46" name="Flying1" class="Flying" x="332" y="425">
+  <object id="46" name="Flying1" type="Flying" x="332" y="425">
    <point/>
   </object>
-  <object id="47" name="Flying1" class="Flying" x="317" y="237.5">
+  <object id="47" name="Flying1" type="Flying" x="317" y="237.5">
    <point/>
   </object>
-  <object id="48" name="Flying1" class="Flying" x="85.5" y="174">
+  <object id="48" name="Flying1" type="Flying" x="85.5" y="174">
    <point/>
   </object>
-  <object id="49" name="Flying1" class="Flying" x="205" y="179">
+  <object id="49" name="Flying1" type="Flying" x="205" y="179">
    <point/>
   </object>
-  <object id="50" name="Flying1" class="Flying" x="97" y="273.5">
+  <object id="50" name="Flying1" type="Flying" x="97" y="273.5">
    <point/>
   </object>
-  <object id="51" name="Flying1" class="Flying" x="109" y="411.5">
+  <object id="51" name="Flying1" type="Flying" x="109" y="411.5">
    <point/>
   </object>
-  <object id="52" name="Flying1" class="Flying" x="186.5" y="480">
+  <object id="52" name="Flying1" type="Flying" x="186.5" y="480">
    <point/>
   </object>
-  <object id="53" name="Flying1" class="Flying" x="281" y="496">
+  <object id="53" name="Flying1" type="Flying" x="281" y="496">
    <point/>
   </object>
-  <object id="54" name="Flying1" class="Flying" x="127" y="552">
+  <object id="54" name="Flying1" type="Flying" x="127" y="552">
    <point/>
   </object>
-  <object id="55" name="Flying1" class="Flying" x="237" y="565.5">
+  <object id="55" name="Flying1" type="Flying" x="237" y="565.5">
    <point/>
   </object>
-  <object id="56" name="Flying1" class="Flying" x="372.5" y="538.5">
+  <object id="56" name="Flying1" type="Flying" x="372.5" y="538.5">
    <point/>
   </object>
-  <object id="57" name="Flying1" class="Flying" x="447.5" y="456.5">
+  <object id="57" name="Flying1" type="Flying" x="447.5" y="456.5">
    <point/>
   </object>
-  <object id="58" name="Flying1" class="Flying" x="507.5" y="398">
+  <object id="58" name="Flying1" type="Flying" x="507.5" y="398">
    <point/>
   </object>
-  <object id="59" name="Flying1" class="Flying" x="499.5" y="278.5">
+  <object id="59" name="Flying1" type="Flying" x="499.5" y="278.5">
    <point/>
   </object>
-  <object id="60" name="Flying1" class="Flying" x="446" y="181">
+  <object id="60" name="Flying1" type="Flying" x="446" y="181">
    <point/>
   </object>
-  <object id="61" name="Flying1" class="Flying" x="302" y="236.5">
+  <object id="61" name="Flying1" type="Flying" x="302" y="236.5">
    <point/>
   </object>
-  <object id="62" name="Flying1" class="Flying" x="375" y="278.5">
+  <object id="62" name="Flying1" type="Flying" x="375" y="278.5">
    <point/>
   </object>
-  <object id="63" name="Flying1" class="Flying" x="281" y="328.5">
+  <object id="63" name="Flying1" type="Flying" x="281" y="328.5">
    <point/>
   </object>
-  <object id="64" name="Flying1" class="Flying" x="510.5" y="339">
+  <object id="64" name="Flying1" type="Flying" x="510.5" y="339">
    <point/>
   </object>
-  <object id="65" name="Flying1" class="Flying" x="483.5" y="240">
+  <object id="65" name="Flying1" type="Flying" x="483.5" y="240">
    <point/>
   </object>
-  <object id="66" name="Flying1" class="Flying" x="431" y="382">
+  <object id="66" name="Flying1" type="Flying" x="431" y="382">
    <point/>
   </object>
-  <object id="67" name="Flying1" class="Flying" x="416" y="194.5">
+  <object id="67" name="Flying1" type="Flying" x="416" y="194.5">
    <point/>
   </object>
-  <object id="68" name="Flying1" class="Flying" x="184.5" y="131">
+  <object id="68" name="Flying1" type="Flying" x="184.5" y="131">
    <point/>
   </object>
-  <object id="69" name="Flying1" class="Flying" x="304" y="136">
+  <object id="69" name="Flying1" type="Flying" x="304" y="136">
    <point/>
   </object>
-  <object id="70" name="Flying1" class="Flying" x="196" y="230.5">
+  <object id="70" name="Flying1" type="Flying" x="196" y="230.5">
    <point/>
   </object>
-  <object id="71" name="Flying1" class="Flying" x="208" y="368.5">
+  <object id="71" name="Flying1" type="Flying" x="208" y="368.5">
    <point/>
   </object>
-  <object id="72" name="Flying1" class="Flying" x="285.5" y="437">
+  <object id="72" name="Flying1" type="Flying" x="285.5" y="437">
    <point/>
   </object>
-  <object id="73" name="Flying1" class="Flying" x="380" y="453">
+  <object id="73" name="Flying1" type="Flying" x="380" y="453">
    <point/>
   </object>
-  <object id="74" name="Flying1" class="Flying" x="226" y="509">
+  <object id="74" name="Flying1" type="Flying" x="226" y="509">
    <point/>
   </object>
-  <object id="75" name="Flying1" class="Flying" x="336" y="522.5">
+  <object id="75" name="Flying1" type="Flying" x="336" y="522.5">
    <point/>
   </object>
-  <object id="76" name="Flying1" class="Flying" x="471.5" y="495.5">
+  <object id="76" name="Flying1" type="Flying" x="471.5" y="495.5">
    <point/>
   </object>
-  <object id="77" name="Flying1" class="Flying" x="546.5" y="413.5">
+  <object id="77" name="Flying1" type="Flying" x="546.5" y="413.5">
    <point/>
   </object>
-  <object id="78" name="Flying1" class="Flying" x="578.318" y="320.455">
+  <object id="78" name="Flying1" type="Flying" x="578.318" y="320.455">
    <point/>
   </object>
-  <object id="79" name="Flying1" class="Flying" x="581.773" y="222.591">
+  <object id="79" name="Flying1" type="Flying" x="581.773" y="222.591">
    <point/>
   </object>
-  <object id="80" name="Flying1" class="Flying" x="545" y="138">
+  <object id="80" name="Flying1" type="Flying" x="545" y="138">
    <point/>
   </object>
-  <object id="81" name="Flying1" class="Flying" x="177" y="231.5">
+  <object id="81" name="Flying1" type="Flying" x="177" y="231.5">
    <point/>
   </object>
-  <object id="82" name="Flying1" class="Flying" x="250" y="273.5">
+  <object id="82" name="Flying1" type="Flying" x="250" y="273.5">
    <point/>
   </object>
-  <object id="83" name="Flying1" class="Flying" x="156" y="323.5">
+  <object id="83" name="Flying1" type="Flying" x="156" y="323.5">
    <point/>
   </object>
-  <object id="84" name="Flying1" class="Flying" x="385.5" y="334">
+  <object id="84" name="Flying1" type="Flying" x="385.5" y="334">
    <point/>
   </object>
-  <object id="85" name="Flying1" class="Flying" x="358.5" y="235">
+  <object id="85" name="Flying1" type="Flying" x="358.5" y="235">
    <point/>
   </object>
-  <object id="86" name="Flying1" class="Flying" x="306" y="377">
+  <object id="86" name="Flying1" type="Flying" x="306" y="377">
    <point/>
   </object>
-  <object id="87" name="Flying1" class="Flying" x="291" y="189.5">
+  <object id="87" name="Flying1" type="Flying" x="291" y="189.5">
    <point/>
   </object>
-  <object id="88" name="Flying1" class="Flying" x="59.5" y="126">
+  <object id="88" name="Flying1" type="Flying" x="59.5" y="126">
    <point/>
   </object>
-  <object id="89" name="Flying1" class="Flying" x="179" y="131">
+  <object id="89" name="Flying1" type="Flying" x="179" y="131">
    <point/>
   </object>
-  <object id="90" name="Flying1" class="Flying" x="71" y="225.5">
+  <object id="90" name="Flying1" type="Flying" x="71" y="225.5">
    <point/>
   </object>
-  <object id="91" name="Flying1" class="Flying" x="83" y="363.5">
+  <object id="91" name="Flying1" type="Flying" x="83" y="363.5">
    <point/>
   </object>
-  <object id="92" name="Flying1" class="Flying" x="160.5" y="432">
+  <object id="92" name="Flying1" type="Flying" x="160.5" y="432">
    <point/>
   </object>
-  <object id="93" name="Flying1" class="Flying" x="255" y="448">
+  <object id="93" name="Flying1" type="Flying" x="255" y="448">
    <point/>
   </object>
-  <object id="94" name="Flying1" class="Flying" x="101" y="504">
+  <object id="94" name="Flying1" type="Flying" x="101" y="504">
    <point/>
   </object>
-  <object id="95" name="Flying1" class="Flying" x="211" y="517.5">
+  <object id="95" name="Flying1" type="Flying" x="211" y="517.5">
    <point/>
   </object>
-  <object id="96" name="Flying1" class="Flying" x="346.5" y="490.5">
+  <object id="96" name="Flying1" type="Flying" x="346.5" y="490.5">
    <point/>
   </object>
-  <object id="97" name="Flying1" class="Flying" x="421.5" y="408.5">
+  <object id="97" name="Flying1" type="Flying" x="421.5" y="408.5">
    <point/>
   </object>
-  <object id="98" name="Flying1" class="Flying" x="481.5" y="350">
+  <object id="98" name="Flying1" type="Flying" x="481.5" y="350">
    <point/>
   </object>
-  <object id="99" name="Flying1" class="Flying" x="473.5" y="230.5">
+  <object id="99" name="Flying1" type="Flying" x="473.5" y="230.5">
    <point/>
   </object>
-  <object id="100" name="Flying1" class="Flying" x="420" y="133">
+  <object id="100" name="Flying1" type="Flying" x="420" y="133">
    <point/>
   </object>
-  <object id="101" name="Flying1" class="Flying" x="304" y="266.5">
+  <object id="101" name="Flying1" type="Flying" x="304" y="266.5">
    <point/>
   </object>
-  <object id="102" name="Flying1" class="Flying" x="377" y="308.5">
+  <object id="102" name="Flying1" type="Flying" x="377" y="308.5">
    <point/>
   </object>
-  <object id="103" name="Flying1" class="Flying" x="283" y="358.5">
+  <object id="103" name="Flying1" type="Flying" x="283" y="358.5">
    <point/>
   </object>
-  <object id="104" name="Flying1" class="Flying" x="512.5" y="369">
+  <object id="104" name="Flying1" type="Flying" x="512.5" y="369">
    <point/>
   </object>
-  <object id="105" name="Flying1" class="Flying" x="485.5" y="270">
+  <object id="105" name="Flying1" type="Flying" x="485.5" y="270">
    <point/>
   </object>
-  <object id="106" name="Flying1" class="Flying" x="433" y="412">
+  <object id="106" name="Flying1" type="Flying" x="433" y="412">
    <point/>
   </object>
-  <object id="107" name="Flying1" class="Flying" x="418" y="224.5">
+  <object id="107" name="Flying1" type="Flying" x="418" y="224.5">
    <point/>
   </object>
-  <object id="108" name="Flying1" class="Flying" x="186.5" y="161">
+  <object id="108" name="Flying1" type="Flying" x="186.5" y="161">
    <point/>
   </object>
-  <object id="109" name="Flying1" class="Flying" x="306" y="166">
+  <object id="109" name="Flying1" type="Flying" x="306" y="166">
    <point/>
   </object>
-  <object id="110" name="Flying1" class="Flying" x="198" y="260.5">
+  <object id="110" name="Flying1" type="Flying" x="198" y="260.5">
    <point/>
   </object>
-  <object id="111" name="Flying1" class="Flying" x="210" y="398.5">
+  <object id="111" name="Flying1" type="Flying" x="210" y="398.5">
    <point/>
   </object>
-  <object id="112" name="Flying1" class="Flying" x="287.5" y="467">
+  <object id="112" name="Flying1" type="Flying" x="287.5" y="467">
    <point/>
   </object>
-  <object id="113" name="Flying1" class="Flying" x="382" y="483">
+  <object id="113" name="Flying1" type="Flying" x="382" y="483">
    <point/>
   </object>
-  <object id="114" name="Flying1" class="Flying" x="228" y="539">
+  <object id="114" name="Flying1" type="Flying" x="228" y="539">
    <point/>
   </object>
-  <object id="115" name="Flying1" class="Flying" x="338" y="552.5">
+  <object id="115" name="Flying1" type="Flying" x="338" y="552.5">
    <point/>
   </object>
-  <object id="116" name="Flying1" class="Flying" x="473.5" y="525.5">
+  <object id="116" name="Flying1" type="Flying" x="473.5" y="525.5">
    <point/>
   </object>
-  <object id="117" name="Flying1" class="Flying" x="548.5" y="443.5">
+  <object id="117" name="Flying1" type="Flying" x="548.5" y="443.5">
    <point/>
   </object>
-  <object id="118" name="Flying1" class="Flying" x="586.682" y="370.273">
+  <object id="118" name="Flying1" type="Flying" x="586.682" y="370.273">
    <point/>
   </object>
-  <object id="119" name="Flying1" class="Flying" x="580.136" y="257.5">
+  <object id="119" name="Flying1" type="Flying" x="580.136" y="257.5">
    <point/>
   </object>
-  <object id="120" name="Flying1" class="Flying" x="547" y="168">
+  <object id="120" name="Flying1" type="Flying" x="547" y="168">
    <point/>
   </object>
-  <object id="121" name="Flying1" class="Flying" x="183" y="287.5">
+  <object id="121" name="Flying1" type="Flying" x="183" y="287.5">
    <point/>
   </object>
-  <object id="122" name="Flying1" class="Flying" x="256" y="329.5">
+  <object id="122" name="Flying1" type="Flying" x="256" y="329.5">
    <point/>
   </object>
-  <object id="123" name="Flying1" class="Flying" x="162" y="379.5">
+  <object id="123" name="Flying1" type="Flying" x="162" y="379.5">
    <point/>
   </object>
-  <object id="124" name="Flying1" class="Flying" x="391.5" y="390">
+  <object id="124" name="Flying1" type="Flying" x="391.5" y="390">
    <point/>
   </object>
-  <object id="125" name="Flying1" class="Flying" x="364.5" y="291">
+  <object id="125" name="Flying1" type="Flying" x="364.5" y="291">
    <point/>
   </object>
-  <object id="126" name="Flying1" class="Flying" x="312" y="433">
+  <object id="126" name="Flying1" type="Flying" x="312" y="433">
    <point/>
   </object>
-  <object id="127" name="Flying1" class="Flying" x="297" y="245.5">
+  <object id="127" name="Flying1" type="Flying" x="297" y="245.5">
    <point/>
   </object>
-  <object id="128" name="Flying1" class="Flying" x="65.5" y="182">
+  <object id="128" name="Flying1" type="Flying" x="65.5" y="182">
    <point/>
   </object>
-  <object id="129" name="Flying1" class="Flying" x="185" y="187">
+  <object id="129" name="Flying1" type="Flying" x="185" y="187">
    <point/>
   </object>
-  <object id="130" name="Flying1" class="Flying" x="77" y="281.5">
+  <object id="130" name="Flying1" type="Flying" x="77" y="281.5">
    <point/>
   </object>
-  <object id="131" name="Flying1" class="Flying" x="89" y="419.5">
+  <object id="131" name="Flying1" type="Flying" x="89" y="419.5">
    <point/>
   </object>
-  <object id="132" name="Flying1" class="Flying" x="166.5" y="488">
+  <object id="132" name="Flying1" type="Flying" x="166.5" y="488">
    <point/>
   </object>
-  <object id="133" name="Flying1" class="Flying" x="261" y="504">
+  <object id="133" name="Flying1" type="Flying" x="261" y="504">
    <point/>
   </object>
-  <object id="134" name="Flying1" class="Flying" x="107" y="560">
+  <object id="134" name="Flying1" type="Flying" x="107" y="560">
    <point/>
   </object>
-  <object id="135" name="Flying1" class="Flying" x="217" y="573.5">
+  <object id="135" name="Flying1" type="Flying" x="217" y="573.5">
    <point/>
   </object>
-  <object id="136" name="Flying1" class="Flying" x="352.5" y="546.5">
+  <object id="136" name="Flying1" type="Flying" x="352.5" y="546.5">
    <point/>
   </object>
-  <object id="137" name="Flying1" class="Flying" x="427.5" y="464.5">
+  <object id="137" name="Flying1" type="Flying" x="427.5" y="464.5">
    <point/>
   </object>
-  <object id="138" name="Flying1" class="Flying" x="487.5" y="406">
+  <object id="138" name="Flying1" type="Flying" x="487.5" y="406">
    <point/>
   </object>
-  <object id="139" name="Flying1" class="Flying" x="479.5" y="286.5">
+  <object id="139" name="Flying1" type="Flying" x="479.5" y="286.5">
    <point/>
   </object>
-  <object id="140" name="Flying1" class="Flying" x="426" y="189">
+  <object id="140" name="Flying1" type="Flying" x="426" y="189">
    <point/>
   </object>
  </objectgroup>
  <objectgroup id="3" name="Player">
-  <object id="141" name="Start" class="Start" x="264" y="581.333">
+  <object id="141" name="Start" type="Start" x="264" y="581.333">
    <point/>
   </object>
  </objectgroup>

@@ -181,7 +181,7 @@ class Level:
                         ),
                     )
                 if self.is_end_cutscene:
-                    if getattr(obj, "class") == "Home":
+                    if obj.type == "Home":
                         from core.home import Home
 
                         Home(
@@ -278,6 +278,7 @@ class Level:
 
         try:
             for obj in tmx_data.get_layer_by_name("Consumables"):
+
                 if obj.type == "Coin":
                     AnimatedEntity(
                         [self.all_sprites, self.coins],

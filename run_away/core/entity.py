@@ -114,10 +114,6 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, min_left, "left")
 
-                    #if type(self) is Enemy or type(self) is Weapon:
-                        #self.checkTakenDamage(collided, min_left, "left")
-                        #print("d")
-
                     # The max distance that this entity can move without causing collision
                     return min_left - self.hitbox.right
                 else:  # Moving left
@@ -126,10 +122,6 @@ class Entity(pygame.sprite.Sprite):
 
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, max_right, "right")
-
-                    #if type(self) is Enemy or type(self) is Weapon:
-                        #self.checkTakenDamage(collided, max_right, "right")
-                        #print("a")
                         
 
                     # The max distance that this entity can move without causing collision
@@ -160,10 +152,6 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, lowest_bottom, "bottom")
 
-                    #if type(self) is Enemy or type(self) is Weapon:
-                        #self.checkTakenDamage(collided, lowest_bottom, "bottom")
-                        #print("c")
-
                     # The max distance that this entity can move without causing collision
                     return lowest_bottom - self.hitbox.top
                 else:
@@ -182,10 +170,6 @@ class Entity(pygame.sprite.Sprite):
 
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, max_top, "top")
-
-                    #if type(self) is Enemy or type(self) is Weapon:
-                        #self.checkTakenDamage(collided, max_top, "top")
-                        #print("b")
 
                     # The max distance that this entity can move without causing collision
                     return max_top - self.hitbox.bottom

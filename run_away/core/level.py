@@ -57,7 +57,7 @@ class Level:
         self.home = pygame.sprite.GroupSingle()
         self.is_end_cutscene = False
         self.coins = pygame.sprite.Group()
-        self.npcs = pygame.sprite.Group()
+        self.npcs = pygame.sprite.GroupSingle()
         self.grunt_tiles = pygame.sprite.Group()
 
         self.stats = stats
@@ -68,6 +68,16 @@ class Level:
 
         self.kind = kind
         self.path: Path = self.kind.value
+
+        self.dialogue: list
+        if self.kind is LevelType.RAIN:
+            self.dialogue = config.NPC_DIALOGUE["RAIN"]
+        elif self.kind is LevelType.SNOW:
+            self.dialogue = config.NPC_DIALOGUE["SNOW"]
+        elif self.kind is LevelType.WIND:
+            self.dialogue = config.NPC_DIALOGUE["WIND"]
+        elif self.kind is LevelType.LIGHTNING:
+            self.dialogue = config.NPC_DIALOGUE["LIGHTNING"]
 
         self.import_assets()
 
@@ -84,7 +94,7 @@ class Level:
         print(f"{self.screen_width}, {self.screen_height}")
 
         # Load blocks
-        for layer in tmx_data.visible_layers:
+        for layer in tmx_data.layers:
 
             # Background test code
             if "Background" in layer.name:
@@ -204,21 +214,21 @@ class Level:
                             config.GFX_PATH.joinpath("objects", "home"),
                         )
 
-                # if obj.type == "NPC":
-                #     NPC(
-                #         [self.all_sprites, self.npcs],
-                #         None,
-                #         (obj.x, obj.y),
-                #         "./run_away/resources/gfx/NPCs/" + obj.name[0:obj.name.find("_")].lower() + "NPC",
-                #         dialogue = ["get dunked on lol"]
-                #     )
+                if obj.type == "NPC":
+                    NPC(
+                        [self.all_sprites, self.npcs],
+                        None,
+                        (obj.x, obj.y),
+                        "./run_away/resources/gfx/objects/female_npc",
+                        dialogue = self.dialogue,
+                        animation_speed= 18
+                    )
         except ValueError:
             pass
 
         # Spawn player
         for obj in tmx_data.get_layer_by_name("Player"):
             if obj.name == "Start":
-                # TODO: add Player stats attribute that contains coins?
                 Player(
                     [self.all_sprites, self.player],
                     [self.collidable_sprites, self.enemies],
@@ -231,6 +241,8 @@ class Level:
                     damage=config.PLAYER_DATA["stats"]["damage"],
                     jump_speed=config.PLAYER_DATA["jump_speed"],
                 )
+                self.player.sprite.updatePlayer(self.stats)
+
             elif obj.name == "Start:ForceLeft":
                 AnimatedEntity(
                     [self.all_sprites, self.player],
@@ -321,11 +333,12 @@ class Level:
 
     def check_coins(self) -> None:
         for coin in pygame.sprite.groupcollide(self.coins, self.player, True, False):
-            # TODO: add sfx
             self.player.sprite.get_coin()
+            self.stats["coins"] = self.player.sprite.coins
+
 
     def check_interactables(self) -> None:
-        if pygame.sprite.collide_rect(self.player.sprite, self.npcs):
+        if pygame.sprite.groupcollide(self.player, self.npcs, False, False):
             if self.check_interacting():
                 self.npcs.sprite.interact()
         
@@ -339,6 +352,7 @@ class Level:
 
         if self.in_shop:
             self.in_shop = self.shop.interact()
+            self.player.sprite.coins = self.stats["coins"]
         else: 
             self.check_shop()       
     
@@ -346,13 +360,14 @@ class Level:
                 offset_x = -self.player.sprite.rect.x
                 offset_y = -self.player.sprite.rect.y
                 background.draw(offset_x,offset_y,self.render_surface)
-
+            self.render_surface.fill((0,0,0))
             # Draw sprites, upscale the render surface and display to the user's screen
             self.all_sprites.update(dt)
             self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
     
             if self.is_end_cutscene:
                 self.update_end_cutscene(dt)
+            
 
             scaled_display = pygame.transform.scale(
                 self.render_surface,
@@ -368,6 +383,7 @@ class Level:
                 # self.stats["coins"] = self.player.sprite.coins
 
             self.check_coins()
+            self.check_interactables()
             
             if config.DEBUG_UI:
                 debug(self.player.sprite.status)
@@ -384,9 +400,8 @@ class Level:
                     140,
                 )
                 debug(f"Player Health: {self.player.sprite.health}", 160)
-                debug(f"On Spikes: {self.player.sprite.on_hazard}", 180)
                 debug(f"Player Coins: {self.player.sprite.coins}", 200)
-                debug(f"Stats: {self.stats}", 220)
+                debug(f"Stats: {self.stats}, Player Coins: {self.player.sprite.coins}, Player Health: {self.player.sprite.health}", 220)
         self.check_portals()
         pygame.display.flip()
         return self.check_portals()

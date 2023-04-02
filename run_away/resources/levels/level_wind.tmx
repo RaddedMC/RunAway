@@ -749,7 +749,7 @@
   </object>
  </objectgroup>
  <objectgroup id="5" name="Interactables">
-  <object id="14" name="Wind_NPC" type="NPC" x="208" y="1136">
+  <object id="14" name="Wind_NPC" type="NPC" x="208" y="1120">
    <point/>
   </object>
   <object id="16" name="Hub_Portal" type="Portal" x="32" y="272">

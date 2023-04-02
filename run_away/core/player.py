@@ -35,6 +35,8 @@ class Player(AnimatedEntity):
         # Player stats
         self.health = health
         self.max_health = health
+        self.strength: int
+        self.agility: int
         self.damage = damage
         self.skills = None
 
@@ -156,6 +158,19 @@ class Player(AnimatedEntity):
     def spend_coins(self, price: int) -> None:
         self.coins -= price
 
+    def updatePlayer(self, stats: dict):
+        self.health = stats["health"]
+        self.strength = stats["strength"]
+        self.agility = stats["agility"]
+        self.coins = stats["coins"]
+    
+    def purchaseStats(self,stats: dict):
+        self.strength = stats["strength"]
+        self.agility = stats["agility"]
+        self.coins = stats["coins"]
+        
+        
+        
     def update(self, dt) -> None:
         self.get_inputs()
         self.cooldowns()

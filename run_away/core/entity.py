@@ -26,17 +26,6 @@ class Block(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(topleft=pos)
         
         self.hitbox = self.rect.copy()
-
-class Block(pygame.sprite.Sprite):
-    def __init__(
-        self,
-        groups: pygame.sprite.Group,
-        pos: tuple,
-        image: pygame.Surface,
-    ):
-        super().__init__(groups)
-        self.image = image
-        self.rect = self.image.get_rect(topleft=pos)
         
 
 class Entity(pygame.sprite.Sprite):

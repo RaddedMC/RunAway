@@ -4,7 +4,7 @@ from typing import Union
 
 import pygame
 from core.level import LevelType
-from core.npc import NPC
+from core.NPC import NPC
 
 
 class Portal(NPC):

@@ -1,12 +1,13 @@
 from enum import Enum
 from pathlib import Path
+from typing import Union
 
 import config
 import pygame
 from config import LEVELS_PATH
 from core.camera import CameraGroup
-from core.enemy import Flying, Grunt
-from core.entity import AnimatedEntity, Block, Hazard
+from core.enemy import Flying, Grunt, Projectile, Shooter
+from core.entity import AnimatedEntity, Block, Entity, Hazard
 from core.npc import NPC
 from core.player import Player
 from pytmx.util_pygame import load_pygame
@@ -14,7 +15,7 @@ from utils.tools import debug
 
 
 class LevelType(Enum):
-    RAIN = LEVELS_PATH.joinpath("level_rain.tmx").resolve()
+    RAIN = LEVELS_PATH.joinpath("level_spring.tmx").resolve()
     WIND = LEVELS_PATH.joinpath("level_wind.tmx").resolve()
     LIGHTNING = LEVELS_PATH.joinpath("level_lightning.tmx").resolve()
     SNOW = LEVELS_PATH.joinpath("level_snow.tmx").resolve()
@@ -255,6 +256,32 @@ class Level:
                         damage=config.ENEMY_DATA["flying"]["stats"]["damage"],
                         player=self.player.sprite,
                     )
+                elif obj.type == "Projectile":
+                    Shooter(
+                        [self.all_sprites, self.enemies],
+                        [self.collidable_sprites, self.player],
+                        (obj.x, obj.y),
+                        config.GFX_PATH.joinpath(
+                            "enemies", "shooter"
+                        ),  # FIXME: change once cropped proper sprite
+                        config.ENEMY_DATA["shooter"]["animation_speed"],
+                        speed=config.ENEMY_DATA["shooter"]["stats"]["speed"],
+                        gravity=100,  # FIXME: hardcoded for now, make world property?
+                        health=config.ENEMY_DATA["shooter"]["stats"]["health"],
+                        damage=config.ENEMY_DATA["shooter"]["stats"]["damage"],
+                        projectile_damage=config.ENEMY_DATA["shooter"]["stats"][
+                            "p_damage"
+                        ],
+                        projectile_health=config.ENEMY_DATA["shooter"]["stats"][
+                            "p_damage"
+                        ],
+                        projectile_speed=config.ENEMY_DATA["shooter"]["stats"][
+                            "p_speed"
+                        ],
+                        player=self.player.sprite,
+                        create_projectile=self.create_projectile,
+                        colour=grunt_colour,
+                    )
         except ValueError:
             # This level probably has no enemies
             pass
@@ -271,6 +298,29 @@ class Level:
         except ValueError:
             # level has no coins
             pass
+
+    # TODO: pass this into Shooter's constructor
+    def create_projectile(
+        self,
+        pos: tuple[int, int],
+        root_dir: Union[str, Path],
+        animation_speed: int,
+        speed: float,
+        health: float,
+        damage: float,
+        direction: str,
+    ):
+        Projectile(
+            [self.all_sprites, self.enemies],
+            [self.collidable_sprites, self.player],
+            pos,
+            root_dir,
+            animation_speed,
+            speed,
+            health,
+            damage,
+            direction,
+        )
 
     def check_portals(self) -> None:
         collided = pygame.sprite.groupcollide(self.player, self.portals, False, False)

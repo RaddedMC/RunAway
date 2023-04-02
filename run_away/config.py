@@ -39,7 +39,7 @@ PLAYER_DATA = {
     "animation_speed": 9,
     "jump_speed": 175,
     "gravity": 275,
-    "stats": {"speed": 120, "health": 20, "damage": 10},
+    "stats": {"speed": 120, "health": 40, "damage": 10},
 }
 ENEMY_DATA = {
     "grunt": {"animation_speed": 6, "stats": {"speed": 40, "health": 10, "damage": 10}},
@@ -47,7 +47,19 @@ ENEMY_DATA = {
         "animation_speed": 6,
         "stats": {"speed": 100, "health": 10, "damage": 10},
     },
-    "shooter": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}},
+    "shooter": {
+        "animation_speed": 6,
+        "stats": {
+            "speed": 0,
+            "health": 10,
+            "damage": 1,
+            "p_speed": 40,
+            "p_health": 1,
+            "p_damage": 1,
+        },
+        "left": {"offset": pygame.math.Vector2(0, 0)},
+        "right": {"offset": pygame.math.Vector2(0, 0)},
+    },
 }
 WEAPON_DATA = {}
 PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}

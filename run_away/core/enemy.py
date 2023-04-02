@@ -85,6 +85,8 @@ class Enemy(AnimatedEntity):
         if type(s) is Player:
             s.apply_damage(self.get_damage())
 
+        # TODO: handle weapon damage here
+
 
 class Grunt(Enemy):
     def __init__(
@@ -237,3 +239,54 @@ class Flying(Enemy):
 
         if DEBUG_VERBOSE_LOGGING:
             print(f"Launch! ({self.speed.x}, {self.speed.y})")
+
+
+class Shooter(Enemy):
+    def __init__(
+        self,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: list[pygame.sprite.Group],
+        pos: tuple[int, int],
+        root_dir: Union[str, Path],
+        animation_speed: int,
+        speed: float,
+        gravity: float,
+        health: float,
+        projectile_speed: float,
+        projectile_health: float,
+        projectile_damage: float,
+        player: Player,
+        colour: str = "red",
+    ) -> None:
+        if type(root_dir) is Path:
+            root_dir = root_dir.joinpath(colour)
+        else:
+            root_dir = os.path.join(root_dir, colour)
+
+        super().__init__(
+            groups,
+            collidable_sprites,
+            pos,
+            root_dir,
+            animation_speed,
+            speed,
+            gravity,
+            health,
+            0,  # TODO: do we want player to take damage when colliding with this enemy?
+            player,
+        )
+        self.projectile_speed = projectile_speed
+        self.projectile_health = projectile_health  # TODO: might not end up using, see below
+        self.projectile_damage = projectile_damage
+
+        # Shooter will shoot projectiles non-stop
+        # Do we want shooter to only shoot new projectile once old one has "died" or shoot after a delay?
+        # Should the projectiles themselves have health? (so that player can counter them)
+        # Should shooter only shoot when visible on screen?
+
+        # Shooter needs to be able to spawn facing a specified direction
+        # TODO: add direction custom property to each Projectile in Tiled: "right", "left"
+        # Should shooter be able to "follow" the player? (i.e., flip direction to face the player)
+
+        # TODO: "kill" projectile after it collides with something (add code to entity collision methods)
+        # TODO: get & apply damage if it collided with a Player

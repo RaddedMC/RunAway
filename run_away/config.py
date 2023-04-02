@@ -47,6 +47,7 @@ ENEMY_DATA = {
         "animation_speed": 6,
         "stats": {"speed": 100, "health": 10, "damage": 10},
     },
+    "shooter": {"animation_speed": 6, "stats": {"health": 10, "damage": 10}},
 }
 WEAPON_DATA = {}
 PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}

@@ -158,16 +158,6 @@ class Level:
                             ),
                         ),
                     )
-                if self.is_end_cutscene:
-                    if getattr(obj, "class") == "Home":
-                        from core.home import Home
-
-                        Home(
-                            [self.all_sprites, self.home],
-                            None,
-                            (obj.x, obj.y),
-                            config.GFX_PATH.joinpath("objects", "home"),
-                        )
 
                 # if obj.type == "NPC":
                 #     NPC(
@@ -196,18 +186,33 @@ class Level:
                     damage=config.PLAYER_DATA["stats"]["damage"],
                     jump_speed=config.PLAYER_DATA["jump_speed"],
                 )
-            elif obj.name == "Start:ForceLeft":
-                AnimatedEntity(
-                    [self.all_sprites, self.player],
-                    [self.collidable_sprites],
-                    (obj.x, obj.y),
-                    config.GFX_PATH.joinpath("player"),
-                    animation_speed=18,
-                    speed=60,
-                    gravity=275,
-                ).direction = pygame.Vector2(-1, 0)
-                self.is_end_cutscene = True
-                self.player.sprite.status = "run"
+
+        # Ending cutscene
+        if self.kind is LevelType.HOME:
+            for layer in ["Player", "Interactables"]:
+                for obj in tmx_data.get_layer_by_name(layer):
+                    if obj.name == "Start:ForceLeft":
+                        AnimatedEntity(
+                            [self.all_sprites, self.player],
+                            [self.collidable_sprites],
+                            (obj.x, obj.y),
+                            config.GFX_PATH.joinpath("player"),
+                            animation_speed=18,
+                            speed=60,
+                            gravity=275,
+                        ).direction = pygame.Vector2(-1, 0)
+                        self.is_end_cutscene = True
+                        self.player.sprite.status = "run"
+                    elif self.is_end_cutscene:
+                        if getattr(obj, "class") == "Home":
+                            from core.home import Home
+
+                            Home(
+                                [self.all_sprites, self.home],
+                                None,
+                                (obj.x, obj.y),
+                                config.GFX_PATH.joinpath("objects", "home"),
+                            )
 
         # Select grunt colour
         if self.kind is LevelType.LIGHTNING:
@@ -326,7 +331,7 @@ class Level:
             )
             debug(f"Player Health: {self.player.sprite.health}", 160)
             debug(f"Player Coins: {self.player.sprite.coins}", 180)
-            self.check_portals()
+
         self.check_portals()
         pygame.display.flip()
         return self.check_portals()

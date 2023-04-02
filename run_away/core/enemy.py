@@ -6,7 +6,7 @@ from typing import Callable, Union
 import config
 import pygame
 from config import DEBUG_VERBOSE_LOGGING
-from core.entity import AnimatedEntity, Entity
+from core.entity import AnimatedEntity
 from core.player import Player
 
 
@@ -257,12 +257,6 @@ class Shooter(Enemy):
             damage,
             player,
         )
-
-        # Shooter needs to be able to spawn facing a specified direction
-        # TODO: add direction custom property to each Projectile in Tiled: "right", "left"
-        # Should shooter be able to "follow" the player? (i.e., flip direction to face the player)
-
-        # TODO: get & apply damage if it collided with a Player
 
         # Projectile
         self.projectile_speed = projectile_speed

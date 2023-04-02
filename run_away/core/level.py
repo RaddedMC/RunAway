@@ -7,7 +7,7 @@ import pygame
 from config import LEVELS_PATH
 from core.camera import CameraGroup
 from core.enemy import Flying, Grunt, Projectile, Shooter
-from core.entity import AnimatedEntity, Block, Entity, Hazard
+from core.entity import AnimatedEntity, Block, Hazard
 from core.npc import NPC
 from core.player import Player
 from pytmx.util_pygame import load_pygame
@@ -15,7 +15,7 @@ from utils.tools import debug
 
 
 class LevelType(Enum):
-    RAIN = LEVELS_PATH.joinpath("level_spring.tmx").resolve()
+    RAIN = LEVELS_PATH.joinpath("level_rain.tmx").resolve()
     WIND = LEVELS_PATH.joinpath("level_wind.tmx").resolve()
     LIGHTNING = LEVELS_PATH.joinpath("level_lightning.tmx").resolve()
     SNOW = LEVELS_PATH.joinpath("level_snow.tmx").resolve()
@@ -261,9 +261,7 @@ class Level:
                         [self.all_sprites, self.enemies],
                         [self.collidable_sprites, self.player],
                         (obj.x, obj.y),
-                        config.GFX_PATH.joinpath(
-                            "enemies", "shooter"
-                        ),  # FIXME: change once cropped proper sprite
+                        config.GFX_PATH.joinpath("enemies", "shooter"),
                         config.ENEMY_DATA["shooter"]["animation_speed"],
                         speed=config.ENEMY_DATA["shooter"]["stats"]["speed"],
                         gravity=100,  # FIXME: hardcoded for now, make world property?
@@ -299,7 +297,6 @@ class Level:
             # level has no coins
             pass
 
-    # TODO: pass this into Shooter's constructor
     def create_projectile(
         self,
         pos: tuple[int, int],

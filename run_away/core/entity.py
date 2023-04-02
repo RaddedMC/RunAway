@@ -237,7 +237,7 @@ class Entity(pygame.sprite.Sprite):
 
             # (Projectile)
             if type(self) is Projectile:
-                self.kill()                
+                self.kill()
 
     def update(self, dt: float) -> None:
         if not self.gravity == 0:

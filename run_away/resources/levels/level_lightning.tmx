@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="34">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="34">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_lightning.tsx"/>
  <tileset firstgid="281" source="../gfx/tilesets/terrain_objects.tsx"/>
+ <imagelayer id="14" name="Background_1" parallaxy="0" repeatx="1">
+  <image source="../gfx/bg/wind_hills/Hills Layer 01.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="15" name="Background_2" offsetx="0" offsety="180" parallaxy="0.02" repeatx="1">
+  <image source="../gfx/bg/wind_hills/Hills Layer 02.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="16" name="Background_3" offsetx="0" offsety="230" parallaxy="0.05" repeatx="1">
+  <image source="../gfx/bg/wind_hills/Hills Layer 03.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="17" name="Background_4" offsetx="0" offsety="300" parallaxx="0.7" parallaxy="0.1" repeatx="1">
+  <image source="../gfx/bg/wind_hills/Hills Layer 04.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="18" name="Background_5" offsetx="0" offsety="420" parallaxx="0.8" parallaxy="0.2" repeatx="1">
+  <image source="../gfx/bg/wind_hills/Hills Layer 05.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="19" name="Background_6" offsetx="0" offsety="678" parallaxx="1.2" parallaxy="0.4" repeatx="1">
+  <image source="../gfx/bg/wind_hills/Hills Layer 06.png" width="512" height="256"/>
+ </imagelayer>
  <layer id="6" name="vLayer1" width="30" height="85">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -71,7 +89,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,284,285,286,0,0,302,303,304,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,302,303,304,0,0,320,321,322,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,320,321,322,0,0,0,339,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,322,0,338,339,372,373,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,338,339,372,373,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

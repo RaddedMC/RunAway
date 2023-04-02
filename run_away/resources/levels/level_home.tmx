@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="74" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="5">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="74" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="5">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_lightning.tsx"/>
  <tileset firstgid="281" source="../gfx/tilesets/terrain_snow.tsx"/>
  <tileset firstgid="561" source="../gfx/tilesets/terrain_rain.tsx"/>
  <tileset firstgid="781" source="../gfx/tilesets/terrain_objects.tsx"/>
+ <imagelayer id="8" name="Background_1" parallaxx="0.1" repeatx="1">
+  <image source="../gfx/bg/night_city_home/City Night Layer 01.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="9" name="Background_2" parallaxx="0.15" repeatx="1">
+  <image source="../gfx/bg/night_city_home/City Night Layer 02.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="10" name="Background_3" parallaxx="0.3" repeatx="1">
+  <image source="../gfx/bg/night_city_home/City Night Layer 03.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="11" name="Background_4" parallaxx="0.5" repeatx="1">
+  <image source="../gfx/bg/night_city_home/City Night Layer 04.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="12" name="Background_5" parallaxx="0.7" repeatx="1">
+  <image source="../gfx/bg/night_city_home/City Night Layer 05.png" width="512" height="256"/>
+ </imagelayer>
+ <imagelayer id="13" name="Background_6" parallaxx="0.8" repeatx="1">
+  <image source="../gfx/bg/night_city_home/City Night Layer 06.png" width="512" height="256"/>
+ </imagelayer>
  <layer id="3" name="vLayer1" width="74" height="20">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

@@ -76,12 +76,11 @@ class Level:
 
         self.screen_width = config.RENDER_AREA[0]
         self.screen_height = config.RENDER_AREA[1]
-        print(f"{self.screen_width}, {self.screen_height}")
 
         # Load blocks
         for layer in tmx_data.visible_layers:
 
-            # Background test code
+            # Load backgrounds
             if "Background" in layer.name:
                 parallax_x = 1
                 if hasattr(layer, "parallaxx"):
@@ -91,8 +90,31 @@ class Level:
                 if hasattr(layer, "parallaxy"):
                     parallax_y = float(layer.parallaxy)
 
-                
-                self.backgrounds.append(Background(layer.source, parallax_x, parallax_y, self.screen_width, self.screen_height, tmx_data.width, tmx_data.height))
+                if not hasattr(layer, "offsetx"):
+                    set_x = 0
+                else:
+                    set_x = layer.offsetx
+
+                if not hasattr(layer, "offsety"):
+                    set_y = 0
+                else:
+                    set_y = layer.offsety
+
+                self.backgrounds.append(Background(
+                    path_from_tiled=layer.source,
+
+                    parallax_x=parallax_x,
+                    parallax_y=parallax_y,
+
+                    world_width=self.screen_width,
+                    world_height=self.screen_height,
+
+                    bg_width=tmx_data.width,
+                    bg_height=tmx_data.height,
+
+                    image_offset_x=set_x,
+                    image_offset_y=set_y
+                ))
 
 
             # Only get tile layers

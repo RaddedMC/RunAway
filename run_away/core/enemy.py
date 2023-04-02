@@ -221,6 +221,7 @@ class Flying(Enemy):
             y_launch = self.max_speed
 
         if self.player.rect.x > self.rect.x:
+            self.flip_sprite = False
             self.speed.x = x_launch + random.randrange(0, self.max_speed * 0.1)
         elif self.player.rect.x < self.rect.x:
             self.flip_sprite = True

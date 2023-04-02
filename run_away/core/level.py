@@ -58,12 +58,25 @@ class Level:
         tmx_data = load_pygame(Path(level_path).resolve())
         self.backgrounds = []
 
+        self.screen_width = config.RENDER_AREA[0]
+        self.screen_height = config.RENDER_AREA[1]
+        print(f"{self.screen_width}, {self.screen_height}")
+
         # Load blocks
         for layer in tmx_data.visible_layers:
 
             # Background test code
             if "Background" in layer.name:
-                Background(layer.source, layer.parallaxx, layer.parallaxy)
+                parallax_x = 1
+                if hasattr(layer, "parallaxx"):
+                    parallax_x = float(layer.parallaxx)
+
+                parallax_y = 1
+                if hasattr(layer, "parallaxy"):
+                    parallax_y = float(layer.parallaxy)
+
+                
+                self.backgrounds.append(Background(layer.source, parallax_x, parallax_y, self.screen_width, self.screen_height, tmx_data.width, tmx_data.height))
 
 
             # Only get tile layers
@@ -250,7 +263,9 @@ class Level:
     def run(self, dt):
 
         for background in self.backgrounds:
-            self.render_surface.blit(background, (0,0))
+            offset_x = -self.player.sprite.rect.x
+            offset_y = -self.player.sprite.rect.y
+            background.draw(offset_x,offset_y,self.render_surface)
 
         # Draw sprites, upscale the render surface and display to the user's screen
         self.all_sprites.update(dt)

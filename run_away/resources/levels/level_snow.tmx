@@ -3,31 +3,31 @@
  <tileset firstgid="1" source="../gfx/tilesets/terrain_snow.tsx"/>
  <tileset firstgid="281" source="../gfx/tilesets/terrain_objects.tsx"/>
  <tileset firstgid="443" source="../gfx/tilesets/terrain_rain.tsx"/>
- <imagelayer id="12" name="Background_1" parallaxx="0" parallaxy="0" repeatx="1">
+ <imagelayer id="12" name="Background_1" parallaxx="0.05" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 01.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="14" name="Background_2" parallaxx="0.2" parallaxy="0" repeatx="1">
+ <imagelayer id="14" name="Background_2" parallaxx="0.2" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 02.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="15" name="Background_3" parallaxx="0.3" parallaxy="0" repeatx="1">
+ <imagelayer id="15" name="Background_3" parallaxx="0.3" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 03.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="16" name="Background_4" parallaxx="0.5" parallaxy="0" repeatx="1">
+ <imagelayer id="16" name="Background_4" parallaxx="0.5" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 04.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="17" name="Background_5" parallaxx="0.6" parallaxy="0" repeatx="1">
+ <imagelayer id="17" name="Background_5" parallaxx="0.6" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 05.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="18" name="Background_6" parallaxx="0.7" parallaxy="0" repeatx="1">
+ <imagelayer id="18" name="Background_6" parallaxx="0.7" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 06.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="19" name="Background_7" parallaxx="0.7" parallaxy="0" repeatx="1">
+ <imagelayer id="19" name="Background_7" parallaxx="0.7" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 07.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="20" name="Background_8" parallaxx="0.8" parallaxy="0" repeatx="1">
+ <imagelayer id="20" name="Background_8" parallaxx="0.8" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 08.png" width="512" height="256"/>
  </imagelayer>
- <imagelayer id="21" name="Background_9" parallaxy="0" repeatx="1">
+ <imagelayer id="21" name="Background_9" repeatx="1">
   <image source="../gfx/bg/snow/Snow Layer 09.png" width="512" height="256"/>
  </imagelayer>
  <layer id="11" name="vLayer2" width="64" height="44">

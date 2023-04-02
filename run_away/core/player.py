@@ -94,8 +94,6 @@ class Player(AnimatedEntity):
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
 
-        if True in [keys[key] for key in config.KEYS_INTERACT]:
-            self.status = "interacting"
 
     def jump(self):
         """

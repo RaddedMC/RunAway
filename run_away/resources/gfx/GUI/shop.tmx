@@ -42,12 +42,12 @@
   <object id="8" name="Agility" x="176" y="64" width="16" height="16">
    <text fontfamily="Terminal" pixelsize="8" wrap="1" halign="center" valign="center">0</text>
   </object>
-  <object id="10" name="Increase_Health" x="64" y="48" width="16" height="16"/>
-  <object id="11" name="Decrease_Health" x="64" y="80" width="16" height="16"/>
-  <object id="12" name="Increase_Strength" x="112" y="48" width="16" height="16"/>
-  <object id="13" name="Decrease_Strength" x="112" y="80" width="16" height="16"/>
-  <object id="14" name="Increase_Agility" x="160" y="48" width="16" height="16"/>
-  <object id="15" name="Decrease_Agility" x="160" y="80" width="16" height="16"/>
-  <object id="16" name="close" x="224" y="16" width="16" height="16"/>
+  <object id="10" name="Increase_Health" x="64" y="48" width="25" height="25"/>
+  <object id="11" name="Decrease_Health" x="64" y="80" width="25" height="25"/>
+  <object id="12" name="Increase_Strength" x="112" y="48" width="25" height="25"/>
+  <object id="13" name="Decrease_Strength" x="112" y="80" width="25" height="25"/>
+  <object id="14" name="Increase_Agility" x="160" y="48" width="25" height="25"/>
+  <object id="15" name="Decrease_Agility" x="160" y="80" width="25" height="25"/>
+  <object id="16" name="close" x="224" y="16" width="25" height="25"/>
  </objectgroup>
 </map>

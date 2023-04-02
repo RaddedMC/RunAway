@@ -70,4 +70,5 @@ pygame.font.init()
 DEBUG_FONT = pygame.font.Font(None, 30)
 
 GAME_FONT = pygame.font.Font("run_away/resources/font/BitFont.ttf", 30)
+MENU_FONT =  pygame.font.Font("run_away/resources/font/BitFont.ttf", 10)
 BIG_FONT = pygame.font.Font("run_away/resources/font/ROGFonts-Regular.otf", 20)

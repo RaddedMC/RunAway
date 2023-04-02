@@ -50,6 +50,7 @@ class Level:
 
         self.in_shop = False
         self.shop = None
+        
 
         self.import_assets(level_path)
 
@@ -134,8 +135,8 @@ class Level:
                 if obj.type == "Shop":
                     self.shop = Shop(
                         pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height),
-                        self.stats,
-                        self.in_shop
+                        self.render_surface,
+                        stats = self.stats,
                     )
 
                 if self.is_end_cutscene:
@@ -231,12 +232,19 @@ class Level:
         except ValueError:
             # level has no coins
             pass
-        
+    def check_interacting(self):
+        keys = pygame.key.get_pressed()
+
+        if True in [keys[key] for key in config.KEYS_INTERACT]:
+            return True
+        else:
+            return False
+
     def check_portals(self):
         collided = pygame.sprite.groupcollide(self.player, self.portals, False, False)
         if self.player.sprite in collided:
             collided[self.player.sprite][0].interact()
-            if self.player.sprite.status == "interacting":
+            if self.check_interacting():
                 return collided[self.player.sprite][0]
         else:
             return False
@@ -248,23 +256,21 @@ class Level:
 
     def check_interactables(self):
         if pygame.sprite.collide_rect(self.player.sprite, self.npcs):
-            if self.player.sprite.status == "interacting":
+            if self.check_interacting():
                 self.npcs.sprite.interact()
         
     def check_shop(self):
         if self.shop == None:
             return
-        elif self.shop.rect.colliderect(self.player.sprite) and self.player.sprite.status == "interacting":
+        elif self.shop.rect.colliderect(self.player.sprite) and self.check_interacting():
             self.in_shop = True
             
     def run(self, dt):
 
-        self.check_shop()
-
         if self.in_shop:
             self.in_shop = self.shop.interact()
-            print(self.in_shop)
-        else:        
+        else: 
+            self.check_shop()       
             # Draw sprites, upscale the render surface and display to the user's screen
             self.render_surface.fill("black")
             self.all_sprites.update(dt)
@@ -283,7 +289,7 @@ class Level:
             else:
                 self.display_surface.blit(scaled_display, (0, 0))
                 # TODO update entire stats dictionary at once?
-                self.stats["coins"] = self.player.sprite.coins
+                # self.stats["coins"] = self.player.sprite.coins
 
             self.check_coins()
             
@@ -304,7 +310,7 @@ class Level:
                 debug(f"Player Health: {self.player.sprite.health}", 160)
                 debug(f"On Spikes: {self.player.sprite.on_hazard}", 180)
                 debug(f"Player Coins: {self.player.sprite.coins}", 200)
-                debug(f"Shop?: {self.shop.stats} and {self.in_shop}", 220)
+                debug(f"Stats: {self.stats}", 220)
         self.check_portals()
         pygame.display.flip()
         return self.check_portals()

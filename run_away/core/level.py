@@ -89,6 +89,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="bottom",
                         )
                     elif layer.name == "Top Spikes":
@@ -97,6 +98,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="top",
                         )
                     elif layer.name == "Left Spikes":
@@ -105,6 +107,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="left",
                         )
                     elif layer.name == "Right Spikes":
@@ -113,6 +116,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="right",
                         )
                     elif layer.name == "vLayer1":

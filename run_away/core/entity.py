@@ -325,12 +325,10 @@ class Hazard(Entity):
         collidable_sprites: Optional[list[pygame.sprite.Group]],
         pos: tuple[int, int],
         image: pygame.Surface,
+        damage: float,
         kind: str,
     ) -> None:
         super().__init__(groups, collidable_sprites, pos, image)
-        self.config = (
-            config.HAZARD_DATA
-        )  # TODO: remove this and pass damage in the constructor instead
         self.kind = kind
         self.hitbox = (
             self.rect.copy()
@@ -344,7 +342,7 @@ class Hazard(Entity):
             )
             .move(config.HAZARD_DATA[self.kind]["offset"])
         )
-        self.damage: int = self.config["damage"]
+        self.damage = damage
 
-    def get_damage(self) -> int:
+    def get_damage(self) -> float:
         return self.damage

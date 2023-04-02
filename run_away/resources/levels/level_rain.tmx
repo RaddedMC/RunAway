@@ -172,7 +172,7 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="Enemies">
-  <object id="6" name="Grunt2" class="Grunt" x="592" y="112">
+  <object id="6" name="Grunt2" type="Grunt" x="608" y="112">
    <point/>
   </object>
   <object id="7" name="Flying2" class="Flying" x="640" y="256">

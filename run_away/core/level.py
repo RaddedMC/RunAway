@@ -7,7 +7,7 @@ from config import LEVELS_PATH
 from core.camera import CameraGroup
 from core.enemy import Flying, Grunt
 from core.entity import AnimatedEntity, Block, Hazard
-from core.NPC import NPC
+from core.npc import NPC
 from core.player import Player
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
@@ -70,8 +70,8 @@ class Level:
         self.render_surface = pygame.Surface(config.RENDER_AREA)
 
     # Load level items
-    def import_assets(self, level_path):
-        tmx_data = load_pygame(Path(level_path).resolve())
+    def import_assets(self):
+        tmx_data = load_pygame(str(Path(self.path).resolve()))
         self.backgrounds = []
 
         self.screen_width = config.RENDER_AREA[0]

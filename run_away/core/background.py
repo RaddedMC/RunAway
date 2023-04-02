@@ -18,7 +18,7 @@ class Background():
     ):
 
         # Import things
-        self.image = pygame.image.load(Path(os.getcwd() + "/" + config.BASE_PATH + "/" + path_from_tiled[3:]))
+        self.image = pygame.image.load(Path(str(config.BASE_PATH) + "/resources/" + path_from_tiled[3:]))
         self.image = pygame.transform.scale(self.image, config.RENDER_AREA)
 
         # Save additional properties

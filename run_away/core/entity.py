@@ -36,7 +36,7 @@ class Entity(pygame.sprite.Sprite):
         pos: tuple[int, int],
         image: pygame.Surface,
         speed: float = 0,
-        gravity: float = 0,
+        gravity: float = 0
     ) -> None:
         super().__init__(groups)
         self.image = image
@@ -51,6 +51,7 @@ class Entity(pygame.sprite.Sprite):
         self.gravity = gravity
         self.max_gravity = gravity
         self.direction = pygame.math.Vector2(0, 0)
+        self.on_ground = False
 
     def apply_gravity(self, dt: float) -> None:
         # if not self.on_ground:

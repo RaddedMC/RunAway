@@ -53,7 +53,7 @@
 </data>
  </layer>
  <objectgroup id="7" name="Interactables">
-  <object id="2" name="Home" class="Home" x="60" y="216">
+  <object id="2" name="Home" type="Home" x="60" y="216">
    <point/>
   </object>
  </objectgroup>

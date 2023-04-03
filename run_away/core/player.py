@@ -118,10 +118,10 @@ class Player(AnimatedEntity):
             else:
                 #player facing right
                 weaponPosition = (self.rect.x + 15, self.rect.y + 10)
-                if self.weaponHitEnemy:
-                    self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",0)
-                else:
-                    self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",4)
+            if self.weaponHitEnemy:
+                self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",0)
+            else:
+                self.weaponOut = Weapon(self.playerGroups[0], self.collidable_sprites, weaponPosition, "./run_away/resources/gfx/weapons/test_stick.png",4)
 
 
 

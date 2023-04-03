@@ -55,7 +55,8 @@ class Enemy(AnimatedEntity):
 
     def check_death(self):
         if self.health <= 0:
-            pygame.sprite.Sprite.kill(self) 
+            pygame.sprite.Sprite.kill(self)
+            self.player.get_coin() 
 
     def update(self, dt: float) -> None:
         super().update(dt)

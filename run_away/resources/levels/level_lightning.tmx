@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="34">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="30" height="85" tilewidth="16" tileheight="16" infinite="0" nextlayerid="20" nextobjectid="37">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_lightning.tsx"/>
  <tileset firstgid="281" source="../gfx/tilesets/terrain_objects.tsx"/>
  <tileset firstgid="443" source="../gfx/tilesets/terrain_snow.tsx"/>
@@ -752,9 +752,6 @@
   <object id="14" name="Grunt7" type="Grunt" x="400" y="1056">
    <point/>
   </object>
-  <object id="16" name="GruntBoss" type="Boss" x="320" y="1296">
-   <point/>
-  </object>
   <object id="17" name="Flying1" type="Flying" x="336" y="336">
    <point/>
   </object>
@@ -768,6 +765,15 @@
    <point/>
   </object>
   <object id="27" name="Flying2" type="Flying" x="368" y="880">
+   <point/>
+  </object>
+  <object id="34" name="Grunt6" type="Grunt" x="304" y="1296">
+   <point/>
+  </object>
+  <object id="35" name="Grunt6" type="Grunt" x="352" y="1296">
+   <point/>
+  </object>
+  <object id="36" name="Grunt6" type="Grunt" x="400" y="1296">
    <point/>
   </object>
  </objectgroup>

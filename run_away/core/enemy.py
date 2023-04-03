@@ -1,7 +1,7 @@
 import os
 import random
 from pathlib import Path
-from typing import Callable, Union
+from typing import Callable, Optional, Union
 
 import config
 import pygame
@@ -241,7 +241,6 @@ class Shooter(Enemy):
     ) -> None:
         if type(root_dir) is Path:
             root_dir = root_dir.joinpath(colour)
-            print(root_dir)
         else:
             root_dir = os.path.join(root_dir, colour)
 
@@ -297,11 +296,8 @@ class Shooter(Enemy):
             # TODO: pos will require the same offset trick as Hazard
             # TODO: find + add actual projectile sprite(s)
             self.create_projectile(
-                self.rect.copy()
-                .move(config.ENEMY_DATA["shooter"][self.get_direction_str()]["offset"])
-                .topleft,
-                config.GFX_PATH.joinpath("objects", "coins"),
-                config.ENEMY_DATA["shooter"]["animation_speed"],
+                self.rect.topleft,  # FIXME: might need to use a different rect attr
+                config.GFX_PATH.joinpath("objects", "projectiles"),
                 self.projectile_speed,
                 self.projectile_health,
                 self.projectile_damage,
@@ -325,12 +321,21 @@ class Projectile(Enemy):
         collidable_sprites: list[pygame.sprite.Group],
         pos: tuple[int, int],
         root_dir: Union[str, Path],
-        animation_speed: int,
+        animation_speed: Optional[int],
         speed: float,
         health: float,
         damage: float,
         direction: str,
+        kind: str,
     ) -> None:
+        if type(root_dir) is Path:  # TODO: add support for final level
+            root_dir = root_dir.joinpath(kind)
+        else:
+            root_dir = os.path.join(root_dir, kind)
+
+        if animation_speed is None:
+            animation_speed = config.PROJECTILE_DATA[kind]["animation_speed"]
+
         super().__init__(
             groups,
             collidable_sprites,
@@ -342,6 +347,13 @@ class Projectile(Enemy):
             health,
             damage,
             None,
+        )
+        self.rect.move_ip(config.PROJECTILE_DATA[kind]["offset"][direction])
+        self.hitbox = self.rect.copy().inflate(
+            tuple(
+                l * r
+                for l, r in zip(self.rect.size, config.PROJECTILE_DATA[kind]["scale"])
+            )
         )
 
         if direction == "left":

@@ -39,7 +39,7 @@ PLAYER_DATA = {
     "animation_speed": 9,
     "jump_speed": 175,
     "gravity": 275,
-    "stats": {"speed": 120, "health": 40, "damage": 10},
+    "stats": {"speed": 120, "health": 100, "damage": 10},
 }
 ENEMY_DATA = {
     "grunt": {"animation_speed": 6, "stats": {"speed": 40, "health": 10, "damage": 10}},
@@ -57,8 +57,42 @@ ENEMY_DATA = {
             "p_health": 1,
             "p_damage": 1,
         },
-        "left": {"offset": pygame.math.Vector2(0, 0)},
+        "left": {"offset": pygame.math.Vector2(0, 0)},  # TODO: remove?
         "right": {"offset": pygame.math.Vector2(0, 0)},
+    },
+}
+PROJECTILE_DATA = {  # TODO: add support for final level
+    "rain": {
+        "animation_speed": 14,
+        "scale": (-0.3, -0.5),
+        "offset": {
+            "left": pygame.math.Vector2(0, -5),
+            "right": pygame.math.Vector2(0, -5),
+        },
+    },
+    "wind": {
+        "animation_speed": 18,
+        "scale": (0, 0),
+        "offset": {
+            "left": pygame.math.Vector2(0, 3),
+            "right": pygame.math.Vector2(0, 3),
+        },
+    },
+    "lightning": {
+        "animation_speed": 24,
+        "scale": (0, -0.5),
+        "offset": {
+            "left": pygame.math.Vector2(0, -5),
+            "right": pygame.math.Vector2(0, -5),
+        },
+    },
+    "snow": {
+        "animation_speed": 10,
+        "scale": (-0.45, -0.65),
+        "offset": {
+            "left": pygame.math.Vector2(-20, -8),
+            "right": pygame.math.Vector2(20, -8),
+        },
     },
 }
 WEAPON_DATA = {}

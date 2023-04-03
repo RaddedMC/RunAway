@@ -11,7 +11,7 @@ from core.entity import AnimatedEntity, Block, Hazard
 from core.npc import NPC
 from core.player import Player
 from pytmx.util_pygame import load_pygame
-from utils.tools import debug
+from utils.tools import debug, get_level_str
 
 
 class LevelType(Enum):
@@ -304,8 +304,7 @@ class Level:
     def create_projectile(
         self,
         pos: tuple[int, int],
-        root_dir: Union[str, Path],
-        animation_speed: int,
+        root_dir: Path,
         speed: float,
         health: float,
         damage: float,
@@ -316,11 +315,12 @@ class Level:
             [self.collidable_sprites, self.player],
             pos,
             root_dir,
-            animation_speed,
+            None,
             speed,
             health,
             damage,
             direction,
+            get_level_str(self.kind),
         )
 
     def check_portals(self) -> None:

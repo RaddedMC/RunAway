@@ -44,6 +44,14 @@ def get_wave_value() -> int:
         return 0
 
 
+def get_level_str(level) -> str:
+    """
+    Return a string representing the current level (i.e., "wind", "snow", etc.)
+    """
+    file_name = level.value.stem
+    return file_name[file_name.find("_") + 1 :]
+
+
 def debug(info, y: int = 10, x: int = 10) -> None:
     """
     Create a simple debug panel to access information on the screen.

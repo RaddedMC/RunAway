@@ -12,7 +12,7 @@ import pygame
 DEBUG_VERBOSE_LOGGING = False
 DEBUG_UI = False
 DEBUG_ZOOM = False
-DEBUG_SHOW_HITBOXES = True
+DEBUG_SHOW_HITBOXES = False
 
 ### FOLDER PATHS ###
 BASE_PATH = Path.cwd().absolute().joinpath("run_away")
@@ -154,5 +154,5 @@ pygame.font.init()
 DEBUG_FONT = pygame.font.Font(None, 30)
 
 GAME_FONT = pygame.font.Font(FONT_PATH.joinpath("BitFont.ttf"), 30)
-MENU_FONT = pygame.font.Font("run_away/resources/font/BitFont.ttf", 10)
+MENU_FONT = pygame.font.Font(FONT_PATH.joinpath("BitFont.ttf"), 10)
 BIG_FONT = pygame.font.Font(FONT_PATH.joinpath("ROGFonts-Regular.otf"), 20)

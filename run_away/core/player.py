@@ -132,7 +132,6 @@ class Player(AnimatedEntity):
             pass
         else:
             self.attacking = True
-            print("attack!")
             #need player direction, position for offset, calc and pass that here
             #use test_stick.png
             #init the weapon here

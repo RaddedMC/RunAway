@@ -376,6 +376,7 @@ class Level:
             self.in_shop = self.shop.interact()
             self.player.sprite.coins = self.stats["coins"]
             self.player.sprite.max_health = self.stats["health"]
+            self.player.sprite.purchaseStats(self.stats)
         else: 
             self.check_shop()       
     

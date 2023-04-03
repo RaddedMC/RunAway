@@ -100,6 +100,7 @@ class Enemy(AnimatedEntity):
 
     def enemyTakeDamage(self, damageTaken : int) -> None:
         self.health -= damageTaken
+        print("enemy helth", self.health)
 
 #use enemy rectangle to spawn coin
 

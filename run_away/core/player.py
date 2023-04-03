@@ -169,12 +169,12 @@ class Player(AnimatedEntity):
             if now - self.hurt_time >= self.invulnerable_duration:
                 self.vulnerable = True
                 self.hurt_time = None
-                self.weaponHitEnemy = False
-
+                
         if self.attacking:
             # Attack has reached end
             if now - self.attack_time >= 250:
                 self.attacking = False
+                self.weaponHitEnemy = False
                 self.weaponOut.destroy()
             if now - self.attack_time < self.attack_cooldown:
                 self.attackCoolingDown = True

@@ -360,7 +360,6 @@ class Level:
                 offset_x = -self.player.sprite.rect.x
                 offset_y = -self.player.sprite.rect.y
                 background.draw(offset_x,offset_y,self.render_surface)
-            self.render_surface.fill((0,0,0))
             # Draw sprites, upscale the render surface and display to the user's screen
             self.all_sprites.update(dt)
             self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
@@ -368,6 +367,7 @@ class Level:
             if self.is_end_cutscene:
                 self.update_end_cutscene(dt)
             
+            self.displayHUD()
 
             scaled_display = pygame.transform.scale(
                 self.render_surface,
@@ -472,3 +472,23 @@ class Level:
         else:
             self.home.sprite.set_frame_by_percent((100 - dist_factor) / 100)
         self.home.sprite.set_frame_by_percent(self.player.sprite.rect.x)
+
+
+    def displayHUD(self):
+
+        health_icon = pygame.image.load(config.GFX_PATH.joinpath("GUIelements", "heart_icon.png"))
+        health_num = config.MENU_FONT.render(f"x{self.player.sprite.health}", True, "white")
+
+        coin_icon = pygame.image.load(config.GFX_PATH.joinpath("GUIelements", "coin_icon.png"))
+        coin_num = config.MENU_FONT.render(f"x{self.player.sprite.coins}", True, "white")
+
+        health_num_rect = health_num.get_rect(topleft = (256,10))
+        health_rect = health_icon.get_rect(center = (245, health_num_rect.centery))
+
+        coin_num_rect = coin_num.get_rect(topleft = (256, 30))
+        coin_rect = coin_icon.get_rect(center = (245, coin_num_rect.centery))
+
+        self.render_surface.blit(health_num, health_num_rect)
+        self.render_surface.blit(coin_num, coin_num_rect)
+        self.render_surface.blit(health_icon,health_rect)
+        self.render_surface.blit(coin_icon, coin_rect)

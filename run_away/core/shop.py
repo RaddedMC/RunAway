@@ -46,7 +46,6 @@ class Shop():
     def import_assets(self):
         tmx_data = load_pygame(Path("run_away/resources/gfx/GUI/shop.tmx"))
 
-        print(dir(tmx_data))
 
         for layer in tmx_data.visible_layers:
             if hasattr(layer, "data"):
@@ -133,11 +132,9 @@ class Shop():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
-                    print(f"{mouse_pos}, {self.healthDown}")
         
         if self.close.collidepoint(mouse_pos) and click == True:
             self.inShop = False
-            print("click")
 
         if self.healthUp.collidepoint(mouse_pos) and click == True and self.stats["coins"] >= 7:
                 self.stats["health"] += 1

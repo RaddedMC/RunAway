@@ -258,6 +258,7 @@ class Shooter(Enemy):
         )
 
         # Projectile
+        self.colour = colour
         self.projectile_speed = projectile_speed
         self.projectile_health = projectile_health
         self.projectile_damage = projectile_damage
@@ -302,6 +303,7 @@ class Shooter(Enemy):
                 self.projectile_health,
                 self.projectile_damage,
                 self.get_direction_str(),
+                self.colour,
             )
 
             self.attack_time = pygame.time.get_ticks()

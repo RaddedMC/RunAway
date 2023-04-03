@@ -1,3 +1,4 @@
+import random
 from enum import Enum
 from pathlib import Path
 from typing import Union
@@ -11,7 +12,7 @@ from core.entity import AnimatedEntity, Block, Hazard
 from core.npc import NPC
 from core.player import Player
 from pytmx.util_pygame import load_pygame
-from utils.tools import debug, get_level_str
+from utils.tools import debug
 
 
 class LevelType(Enum):
@@ -27,6 +28,30 @@ class LevelType(Enum):
     @classmethod
     def list(cls):
         return list(map(lambda e: e.value, cls))
+
+    def __str__(self) -> str:
+        """
+        Return a string representing the current level (i.e., "wind", "snow", etc.)
+        """
+        file_name = self.value.stem
+        return file_name[file_name.find("_") + 1 :]
+
+    def to_colour(self) -> Union[str, None]:
+        if self is LevelType.RAIN_RETURN:  # Return a random colour
+            return random.choice(list(config.ENEMY_COLOUR_LOOKUP.values()))
+        else:
+            return config.ENEMY_COLOUR_LOOKUP.get(str(self))
+
+    @staticmethod
+    def from_colour(search_colour: str) -> Union[str, None]:
+        return next(
+            (
+                level
+                for level, colour in config.ENEMY_COLOUR_LOOKUP.items()
+                if colour == search_colour
+            ),
+            None,
+        )
 
 
 from core.portal import Portal
@@ -219,16 +244,6 @@ class Level:
                                 config.GFX_PATH.joinpath("objects", "home"),
                             )
 
-        # Select grunt colour
-        if self.kind is LevelType.LIGHTNING:
-            grunt_colour = "yellow"
-        elif self.kind is LevelType.SNOW:
-            grunt_colour = "blue"
-        elif self.kind is LevelType.RAIN:
-            grunt_colour = "red"
-        else:
-            grunt_colour = "green"
-
         # TODO: find way to determine level progress and multiply factor to the enemy's health, damage, etc.
 
         # Spawn enemies, if any exist
@@ -246,7 +261,7 @@ class Level:
                         health=config.ENEMY_DATA["grunt"]["stats"]["health"],
                         damage=config.ENEMY_DATA["grunt"]["stats"]["damage"],
                         player=self.player.sprite,
-                        colour=grunt_colour,
+                        colour=self.kind.to_colour(),
                     )
                 elif obj.type == "Flying":
                     Flying(
@@ -282,7 +297,7 @@ class Level:
                         ],
                         player=self.player.sprite,
                         create_projectile=self.create_projectile,
-                        colour=grunt_colour,
+                        colour=self.kind.to_colour(),
                     )
         except ValueError:
             # This level probably has no enemies
@@ -309,6 +324,7 @@ class Level:
         health: float,
         damage: float,
         direction: str,
+        colour: str,
     ):
         Projectile(
             [self.all_sprites, self.enemies],
@@ -320,7 +336,7 @@ class Level:
             health,
             damage,
             direction,
-            get_level_str(self.kind),
+            LevelType.from_colour(colour),
         )
 
     def check_portals(self) -> None:

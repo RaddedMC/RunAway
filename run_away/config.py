@@ -28,6 +28,12 @@ SFX_PATH = RESOURCES_PATH.joinpath("sfx")
 TILE_SIZE = 16
 
 ### ENTITY CONSTANTS ###
+ENEMY_COLOUR_LOOKUP = {
+    "rain": "red",
+    "wind": "green",
+    "lightning": "yellow",
+    "snow": "blue",
+}
 HAZARD_DATA = {
     "damage": 1,
     "top": {"scale": (0, -0.65), "offset": pygame.math.Vector2(0, -6)},

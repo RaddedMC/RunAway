@@ -172,22 +172,13 @@
   </object>
  </objectgroup>
  <objectgroup id="4" name="Enemies">
-  <object id="6" name="Grunt2" type="Grunt" x="608" y="112">
-   <point/>
-  </object>
   <object id="7" name="Flying2" type="Flying" x="640" y="256">
    <point/>
   </object>
-  <object id="8" name="Projectile2" type="Projectile" x="880" y="352">
+  <object id="8" name="Projectile2" type="Projectile" x="976" y="112">
    <point/>
   </object>
   <object id="4" name="Grunt1" type="Grunt" x="368" y="400">
-   <point/>
-  </object>
-  <object id="5" name="Flying1" type="Flying" x="848" y="80">
-   <point/>
-  </object>
-  <object id="15" name="Projectile1" type="Projectile" x="832" y="400">
    <point/>
   </object>
  </objectgroup>

@@ -1,12 +1,12 @@
 import os
 import random
 from pathlib import Path
-from typing import Union
+from typing import Callable, Optional, Union
 
 import config
 import pygame
 from config import DEBUG_VERBOSE_LOGGING
-from core.entity import AnimatedEntity, Entity
+from core.entity import AnimatedEntity
 from core.player import Player
 from core.weapon import Weapon
 
@@ -49,44 +49,20 @@ class Enemy(AnimatedEntity):
         """
         Calculates the amount of damage this enemy should deal.
         """
-        return config.LEVEL_DATA["damage_factor"][
-            0
-        ]  # TODO: [0] is temporary until I figure out how to track level progress
+        return (
+            self.damage * config.LEVEL_DATA["damage_factor"][0]
+        )  # TODO: [0] is temporary until I figure out how to track level progress
 
     def check_death(self):
         if self.health <= 0:
             pygame.sprite.Sprite.kill(self)
-            self.player.get_coin() 
+            self.player.get_coin()
 
     def update(self, dt: float) -> None:
         super().update(dt)
         self.run_behaviour()
         self.checkTakenDamage()
         self.check_death()
-
-    def check_damage(
-        self, collided: list[Entity], rect_pos: int, rect_pos_attr: str
-    ) -> None:
-        if rect_pos_attr == "top":
-            s = next(
-                (sprite for sprite in collided if sprite.hitbox.top == rect_pos), None
-            )
-        elif rect_pos_attr == "bottom":
-            s = next(
-                (sprite for sprite in collided if sprite.hitbox.bottom == rect_pos),
-                None,
-            )
-        elif rect_pos_attr == "left":
-            s = next(
-                (sprite for sprite in collided if sprite.hitbox.left == rect_pos), None
-            )
-        else:
-            s = next(
-                (sprite for sprite in collided if sprite.hitbox.right == rect_pos), None
-            )
-
-        if type(s) is Player:
-            s.apply_damage(self.get_damage())
 
     def checkTakenDamage(self) -> None:
         if self.player.attacking:
@@ -97,13 +73,14 @@ class Enemy(AnimatedEntity):
                 self.enemyTakeDamage(self.player.weaponOut.damage)
                 self.player.weaponHitEnemy = True
                 self.player.weaponOut.stopDamage()
-        
 
-    def enemyTakeDamage(self, damageTaken : int) -> None:
+    def enemyTakeDamage(self, damageTaken: int) -> None:
         self.health -= damageTaken
         print("enemy helth", self.health)
 
-#use enemy rectangle to spawn coin
+
+# use enemy rectangle to spawn coin
+
 
 class Grunt(Enemy):
     def __init__(
@@ -257,3 +234,150 @@ class Flying(Enemy):
 
         if DEBUG_VERBOSE_LOGGING:
             print(f"Launch! ({self.speed.x}, {self.speed.y})")
+
+
+class Shooter(Enemy):
+    def __init__(
+        self,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: list[pygame.sprite.Group],
+        pos: tuple[int, int],
+        root_dir: Union[str, Path],
+        animation_speed: int,
+        speed: float,
+        gravity: float,
+        health: float,
+        damage: float,
+        projectile_speed: float,
+        projectile_health: float,
+        projectile_damage: float,
+        player: Player,
+        create_projectile: Callable,
+        colour: str = "red",
+    ) -> None:
+        if type(root_dir) is Path:
+            root_dir = root_dir.joinpath(colour)
+        else:
+            root_dir = os.path.join(root_dir, colour)
+
+        super().__init__(
+            groups,
+            collidable_sprites,
+            pos,
+            root_dir,
+            animation_speed,
+            speed,
+            gravity,
+            health,
+            damage,
+            player,
+        )
+
+        # Projectile
+        self.colour = colour
+        self.projectile_speed = projectile_speed
+        self.projectile_health = projectile_health
+        self.projectile_damage = projectile_damage
+        self.create_projectile = create_projectile
+
+        # Track enemy states/actions
+        self.can_shoot = True
+        self.attack_delay = 2750
+        self.attack_time = None
+
+    def cooldowns(self) -> None:
+        now = pygame.time.get_ticks()
+
+        # We are able to shoot another projectile
+        if now - self.attack_time >= self.attack_delay:
+            self.can_shoot = True
+            self.attack_time = None
+
+    def check_direction(self):
+        if self.rect.x < self.player.rect.x:  # Player is to the right of the enemy
+            self.direction.x = 1
+            self.flip_sprite = False
+        else:  # Player is to the left of the enemy
+            self.direction.x = -1
+            self.flip_sprite = True
+
+    def get_direction_str(self) -> str:
+        if self.direction.x == 1:
+            return "right"
+        elif self.direction.x == -1:
+            return "left"
+
+    def shoot(self) -> None:
+        # Spawn the projectile, make it move in the same direction that the shooter is facing
+        if self.can_shoot:
+            # TODO: pos will require the same offset trick as Hazard
+            # TODO: find + add actual projectile sprite(s)
+            self.create_projectile(
+                self.rect.topleft,  # FIXME: might need to use a different rect attr
+                config.GFX_PATH.joinpath("objects", "projectiles"),
+                self.projectile_speed,
+                self.projectile_health,
+                self.projectile_damage,
+                self.get_direction_str(),
+                self.colour,
+            )
+
+            self.attack_time = pygame.time.get_ticks()
+            self.can_shoot = False
+
+    def update(self, dt: float) -> None:
+        super().update(dt)
+        self.check_direction()
+        self.shoot()
+        self.cooldowns()
+
+
+class Projectile(Enemy):
+    def __init__(
+        self,
+        groups: list[pygame.sprite.Group],
+        collidable_sprites: list[pygame.sprite.Group],
+        pos: tuple[int, int],
+        root_dir: Union[str, Path],
+        animation_speed: Optional[int],
+        speed: float,
+        health: float,
+        damage: float,
+        player: Player,
+        direction: str,
+        kind: str,
+    ) -> None:
+        if type(root_dir) is Path:  # TODO: add support for final level
+            root_dir = root_dir.joinpath(kind)
+        else:
+            root_dir = os.path.join(root_dir, kind)
+
+        if animation_speed is None:
+            animation_speed = config.PROJECTILE_DATA[kind]["animation_speed"]
+
+        super().__init__(
+            groups,
+            collidable_sprites,
+            pos,
+            root_dir,
+            animation_speed,
+            speed,
+            0,
+            health,
+            damage,
+            player,
+        )
+        self.rect.move_ip(config.PROJECTILE_DATA[kind]["offset"][direction])
+        self.hitbox = self.rect.copy().inflate(
+            tuple(
+                l * r
+                for l, r in zip(self.rect.size, config.PROJECTILE_DATA[kind]["scale"])
+            )
+        )
+
+        if direction == "left":
+            self.direction.x = -1
+            self.flip_sprite = True
+        elif direction == "right":
+            self.direction.x = 1
+            self.flip_sprite = False

@@ -13,7 +13,12 @@ class Game:
         self.display_surface = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Run Away")
         self.clock = pygame.time.Clock()
-        self.player_stats = {"health": config.PLAYER_DATA["stats"]["health"] ,"strength": config.PLAYER_DATA["stats"]["strength"] ,"agility": config.PLAYER_DATA["stats"]["agility"] ,"coins": config.PLAYER_DATA["stats"]["coins"] }
+        self.player_stats = {
+            "health": config.PLAYER_DATA["stats"]["health"],
+            "strength": config.PLAYER_DATA["stats"]["strength"],
+            "agility": config.PLAYER_DATA["stats"]["agility"],
+            "coins": config.PLAYER_DATA["stats"]["coins"],
+        }
         self.level = Level(LevelType.RAIN, self.player_stats)
         self.running = True
         self.lightning_clear = False

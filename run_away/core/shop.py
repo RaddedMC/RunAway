@@ -1,16 +1,18 @@
-from core.entity import Block
-import pygame
-from pygame import Rect
-import config
-from utils.tools import get_sounds_by_key
 import random
-from pytmx.util_pygame import load_pygame
 from pathlib import Path
 
-class Shop():
+import config
+import pygame
+from core.entity import Block
+from pygame import Rect
+from pytmx.util_pygame import load_pygame
+from utils.tools import get_sounds_by_key
 
-    def __init__(self, rect: pygame.rect.Rect, render_surface: pygame.Surface, stats: dict):
-        
+
+class Shop:
+    def __init__(
+        self, rect: pygame.rect.Rect, render_surface: pygame.Surface, stats: dict
+    ):
         self.inShop = False
         self.rect = rect
 
@@ -29,7 +31,7 @@ class Shop():
 
         self.agility = stats["agility"]
         self.agility_rect: Rect
-        
+
         self.coins = stats["coins"]
         self.coins_rect: Rect
 
@@ -41,37 +43,50 @@ class Shop():
         self.stats = stats
         self.import_assets()
 
-
-
     def import_assets(self):
         tmx_data = load_pygame(Path("run_away/resources/gfx/GUI/shop.tmx"))
-
 
         for layer in tmx_data.visible_layers:
             if hasattr(layer, "data"):
                 for x, y, surf in layer.tiles():
-                    Block(self.background,
-                          (x * config.TILE_SIZE, y * config.TILE_SIZE), 
-                          surf,
-                          )
-        
+                    Block(
+                        self.background,
+                        (x * config.TILE_SIZE, y * config.TILE_SIZE),
+                        surf,
+                    )
+
         for obj in tmx_data.get_layer_by_name("StatNumbers"):
             if obj.name == "Health":
-                self.health = config.MENU_FONT.render(f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)) 
-                self.health_rect = self.health.get_rect(center = (obj.x + obj.width/2, obj.y + obj.height/2))
+                self.health = config.MENU_FONT.render(
+                    f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)
+                )
+                self.health_rect = self.health.get_rect(
+                    center=(obj.x + obj.width / 2, obj.y + obj.height / 2)
+                )
             if obj.name == "Strength":
-                self.strength = config.MENU_FONT.render(f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)) 
-                self.strength_rect = self.health.get_rect(center = (obj.x + obj.width/2, obj.y + obj.height/2))
+                self.strength = config.MENU_FONT.render(
+                    f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)
+                )
+                self.strength_rect = self.health.get_rect(
+                    center=(obj.x + obj.width / 2, obj.y + obj.height / 2)
+                )
             if obj.name == "Agility":
-                self.agility = config.MENU_FONT.render(f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)) 
-                self.agility_rect = self.health.get_rect(center = (obj.x + obj.width/2, obj.y + obj.height/2))
+                self.agility = config.MENU_FONT.render(
+                    f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)
+                )
+                self.agility_rect = self.health.get_rect(
+                    center=(obj.x + obj.width / 2, obj.y + obj.height / 2)
+                )
             if obj.name == "Coins":
-                self.coins = config.MENU_FONT.render(f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)) 
-                self.coins_rect = self.health.get_rect(center = (obj.x + obj.width/2, obj.y + obj.height/2))
-            
+                self.coins = config.MENU_FONT.render(
+                    f"{self.stats[obj.name.lower()]}", True, (0, 0, 0)
+                )
+                self.coins_rect = self.health.get_rect(
+                    center=(obj.x + obj.width / 2, obj.y + obj.height / 2)
+                )
 
             elif obj.name == "Increase_Health":
-                self.healthUp = pygame.rect.Rect(obj.x, obj.y, obj.width , obj.height)
+                self.healthUp = pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height)
             elif obj.name == "Decrease_Health":
                 self.healthDown = pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height)
             elif obj.name == "Increase_Strength":
@@ -84,9 +99,6 @@ class Shop():
                 self.agDown = pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height)
             elif obj.name == "close":
                 self.close = pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height)
-            
-
-
 
     def interact(self):
         self.inShop = True
@@ -95,18 +107,24 @@ class Shop():
         self.background.draw(self.render_surface)
 
         coin_color = 0
-        if (self.stats["coins"] < 7):
+        if self.stats["coins"] < 7:
             coin_color = 255
         else:
             coin_color = 0
 
-        self.health = config.MENU_FONT.render(f"{self.stats['health']}", True, (0, 0, 0))
-        self.strength = config.MENU_FONT.render(f"{self.stats['strength']}", True, (0, 0, 0))
-        self.agility = config.MENU_FONT.render(f"{self.stats['agility']}", True, (0, 0, 0))
-        
+        self.health = config.MENU_FONT.render(
+            f"{self.stats['health']}", True, (0, 0, 0)
+        )
+        self.strength = config.MENU_FONT.render(
+            f"{self.stats['strength']}", True, (0, 0, 0)
+        )
+        self.agility = config.MENU_FONT.render(
+            f"{self.stats['agility']}", True, (0, 0, 0)
+        )
 
-        self.coins = config.MENU_FONT.render(f"{self.stats['coins']}", True, (coin_color, 0, 0))
-
+        self.coins = config.MENU_FONT.render(
+            f"{self.stats['coins']}", True, (coin_color, 0, 0)
+        )
 
         self.render_surface.blit(self.health, self.health_rect)
         self.render_surface.blit(self.strength, self.strength_rect)
@@ -114,58 +132,72 @@ class Shop():
         self.render_surface.blit(self.coins, self.coins_rect)
 
         scaled_display = pygame.transform.scale(
-                self.render_surface,
-                (self.display_surface.get_width(), self.display_surface.get_height()),
-            )
-        
+            self.render_surface,
+            (self.display_surface.get_width(), self.display_surface.get_height()),
+        )
+
         self.display_surface.blit(scaled_display, (0, 0))
 
-
-        
         click = False
         mouse_pos = pygame.mouse.get_pos()
         mouse_pos = list(mouse_pos)
-        mouse_pos[0] = mouse_pos[0] * self.render_surface.get_width() / self.display_surface.get_width()
-        mouse_pos[1] = mouse_pos[1] * self.render_surface.get_width() / self.display_surface.get_width()
-        
+        mouse_pos[0] = (
+            mouse_pos[0]
+            * self.render_surface.get_width()
+            / self.display_surface.get_width()
+        )
+        mouse_pos[1] = (
+            mouse_pos[1]
+            * self.render_surface.get_width()
+            / self.display_surface.get_width()
+        )
+
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
-        
+
         if self.close.collidepoint(mouse_pos) and click == True:
             self.inShop = False
 
-        if self.healthUp.collidepoint(mouse_pos) and click == True and self.stats["coins"] >= 7:
-                self.stats["health"] += 1
-                self.stats["coins"] -= config.SHOP_DATA["price"]
+        if (
+            self.healthUp.collidepoint(mouse_pos)
+            and click == True
+            and self.stats["coins"] >= 7
+        ):
+            self.stats["health"] += 1
+            self.stats["coins"] -= config.SHOP_DATA["price"]
 
         if self.healthDown.collidepoint(mouse_pos) and click == True:
             if self.stats["health"] > 10:
                 self.stats["health"] -= 1
                 self.stats["coins"] += config.SHOP_DATA["price"]
 
-        if self.strUp.collidepoint(mouse_pos) and click == True and self.stats["coins"] >= 7:
-                self.stats["strength"] += 1
-                self.stats["coins"] -= config.SHOP_DATA["price"]
+        if (
+            self.strUp.collidepoint(mouse_pos)
+            and click == True
+            and self.stats["coins"] >= 7
+        ):
+            self.stats["strength"] += 1
+            self.stats["coins"] -= config.SHOP_DATA["price"]
         if self.strDown.collidepoint(mouse_pos) and click == True:
             if self.stats["strength"] > 10:
                 self.stats["strength"] -= 1
                 self.stats["coins"] += config.SHOP_DATA["price"]
 
-        if self.agUp.collidepoint(mouse_pos) and click == True and self.stats["coins"] >= 7:
-                self.stats["agility"] += 1
-                self.stats["coins"] -= config.SHOP_DATA["price"]
+        if (
+            self.agUp.collidepoint(mouse_pos)
+            and click == True
+            and self.stats["coins"] >= 7
+        ):
+            self.stats["agility"] += 1
+            self.stats["coins"] -= config.SHOP_DATA["price"]
 
         if self.agDown.collidepoint(mouse_pos) and click == True:
             if self.stats["agility"] > 10:
                 self.stats["agility"] -= 1
                 self.stats["coins"] += config.SHOP_DATA["price"]
 
-
         return self.inShop
-        
-        
-
 
     # get boolean to hijack run() method of Level, iterate through each visible layer as sprites with their rectangles

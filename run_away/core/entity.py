@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import random
 from pathlib import Path
-from typing import Union, Optional
+from typing import Optional, Union
 
 import config
 import pygame
@@ -24,7 +24,7 @@ class Block(pygame.sprite.Sprite):
         else:
             self.image = image
             self.rect = self.image.get_rect(topleft=pos)
-        
+
         self.hitbox = self.rect.copy()
         
 
@@ -44,6 +44,7 @@ class Entity(pygame.sprite.Sprite):
         self.hitbox = self.rect.copy()
         self.collidable_sprites = collidable_sprites
         self.vulnerable = True  # FIXME: temp fix for AttributeError
+        self.on_ground = False  # FIXME: temp fix for AttributeError
 
         # Movement
         self.pixels_buffer = pygame.math.Vector2(0, 0)
@@ -94,7 +95,7 @@ class Entity(pygame.sprite.Sprite):
             self.on_ground = False
 
     def horizontal_collision(self, dx: float) -> Union[None, float]:
-        from core.enemy import Enemy
+        from core.enemy import Enemy, Projectile
         from core.player import Player
         from core.weapon import Weapon
 
@@ -115,6 +116,9 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, min_left, "left")
 
+                    if type(self) is Projectile:
+                        self.kill()
+
                     # The max distance that this entity can move without causing collision
                     return min_left - self.hitbox.right
                 else:  # Moving left
@@ -124,6 +128,9 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, max_right, "right")
                         
+
+                    if type(self) is Projectile:
+                        self.kill()
 
                     # The max distance that this entity can move without causing collision
                     return max_right - self.hitbox.left
@@ -213,10 +220,28 @@ class Entity(pygame.sprite.Sprite):
                 (sprite for sprite in collided if sprite.hitbox.right == rect_pos), None
             )
 
-        from core.enemy import Enemy
+        from core.enemy import Enemy, Projectile
+        from core.player import Player
 
-        if type(s) is Hazard or isinstance(s, Enemy):
-            self.apply_damage(s.get_damage())
+        # The player collided with...
+        if type(self) is Player:
+            # ...a Hazard or an Enemy
+            if type(s) is Hazard or isinstance(s, Enemy):
+                self.apply_damage(s.get_damage())
+
+            # ...a Projectile
+            if type(s) is Projectile:
+                s.kill()
+
+        # (type) collided with the player
+        if type(s) is Player:
+            # (Enemy)
+            if isinstance(self, Enemy):
+                s.apply_damage(self.get_damage())
+
+            # (Projectile)
+            if type(self) is Projectile:
+                self.kill()
 
     def update(self, dt: float) -> None:
         if not self.gravity == 0:
@@ -304,10 +329,10 @@ class Hazard(Entity):
         collidable_sprites: Optional[list[pygame.sprite.Group]],
         pos: tuple[int, int],
         image: pygame.Surface,
+        damage: float,
         kind: str,
     ) -> None:
         super().__init__(groups, collidable_sprites, pos, image)
-        self.config = config.HAZARD_DATA
         self.kind = kind
         self.hitbox = (
             self.rect.copy()
@@ -321,7 +346,7 @@ class Hazard(Entity):
             )
             .move(config.HAZARD_DATA[self.kind]["offset"])
         )
-        self.damage: int = self.config["damage"]
+        self.damage = damage
 
-    def get_damage(self) -> int:
+    def get_damage(self) -> float:
         return self.damage

@@ -1,19 +1,19 @@
+import random
 from enum import Enum
 from pathlib import Path
+from typing import Union
 
 import config
 import pygame
 from config import LEVELS_PATH
 from core.camera import CameraGroup
-from core.enemy import Flying, Grunt
+from core.enemy import Flying, Grunt, Projectile, Shooter
 from core.entity import AnimatedEntity, Block, Hazard
 from core.npc import NPC
 from core.player import Player
+from core.shop import Shop
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
-
-from core.shop import Shop
-
 
 
 class LevelType(Enum):
@@ -30,10 +30,34 @@ class LevelType(Enum):
     def list(cls):
         return list(map(lambda e: e.value, cls))
 
+    def __str__(self) -> str:
+        """
+        Return a string representing the current level (i.e., "wind", "snow", etc.)
+        """
+        file_name = self.value.stem
+        return file_name[file_name.find("_") + 1 :]
+
+    def to_colour(self) -> Union[str, None]:
+        if self is LevelType.RAIN_RETURN:  # Return a random colour
+            return random.choice(list(config.ENEMY_COLOUR_LOOKUP.values()))
+        else:
+            return config.ENEMY_COLOUR_LOOKUP.get(str(self))
+
+    @staticmethod
+    def from_colour(search_colour: str) -> Union[str, None]:
+        return next(
+            (
+                level
+                for level, colour in config.ENEMY_COLOUR_LOOKUP.items()
+                if colour == search_colour
+            ),
+            None,
+        )
+
 
 from core.background import Background
-
 from core.portal import Portal
+
 
 class Level:
     def __init__(self, kind: LevelType, stats: dict) -> None:
@@ -63,7 +87,6 @@ class Level:
 
         self.in_shop = False
         self.shop = None
-        
 
         self.kind = kind
         self.path: Path = self.kind.value
@@ -93,7 +116,6 @@ class Level:
 
         # Load blocks
         for layer in tmx_data.layers:
-
             # Load backgrounds
             if "Background" in layer.name:
                 parallax_x = 1
@@ -114,22 +136,19 @@ class Level:
                 else:
                     set_y = layer.offsety
 
-                self.backgrounds.append(Background(
-                    path_from_tiled=layer.source,
-
-                    parallax_x=parallax_x,
-                    parallax_y=parallax_y,
-
-                    world_width=self.screen_width,
-                    world_height=self.screen_height,
-
-                    bg_width=tmx_data.width,
-                    bg_height=tmx_data.height,
-
-                    image_offset_x=set_x,
-                    image_offset_y=set_y
-                ))
-
+                self.backgrounds.append(
+                    Background(
+                        path_from_tiled=layer.source,
+                        parallax_x=parallax_x,
+                        parallax_y=parallax_y,
+                        world_width=self.screen_width,
+                        world_height=self.screen_height,
+                        bg_width=tmx_data.width,
+                        bg_height=tmx_data.height,
+                        image_offset_x=set_x,
+                        image_offset_y=set_y,
+                    )
+                )
 
             # Only get tile layers
             if hasattr(layer, "data"):
@@ -146,6 +165,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="bottom",
                         )
                     elif layer.name == "Top Spikes":
@@ -154,6 +174,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="top",
                         )
                     elif layer.name == "Left Spikes":
@@ -162,6 +183,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="left",
                         )
                     elif layer.name == "Right Spikes":
@@ -170,6 +192,7 @@ class Level:
                             self.collidable_sprites,
                             (x * config.TILE_SIZE, y * config.TILE_SIZE),
                             surf,
+                            config.HAZARD_DATA["damage"],
                             kind="right",
                         )
                     elif layer.name == "vLayer1":
@@ -216,26 +239,13 @@ class Level:
                             ),
                         ),
                     )
-                
+
                 if obj.type == "Shop":
                     self.shop = Shop(
                         pygame.rect.Rect(obj.x, obj.y, obj.width, obj.height),
                         self.render_surface,
-                        stats = self.stats,
+                        stats=self.stats,
                     )
-
-                elif self.kind == LevelType.HOME:
-                    print("is end scene!")
-                    print(obj.name, ", ", obj.type)
-                    if obj.type == "Home":
-                        from core.home import Home
-
-                        Home(
-                            [self.all_sprites, self.home],
-                            None,
-                            (obj.x, obj.y),
-                            config.GFX_PATH.joinpath("objects", "home"),
-                        )
 
                 if obj.type == "NPC":
                     NPC(
@@ -243,8 +253,8 @@ class Level:
                         None,
                         (obj.x, obj.y),
                         "./run_away/resources/gfx/objects/female_npc",
-                        dialogue = self.dialogue,
-                        animation_speed= 9
+                        dialogue=self.dialogue,
+                        animation_speed=9,
                     )
         except ValueError:
             pass
@@ -266,27 +276,30 @@ class Level:
                 )
                 self.player.sprite.updatePlayer(self.stats)
 
-            elif obj.name == "Start:ForceLeft":
-                AnimatedEntity(
-                    [self.all_sprites, self.player],
-                    [self.collidable_sprites],
-                    (obj.x, obj.y),
-                    config.GFX_PATH.joinpath("player"),
-                    animation_speed=18,
-                    speed=60,
-                    gravity=275,
-                ).direction = pygame.Vector2(-1, 0)
-                self.player.sprite.status = "run"
+        # Ending cutscene
+        if self.kind is LevelType.HOME:
+            for layer in ["Player", "Interactables"]:
+                for obj in tmx_data.get_layer_by_name(layer):
+                    if obj.name == "Start:ForceLeft":
+                        AnimatedEntity(
+                            [self.all_sprites, self.player],
+                            [self.collidable_sprites],
+                            (obj.x, obj.y),
+                            config.GFX_PATH.joinpath("player"),
+                            animation_speed=18,
+                            speed=60,
+                            gravity=275,
+                        ).direction = pygame.Vector2(-1, 0)
+                        self.player.sprite.status = "run"
+                    elif obj.type == "Home":
+                        from core.home import Home
 
-        # Select grunt colour
-        if self.kind is LevelType.WIND:
-            grunt_colour = "yellow"
-        elif self.kind is LevelType.SNOW:
-            grunt_colour = "blue"
-        elif self.kind is LevelType.RAIN:
-            grunt_colour = "red"
-        else:
-            grunt_colour = "green"
+                        Home(
+                            [self.all_sprites, self.home],
+                            None,
+                            (obj.x, obj.y),
+                            config.GFX_PATH.joinpath("objects", "home"),
+                        )
 
         # TODO: find way to determine level progress and multiply factor to the enemy's health, damage, etc.
 
@@ -305,7 +318,7 @@ class Level:
                         health=config.ENEMY_DATA["grunt"]["stats"]["health"],
                         damage=config.ENEMY_DATA["grunt"]["stats"]["damage"],
                         player=self.player.sprite,
-                        colour=grunt_colour,
+                        colour=self.kind.to_colour(),
                     )
                 elif obj.type == "Flying":
                     Flying(
@@ -319,13 +332,36 @@ class Level:
                         damage=config.ENEMY_DATA["flying"]["stats"]["damage"],
                         player=self.player.sprite,
                     )
+                elif obj.type == "Projectile":
+                    Shooter(
+                        [self.all_sprites, self.enemies],
+                        [self.collidable_sprites, self.player],
+                        (obj.x, obj.y),
+                        config.GFX_PATH.joinpath("enemies", "shooter"),
+                        config.ENEMY_DATA["shooter"]["animation_speed"],
+                        speed=config.ENEMY_DATA["shooter"]["stats"]["speed"],
+                        gravity=100,  # FIXME: hardcoded for now, make world property?
+                        health=config.ENEMY_DATA["shooter"]["stats"]["health"],
+                        damage=config.ENEMY_DATA["shooter"]["stats"]["damage"],
+                        projectile_damage=config.ENEMY_DATA["shooter"]["stats"][
+                            "p_damage"
+                        ],
+                        projectile_health=config.ENEMY_DATA["shooter"]["stats"][
+                            "p_damage"
+                        ],
+                        projectile_speed=config.ENEMY_DATA["shooter"]["stats"][
+                            "p_speed"
+                        ],
+                        player=self.player.sprite,
+                        create_projectile=self.create_projectile,
+                        colour=self.kind.to_colour(),
+                    )
         except ValueError:
             # This level probably has no enemies
             pass
 
         try:
             for obj in tmx_data.get_layer_by_name("Consumables"):
-
                 if obj.type == "Coin":
                     AnimatedEntity(
                         [self.all_sprites, self.coins],
@@ -336,6 +372,7 @@ class Level:
         except ValueError:
             # level has no coins
             pass
+
     def check_interacting(self):
         keys = pygame.key.get_pressed()
 
@@ -343,6 +380,30 @@ class Level:
             return True
         else:
             return False
+
+    def create_projectile(
+        self,
+        pos: tuple[int, int],
+        root_dir: Path,
+        speed: float,
+        health: float,
+        damage: float,
+        direction: str,
+        colour: str,
+    ):
+        Projectile(
+            [self.all_sprites, self.enemies],
+            [self.collidable_sprites, self.player],
+            pos,
+            root_dir,
+            None,
+            speed,
+            health,
+            damage,
+            self.player.sprite,
+            direction,
+            LevelType.from_colour(colour),
+        )
 
     def check_portals(self):
         collided = pygame.sprite.groupcollide(self.player, self.portals, False, False)
@@ -358,46 +419,45 @@ class Level:
             self.player.sprite.get_coin()
             self.stats["coins"] = self.player.sprite.coins
 
-
     def check_interactables(self) -> None:
         if pygame.sprite.groupcollide(self.player, self.npcs, False, False):
             if self.check_interacting():
                 self.npcs.sprite.interact()
-        
+
     def check_shop(self):
         if self.shop == None:
             return
-        elif self.shop.rect.colliderect(self.player.sprite) and self.check_interacting():
+        elif (
+            self.shop.rect.colliderect(self.player.sprite) and self.check_interacting()
+        ):
             self.in_shop = True
-            
-    def run(self, dt: float):
 
+    def run(self, dt: float):
         if self.in_shop:
             self.in_shop = self.shop.interact()
             self.player.sprite.coins = self.stats["coins"]
             self.player.sprite.max_health = self.stats["health"]
             self.player.sprite.purchaseStats(self.stats)
-        else: 
-            self.check_shop()       
-    
+        else:
+            self.check_shop()
+
             for background in self.backgrounds:
                 offset_x = -self.player.sprite.rect.x
                 offset_y = -self.player.sprite.rect.y
-                background.draw(offset_x,offset_y,self.render_surface)
+                background.draw(offset_x, offset_y, self.render_surface)
             # Draw sprites, upscale the render surface and display to the user's screen
             self.all_sprites.update(dt)
             self.all_sprites.custom_draw(self.render_surface, self.player.sprite)
-    
+
             if self.kind == LevelType.HOME:
                 self.update_end_cutscene(dt)
-            
+
             self.displayHUD()
 
             scaled_display = pygame.transform.scale(
                 self.render_surface,
                 (self.display_surface.get_width(), self.display_surface.get_height()),
             )
-
 
             self.display_surface.blit(scaled_display, (0, 0))
             try:
@@ -406,7 +466,7 @@ class Level:
                 print("error occured")
 
             self.check_interactables()
-            
+
             if config.DEBUG_UI:
                 debug(self.player.sprite.status)
                 debug(f"Direction: {self.player.sprite.direction}", 40)
@@ -423,7 +483,10 @@ class Level:
                 )
                 debug(f"Player Health: {self.player.sprite.health}", 160)
                 debug(f"Player Coins: {self.player.sprite.coins}", 200)
-                debug(f"Stats: {self.stats}, Player Coins: {self.player.sprite.coins}, Player Health: {self.player.sprite.health}", 220)
+                debug(
+                    f"Stats: {self.stats}, Player Coins: {self.player.sprite.coins}, Player Health: {self.player.sprite.health}",
+                    220,
+                )
         self.check_portals()
         pygame.display.flip()
         return self.check_portals()
@@ -495,25 +558,31 @@ class Level:
             self.home.sprite.set_frame_by_percent((100 - dist_factor) / 100)
         self.home.sprite.set_frame_by_percent(self.player.sprite.rect.x)
 
-
     def displayHUD(self):
-
         if self.kind is LevelType.HOME:
             return
 
-        health_icon = pygame.image.load(config.GFX_PATH.joinpath("GUIelements", "heart_icon.png"))
-        health_num = config.MENU_FONT.render(f"x{self.player.sprite.health}", True, "white")
+        health_icon = pygame.image.load(
+            config.GFX_PATH.joinpath("GUIelements", "heart_icon.png")
+        )
+        health_num = config.MENU_FONT.render(
+            f"x{self.player.sprite.health}", True, "white"
+        )
 
-        coin_icon = pygame.image.load(config.GFX_PATH.joinpath("GUIelements", "coin_icon.png"))
-        coin_num = config.MENU_FONT.render(f"x{self.player.sprite.coins}", True, "white")
+        coin_icon = pygame.image.load(
+            config.GFX_PATH.joinpath("GUIelements", "coin_icon.png")
+        )
+        coin_num = config.MENU_FONT.render(
+            f"x{self.player.sprite.coins}", True, "white"
+        )
 
-        health_num_rect = health_num.get_rect(topleft = (256,10))
-        health_rect = health_icon.get_rect(center = (245, health_num_rect.centery))
+        health_num_rect = health_num.get_rect(topleft=(256, 10))
+        health_rect = health_icon.get_rect(center=(245, health_num_rect.centery))
 
-        coin_num_rect = coin_num.get_rect(topleft = (256, 30))
-        coin_rect = coin_icon.get_rect(center = (245, coin_num_rect.centery))
+        coin_num_rect = coin_num.get_rect(topleft=(256, 30))
+        coin_rect = coin_icon.get_rect(center=(245, coin_num_rect.centery))
 
         self.render_surface.blit(health_num, health_num_rect)
         self.render_surface.blit(coin_num, coin_num_rect)
-        self.render_surface.blit(health_icon,health_rect)
+        self.render_surface.blit(health_icon, health_rect)
         self.render_surface.blit(coin_icon, coin_rect)

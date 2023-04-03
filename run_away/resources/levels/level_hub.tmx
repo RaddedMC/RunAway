@@ -102,9 +102,7 @@
   <object id="9" name="Snow_Portal" type="Portal" x="720" y="224">
    <point/>
   </object>
-  <object id="10" name="Hub1Shop" type="Shop" x="960.417" y="277.5">
-   <point/>
-  </object>
+  <object id="12" name="Hub1Shop" type="Shop" x="944" y="256" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="2" name="Player">
   <object id="6" name="Start" x="160" y="256">

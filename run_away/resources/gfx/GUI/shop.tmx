@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="16" height="9" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="17">
+ <tileset firstgid="1" source="../tilesets/gui_tilesets/gui2.tsx"/>
+ <tileset firstgid="267" source="../tilesets/gui_tilesets/buttons1.tsx"/>
+ <tileset firstgid="275" source="../tilesets/gui_tilesets/buttons2.tsx"/>
+ <layer id="1" name="background" width="16" height="9">
+  <data encoding="csv">
+138,135,136,136,135,136,135,136,135,136,135,136,135,135,136,141,
+157,13,3221225524,2684354592,3221225524,14,3221225524,14,3221225524,3221225524,14,3221225524,14,14,2684354573,160,
+153,32,33,33,33,33,33,33,33,33,33,33,33,33,34,156,
+172,32,33,33,33,33,33,33,33,33,33,33,33,33,34,175,
+153,32,33,33,33,33,33,33,33,33,33,33,33,33,34,156,
+172,32,33,33,33,33,33,33,33,33,33,33,33,33,34,175,
+172,32,33,33,33,33,33,33,33,33,33,33,33,33,34,175,
+176,1610612749,3221225486,52,52,52,3221225486,52,3221225486,52,3221225486,52,3221225486,52,3221225485,179,
+195,196,193,192,193,192,193,192,193,192,193,192,193,192,197,198
+</data>
+ </layer>
+ <layer id="2" name="vLayer" width="16" height="9">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,286,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,305,0,0,305,0,0,305,0,0,0,0,0,
+0,0,0,0,161,0,0,163,0,0,164,0,0,0,0,0,
+0,0,0,0,306,0,0,306,0,0,306,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,181,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <objectgroup id="3" name="StatNumbers">
+  <object id="4" name="Health" x="80" y="64" width="16" height="16">
+   <text fontfamily="Terminal" pixelsize="8" wrap="1" halign="center" valign="center">0</text>
+  </object>
+  <object id="6" name="Strength" x="128" y="64" width="16" height="16">
+   <text fontfamily="Terminal" pixelsize="8" wrap="1" halign="center" valign="center">0</text>
+  </object>
+  <object id="7" name="Coins" x="208" y="96" width="16" height="16">
+   <text fontfamily="Terminal" pixelsize="8" wrap="1" halign="center" valign="center">0</text>
+  </object>
+  <object id="8" name="Agility" x="176" y="64" width="16" height="16">
+   <text fontfamily="Terminal" pixelsize="8" wrap="1" halign="center" valign="center">0</text>
+  </object>
+  <object id="10" name="Increase_Health" x="64" y="48" width="25" height="25"/>
+  <object id="11" name="Decrease_Health" x="64" y="80" width="25" height="25"/>
+  <object id="12" name="Increase_Strength" x="112" y="48" width="25" height="25"/>
+  <object id="13" name="Decrease_Strength" x="112" y="80" width="25" height="25"/>
+  <object id="14" name="Increase_Agility" x="160" y="48" width="25" height="25"/>
+  <object id="15" name="Decrease_Agility" x="160" y="80" width="25" height="25"/>
+  <object id="16" name="close" x="224" y="16" width="25" height="25"/>
+ </objectgroup>
+</map>

@@ -39,7 +39,7 @@ PLAYER_DATA = {
     "animation_speed": 9,
     "jump_speed": 175,
     "gravity": 275,
-    "stats": {"speed": 120, "health": 20, "damage": 10},
+    "stats": {"speed": 120, "health": 10, "damage": 10, "strength": 10, "agility" : 10, "coins" : 20},
 }
 ENEMY_DATA = {
     "grunt": {"animation_speed": 6, "stats": {"speed": 40, "health": 10, "damage": 10}},
@@ -48,9 +48,18 @@ ENEMY_DATA = {
         "stats": {"speed": 100, "health": 10, "damage": 10},
     },
 }
+
+NPC_DIALOGUE = {
+    "RAIN" : ["You have to leave this place!"],
+    "WIND" : ["Be careful of the winged ones"],
+    "SNOW" : ["Brrrrrrrr"],
+    "LIGHTNING": ["Why are we in the tropics?"]
+}
+
 WEAPON_DATA = {}
 PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}
 LEVEL_DATA = {"damage_factor": [1, 1.2, 1.4, 1.6, 1.8]}
+SHOP_DATA = {"price" : 7}
 
 ### CONTROLS ###
 KEYS_LEFT = [pygame.K_LEFT, pygame.K_a]
@@ -86,4 +95,5 @@ pygame.font.init()
 DEBUG_FONT = pygame.font.Font(None, 30)
 
 GAME_FONT = pygame.font.Font(FONT_PATH.joinpath("BitFont.ttf"), 30)
+MENU_FONT =  pygame.font.Font("run_away/resources/font/BitFont.ttf", 10)
 BIG_FONT = pygame.font.Font(FONT_PATH.joinpath("ROGFonts-Regular.otf"), 20)

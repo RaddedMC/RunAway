@@ -45,7 +45,7 @@ ENEMY_DATA = {
     "grunt": {"animation_speed": 6, "stats": {"speed": 40, "health": 10, "damage": 10}},
     "flying": {
         "animation_speed": 6,
-        "stats": {"speed": 100, "health": 10, "damage": 10},
+        "stats": {"speed": 100, "health": 5, "damage": 10},
     },
 }
 
@@ -68,6 +68,7 @@ KEYS_UP = [pygame.K_UP, pygame.K_w]
 KEYS_DOWN = [pygame.K_DOWN, pygame.K_s]
 KEYS_QUIT = [pygame.K_ESCAPE]
 KEYS_INTERACT = [pygame.K_j, pygame.K_z]
+KEYS_ATTACK = [pygame.K_x]
 
 ### COLOURS ###
 RGB_BLACK = (0, 0, 0)

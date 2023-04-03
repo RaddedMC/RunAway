@@ -96,6 +96,7 @@ class Entity(pygame.sprite.Sprite):
     def horizontal_collision(self, dx: float) -> Union[None, float]:
         from core.enemy import Enemy
         from core.player import Player
+        from core.weapon import Weapon
 
         if dx != 0:
             # Move a copy of the entity and check for collisions
@@ -122,6 +123,7 @@ class Entity(pygame.sprite.Sprite):
 
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, max_right, "right")
+                        
 
                     # The max distance that this entity can move without causing collision
                     return max_right - self.hitbox.left
@@ -132,6 +134,7 @@ class Entity(pygame.sprite.Sprite):
     def vertical_collision(self, dy: float) -> Union[None, float]:
         from core.enemy import Enemy
         from core.player import Player
+        from core.weapon import Weapon
 
         if dy != 0:
             # Move a copy of the entity and check for collisions

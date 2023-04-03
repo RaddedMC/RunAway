@@ -8,6 +8,7 @@ import pygame
 from config import DEBUG_VERBOSE_LOGGING
 from core.entity import AnimatedEntity, Entity
 from core.player import Player
+from core.weapon import Weapon
 
 
 class Enemy(AnimatedEntity):
@@ -54,11 +55,13 @@ class Enemy(AnimatedEntity):
 
     def check_death(self):
         if self.health <= 0:
-            pass  # FIXME: DIE
+            print("dieded")
+            pygame.sprite.Sprite.kill(self) # FIXME: DIE
 
     def update(self, dt: float) -> None:
         super().update(dt)
         self.run_behaviour()
+        self.checkTakenDamage()
         self.check_death()
 
     def check_damage(
@@ -85,6 +88,22 @@ class Enemy(AnimatedEntity):
         if type(s) is Player:
             s.apply_damage(self.get_damage())
 
+    def checkTakenDamage(self) -> None:
+        if self.player.attacking:
+            thisEnemy = pygame.sprite.GroupSingle(self)
+            weaponGroup = pygame.sprite.GroupSingle(self.player.weaponOut)
+            collided = pygame.sprite.groupcollide(thisEnemy, weaponGroup, False, False)
+            if collided:
+                self.enemyTakeDamage(self.player.weaponOut.damage)
+                self.player.weaponHitEnemy = True
+                self.player.weaponOut.stopDamage()
+        
+
+    def enemyTakeDamage(self, damageTaken : int) -> None:
+        self.health -= damageTaken
+        print("Current Health =", self.health)
+
+#use enemy rectangle to spawn coin
 
 class Grunt(Enemy):
     def __init__(

@@ -12,7 +12,7 @@ import pygame
 DEBUG_VERBOSE_LOGGING = False
 DEBUG_UI = False
 DEBUG_ZOOM = False
-DEBUG_SHOW_HITBOXES = False
+DEBUG_SHOW_HITBOXES = True
 
 ### FOLDER PATHS ###
 BASE_PATH = Path.cwd().absolute().joinpath("run_away")
@@ -30,8 +30,8 @@ TILE_SIZE = 16
 ### ENTITY CONSTANTS ###
 ENEMY_COLOUR_LOOKUP = {
     "rain": "red",
-    "wind": "green",
-    "lightning": "yellow",
+    "wind": "yellow",
+    "lightning": "green",
     "snow": "blue",
 }
 HAZARD_DATA = {

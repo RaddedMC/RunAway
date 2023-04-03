@@ -70,11 +70,9 @@ ENEMY_DATA = {
             "p_health": 1,
             "p_damage": 1,
         },
-        "left": {"offset": pygame.math.Vector2(0, 0)},  # TODO: remove?
-        "right": {"offset": pygame.math.Vector2(0, 0)},
     },
 }
-PROJECTILE_DATA = {  # TODO: add support for final level
+PROJECTILE_DATA = {
     "rain": {
         "animation_speed": 14,
         "scale": (-0.3, -0.5),
@@ -118,7 +116,7 @@ NPC_DIALOGUE = {
 
 WEAPON_DATA = {}
 PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}
-LEVEL_DATA = {"damage_factor": [1, 1.2, 1.4, 1.6, 1.8]}
+LEVEL_DATA = {}
 SHOP_DATA = {"price": 7}
 
 ### CONTROLS ###

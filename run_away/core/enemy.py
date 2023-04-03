@@ -49,9 +49,7 @@ class Enemy(AnimatedEntity):
         """
         Calculates the amount of damage this enemy should deal.
         """
-        return (
-            self.damage * config.LEVEL_DATA["damage_factor"][0]
-        )  # TODO: [0] is temporary until I figure out how to track level progress
+        return self.damage
 
     def check_death(self):
         if self.health <= 0:
@@ -310,10 +308,8 @@ class Shooter(Enemy):
     def shoot(self) -> None:
         # Spawn the projectile, make it move in the same direction that the shooter is facing
         if self.can_shoot:
-            # TODO: pos will require the same offset trick as Hazard
-            # TODO: find + add actual projectile sprite(s)
             self.create_projectile(
-                self.rect.topleft,  # FIXME: might need to use a different rect attr
+                self.rect.topleft,
                 config.GFX_PATH.joinpath("objects", "projectiles"),
                 self.projectile_speed,
                 self.projectile_health,
@@ -347,7 +343,7 @@ class Projectile(Enemy):
         direction: str,
         kind: str,
     ) -> None:
-        if type(root_dir) is Path:  # TODO: add support for final level
+        if type(root_dir) is Path:
             root_dir = root_dir.joinpath(kind)
         else:
             root_dir = os.path.join(root_dir, kind)

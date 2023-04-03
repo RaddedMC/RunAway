@@ -301,8 +301,6 @@ class Level:
                             config.GFX_PATH.joinpath("objects", "home"),
                         )
 
-        # TODO: find way to determine level progress and multiply factor to the enemy's health, damage, etc.
-
         # Spawn enemies, if any exist
         try:
             for obj in tmx_data.get_layer_by_name("Enemies"):

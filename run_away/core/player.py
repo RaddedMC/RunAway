@@ -160,6 +160,7 @@ class Player(AnimatedEntity):
 
     def updatePlayer(self, stats: dict):
         self.health = stats["health"]
+        self.max_health = stats["health"]
         self.strength = stats["strength"]
         self.agility = stats["agility"]
         self.coins = stats["coins"]

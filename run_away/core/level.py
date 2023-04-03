@@ -244,7 +244,7 @@ class Level:
                         (obj.x, obj.y),
                         "./run_away/resources/gfx/objects/female_npc",
                         dialogue = self.dialogue,
-                        animation_speed= 18
+                        animation_speed= 9
                     )
         except ValueError:
             pass
@@ -375,6 +375,7 @@ class Level:
         if self.in_shop:
             self.in_shop = self.shop.interact()
             self.player.sprite.coins = self.stats["coins"]
+            self.player.sprite.max_health = self.stats["health"]
         else: 
             self.check_shop()       
     
@@ -495,6 +496,9 @@ class Level:
 
 
     def displayHUD(self):
+
+        if self.kind is LevelType.HOME:
+            return
 
         health_icon = pygame.image.load(config.GFX_PATH.joinpath("GUIelements", "heart_icon.png"))
         health_num = config.MENU_FONT.render(f"x{self.player.sprite.health}", True, "white")

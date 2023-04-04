@@ -39,6 +39,20 @@ class Enemy(AnimatedEntity):
         self.damage = damage
         self.player = player
 
+        # Invincibility frames
+        self.vulnerable = True
+        self.invulnerable_duration = 500  # TODO: move to config?
+        self.hurt_time = None
+
+    def cooldowns(self) -> None:
+        now = pygame.time.get_ticks()
+
+        if not self.vulnerable:
+            # Invincibility frame has expired
+            if now - self.hurt_time >= self.invulnerable_duration:
+                self.vulnerable = True
+                self.hurt_time = None
+
     def run_behaviour(self) -> None:
         """
         Called every frame, figures out what the enemy does (are they attacking the player? changing movement direction? etc)
@@ -47,37 +61,40 @@ class Enemy(AnimatedEntity):
 
     def get_damage(self) -> float:
         """
-        Calculates the amount of damage this enemy should deal.
+        Returns the amount of damage this enemy should deal.
         """
         return self.damage
 
+    def apply_damage(self, amount: int) -> None:
+        if self.vulnerable:
+            self.health -= amount
+            self.vulnerable = False
+            self.hurt_time = pygame.time.get_ticks()
+            # random.choice(self.hit_sounds).play()
+            # random.choice(self.iframe_sfx).play()
+
     def check_death(self):
         if self.health <= 0:
-            pygame.sprite.Sprite.kill(self)
-            self.player.get_coin()
+            self.kill()
+            self.player.get_coin()  # TODO: spawn a coin instead
+
+    def check_weapon_damage(self) -> None:
+        if self.player.weapon is not None:
+            collided = pygame.sprite.groupcollide(
+                pygame.sprite.GroupSingle(self),
+                pygame.sprite.GroupSingle(self.player.weapon),
+                False,
+                False,
+            )
+            if collided:
+                self.apply_damage(self.player.weapon.get_damage())
 
     def update(self, dt: float) -> None:
+        self.cooldowns()
         super().update(dt)
         self.run_behaviour()
-        self.checkTakenDamage()
+        self.check_weapon_damage()
         self.check_death()
-
-    def checkTakenDamage(self) -> None:
-        if self.player.attacking:
-            thisEnemy = pygame.sprite.GroupSingle(self)
-            weaponGroup = pygame.sprite.GroupSingle(self.player.weaponOut)
-            collided = pygame.sprite.groupcollide(thisEnemy, weaponGroup, False, False)
-            if collided:
-                self.enemyTakeDamage(self.player.weaponOut.damage)
-                self.player.weaponHitEnemy = True
-                self.player.weaponOut.stopDamage()
-
-    def enemyTakeDamage(self, damageTaken: int) -> None:
-        self.health -= damageTaken
-        print("enemy helth", self.health)
-
-
-# use enemy rectangle to spawn coin
 
 
 class Grunt(Enemy):
@@ -119,12 +136,6 @@ class Grunt(Enemy):
                 f"Grunt spawned!: speed:{speed}| colour:{colour}| pos:{pos}| gravity:{gravity}"
             )
 
-    def update(self, dt: float) -> None:
-        if DEBUG_VERBOSE_LOGGING:
-            print(f"Grunt - {self.direction.x}, {self.speed.x}")
-        super().update(dt)
-        self.handle_directions(dt)
-
     def handle_directions(self, dt: float) -> None:
         # Handle sprite direction
         self.flip_sprite = self.direction.x == 1
@@ -138,6 +149,12 @@ class Grunt(Enemy):
         if self.pixels_buffer.x == 0:
             # Horizontal collision
             self.direction.x *= -1
+
+    def update(self, dt: float) -> None:
+        if DEBUG_VERBOSE_LOGGING:
+            print(f"Grunt - {self.direction.x}, {self.speed.x}")
+        super().update(dt)
+        self.handle_directions(dt)
 
 
 class Flying(Enemy):
@@ -167,37 +184,6 @@ class Flying(Enemy):
         )
         self.direction.x = 1
         self.launched = False
-
-    def update(self, dt: float) -> None:
-        super().update(dt)
-        if DEBUG_VERBOSE_LOGGING:
-            print(f"Frame: {int(self.frame_index)} ", end="")
-
-        if int(self.frame_index) == 5 and not self.launched:
-            self.launch()
-            self.launched = True
-        else:
-            self.launched = False
-            if self.speed.x < 0:
-                self.speed.x += 50 * dt
-                if self.speed.x > 0:
-                    self.speed.x = 0
-            elif self.speed.x > 0:
-                self.speed.x -= 50 * dt
-                if self.speed.x < 0:
-                    self.speed.x = 0
-
-            if self.speed.y < 0:
-                self.speed.y += 50 * dt
-                if self.speed.y > 0:
-                    self.speed.y = 0
-            elif self.speed.y > 0:
-                self.speed.y -= 50 * dt
-                if self.speed.y < 0:
-                    self.speed.y = 0
-
-            if DEBUG_VERBOSE_LOGGING:
-                print(f"Not a launch frame. ({self.speed.x}, {self.speed.y})")
 
     def launch(self) -> None:
         x_diff = abs(self.player.rect.x - self.rect.x)
@@ -232,6 +218,37 @@ class Flying(Enemy):
 
         if DEBUG_VERBOSE_LOGGING:
             print(f"Launch! ({self.speed.x}, {self.speed.y})")
+
+    def update(self, dt: float) -> None:
+        super().update(dt)
+        if DEBUG_VERBOSE_LOGGING:
+            print(f"Frame: {int(self.frame_index)} ", end="")
+
+        if int(self.frame_index) == 5 and not self.launched:
+            self.launch()
+            self.launched = True
+        else:
+            self.launched = False
+            if self.speed.x < 0:
+                self.speed.x += 50 * dt
+                if self.speed.x > 0:
+                    self.speed.x = 0
+            elif self.speed.x > 0:
+                self.speed.x -= 50 * dt
+                if self.speed.x < 0:
+                    self.speed.x = 0
+
+            if self.speed.y < 0:
+                self.speed.y += 50 * dt
+                if self.speed.y > 0:
+                    self.speed.y = 0
+            elif self.speed.y > 0:
+                self.speed.y -= 50 * dt
+                if self.speed.y < 0:
+                    self.speed.y = 0
+
+            if DEBUG_VERBOSE_LOGGING:
+                print(f"Not a launch frame. ({self.speed.x}, {self.speed.y})")
 
 
 class Shooter(Enemy):
@@ -280,10 +297,15 @@ class Shooter(Enemy):
 
         # Track enemy states/actions
         self.can_shoot = True
-        self.attack_delay = 2750
+        self.attack_delay = 2750  # TODO: move to config?
         self.attack_time = None
 
     def cooldowns(self) -> None:
+        super().cooldowns()
+
+        if self.attack_time is None:
+            return
+
         now = pygame.time.get_ticks()
 
         # We are able to shoot another projectile
@@ -299,12 +321,6 @@ class Shooter(Enemy):
             self.direction.x = -1
             self.flip_sprite = True
 
-    def get_direction_str(self) -> str:
-        if self.direction.x == 1:
-            return "right"
-        elif self.direction.x == -1:
-            return "left"
-
     def shoot(self) -> None:
         # Spawn the projectile, make it move in the same direction that the shooter is facing
         if self.can_shoot:
@@ -317,7 +333,6 @@ class Shooter(Enemy):
                 self.get_direction_str(),
                 self.colour,
             )
-
             self.attack_time = pygame.time.get_ticks()
             self.can_shoot = False
 
@@ -325,7 +340,6 @@ class Shooter(Enemy):
         super().update(dt)
         self.check_direction()
         self.shoot()
-        self.cooldowns()
 
 
 class Projectile(Enemy):

@@ -26,7 +26,7 @@ class Block(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(topleft=pos)
 
         self.hitbox = self.rect.copy()
-        
+
 
 class Entity(pygame.sprite.Sprite):
     def __init__(
@@ -36,7 +36,7 @@ class Entity(pygame.sprite.Sprite):
         pos: tuple[int, int],
         image: pygame.Surface,
         speed: float = 0,
-        gravity: float = 0
+        gravity: float = 0,
     ) -> None:
         super().__init__(groups)
         self.image = image
@@ -97,7 +97,6 @@ class Entity(pygame.sprite.Sprite):
     def horizontal_collision(self, dx: float) -> Union[None, float]:
         from core.enemy import Enemy, Projectile
         from core.player import Player
-        from core.weapon import Weapon
 
         if dx != 0:
             # Move a copy of the entity and check for collisions
@@ -127,7 +126,6 @@ class Entity(pygame.sprite.Sprite):
 
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, max_right, "right")
-                        
 
                     if type(self) is Projectile:
                         self.kill()
@@ -141,7 +139,6 @@ class Entity(pygame.sprite.Sprite):
     def vertical_collision(self, dy: float) -> Union[None, float]:
         from core.enemy import Enemy
         from core.player import Player
-        from core.weapon import Weapon
 
         if dy != 0:
             # Move a copy of the entity and check for collisions
@@ -243,6 +240,12 @@ class Entity(pygame.sprite.Sprite):
             if type(self) is Projectile:
                 self.kill()
 
+    def get_direction_str(self) -> str:
+        if self.direction.x == 1:
+            return "right"
+        elif self.direction.x == -1:
+            return "left"
+
     def update(self, dt: float) -> None:
         if not self.gravity == 0:
             self.apply_gravity(dt)
@@ -300,6 +303,12 @@ class AnimatedEntity(Entity):
             self.image.set_alpha(alpha)
         else:
             self.image.set_alpha(255)
+
+    def get_direction_str(self) -> str:
+        if self.flip_sprite:
+            return "left"
+        else:
+            return "right"
 
     def update(self, dt: float) -> None:
         super().update(dt)

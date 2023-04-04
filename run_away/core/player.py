@@ -1,6 +1,6 @@
 import random
 from pathlib import Path
-from typing import Union
+from typing import Callable, Union
 
 import config
 import pygame
@@ -22,6 +22,8 @@ class Player(AnimatedEntity):
         health: float,
         damage: float,
         jump_speed: int,
+        create_attack: Callable,
+        destroy_attack: Callable,
         coins: int = 0,
     ) -> None:
         super().__init__(
@@ -33,9 +35,6 @@ class Player(AnimatedEntity):
             speed,
             gravity,
         )
-
-        self.playerGroups = groups  # TODO: Clear Code weapon solution
-
         # Player stats
         self.health = health
         self.max_health = health
@@ -49,17 +48,18 @@ class Player(AnimatedEntity):
         self.max_speed = speed
         self.jump_speed = jump_speed
         self.on_ground = False
-        self.lastDirection = 0
 
         # Weapon
-        self.weapon_data = None
-        self.weaponHitEnemy = False
+        self.weapon: Weapon = None
+        self.create_attack = create_attack
+        self.destroy_attack = destroy_attack
 
         # Track player states/actions
         self.attacking = False
-        self.attack_cooldown = 1000
-        self.attackCoolingDown = False
+        self.attack_cooldown = 1000  # TODO: move to config?
+        # self.attack_cooling_down = False
         self.attack_time = None
+        self.attack_duration = 250  # TODO: move to config?
 
         # Invincibility frames
         self.vulnerable = True
@@ -87,13 +87,13 @@ class Player(AnimatedEntity):
         if True in [keys[key] for key in config.KEYS_RIGHT]:
             self.status = "run"
             self.direction.x = 1
-            self.lastDirection = self.direction.x
+            # self.lastDirection = self.direction.x
             self.speed.x = self.max_speed
             self.flip_sprite = False
         elif True in [keys[key] for key in config.KEYS_LEFT]:
             self.status = "run"
             self.direction.x = -1
-            self.lastDirection = self.direction.x
+            # self.lastDirection = self.direction.x
             self.speed.x = self.max_speed
             self.flip_sprite = True
         else:
@@ -104,68 +104,21 @@ class Player(AnimatedEntity):
         if True in [keys[key] for key in config.KEYS_UP]:
             self.jump()
 
-        if True in [keys[key] for key in config.KEYS_INTERACT]:
-            self.status = "interacting"
         if True in [keys[key] for key in config.KEYS_ATTACK]:
             self.attack()
 
-    def updateWeaponPos(self):
-        if self.attacking:
-            self.weaponOut.destroy()
-            if self.lastDirection < 0:
-                # player facing left
-                # keeping in mind that pos is top left
-                weaponPosition = (self.rect.x - 15, self.rect.y + 10)
-            else:
-                # player facing right
-                weaponPosition = (self.rect.x + 15, self.rect.y + 10)
-            if self.weaponHitEnemy:
-                self.weaponOut = Weapon(
-                    self.playerGroups[0],
-                    self.collidable_sprites,
-                    weaponPosition,
-                    "./run_away/resources/gfx/weapons/test_stick.png",
-                    0,
-                )
-            else:
-                self.weaponOut = Weapon(
-                    self.playerGroups[0],
-                    self.collidable_sprites,
-                    weaponPosition,
-                    "./run_away/resources/gfx/weapons/test_stick.png",
-                    4 + self.strength - 10,
-                )
-
     def attack(self):
-        if self.attackCoolingDown:
-            pass
-        else:
+        if not self.attacking:
             self.attacking = True
-            # need player direction, position for offset, calc and pass that here
-            # use test_stick.png
-            # init the weapon here
-            if self.lastDirection < 0:
-                # player facing left
-                # keeping in mind that pos is top left
-                weaponPosition = (self.rect.x - 15, self.rect.y + 10)
-            else:
-                # player facing right
-                weaponPosition = (self.rect.x + 15, self.rect.y + 10)
-            self.weaponOut = Weapon(
-                self.playerGroups[0],
-                self.collidable_sprites,
-                weaponPosition,
-                "./run_away/resources/gfx/weapons/test_stick.png",
-                4 + config.PLAYER_DATA["stats"]["strength"] - 10,
-            )
-            print(
-                "Player damage is ",
-                4 + self.strength - 10,
-                "Cooldown is",
-                self.attack_cooldown - (self.agility - 10) * 200,
-            )
             self.attack_time = pygame.time.get_ticks()
-            self.attackCoolingDown = True
+            self.weapon = self.create_attack(
+                self.rect.topleft,
+                config.GFX_PATH.joinpath("weapons", "test_stick.png"),
+                config.WEAPON_DATA["damage"]
+                + self.strength
+                - config.PLAYER_DATA["stats"]["strength"],
+                self.get_direction_str(),
+            )
 
     def jump(self) -> None:
         """
@@ -192,20 +145,18 @@ class Player(AnimatedEntity):
                 self.hurt_time = None
 
         if self.attacking:
-            # Attack has reached end
-            if now - self.attack_time >= 250:
+            # Attack expired
+            if now - self.attack_time >= self.attack_duration:
+                self.weapon = self.destroy_attack()
+
+            # Player can attack again
+            if (
+                now - self.attack_time
+                >= self.attack_cooldown
+                - (self.agility - 10) * 200  # TODO: move to config?
+            ):
                 self.attacking = False
-                self.weaponHitEnemy = False
-                self.weaponOut.destroy()
-            if now - self.attack_time < (
-                self.attack_cooldown - (self.agility - 10) * 200
-            ):
-                self.attackCoolingDown = True
-        if self.attackCoolingDown:
-            if now - self.attack_time >= (
-                self.attack_cooldown - (self.agility - 10) * 200
-            ):
-                self.attackCoolingDown = False
+                self.attack_time = None
 
     def apply_damage(self, amount: int) -> None:
         if self.vulnerable:
@@ -261,7 +212,6 @@ class Player(AnimatedEntity):
     def update(self, dt) -> None:
         self.get_inputs()
         self.cooldowns()
-        self.updateWeaponPos()
         # self.get_status()
         super().update(dt)
         self.check_death()

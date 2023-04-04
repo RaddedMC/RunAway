@@ -106,15 +106,20 @@ PROJECTILE_DATA = {
         },
     },
 }
-
 NPC_DIALOGUE = {
     "RAIN": ["You have to leave this place!"],
     "WIND": ["Be careful of the winged ones"],
     "SNOW": ["Brrrrrrrr"],
     "LIGHTNING": ["Why are we in the tropics?"],
 }
-
-WEAPON_DATA = {}
+WEAPON_DATA = {
+    "damage": 4,
+    "offset": {
+        "left": pygame.math.Vector2(-15, 10),
+        "right": pygame.math.Vector2(15, 10),
+    },
+    "scale": (0, 1.5),
+}
 PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}
 LEVEL_DATA = {}
 SHOP_DATA = {"price": 7}

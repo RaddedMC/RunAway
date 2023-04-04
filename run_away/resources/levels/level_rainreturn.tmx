@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="37">
+<map version="1.10" tiledversion="1.10.0" orientation="orthogonal" renderorder="right-down" width="80" height="30" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="38">
  <tileset firstgid="1" source="../gfx/tilesets/terrain_rain.tsx"/>
  <tileset firstgid="221" source="../gfx/tilesets/terrain_objects.tsx"/>
  <tileset firstgid="383" source="../gfx/tilesets/terrain_wind.tsx"/>
@@ -212,22 +212,13 @@
   <object id="7" name="Flying2" type="Flying" x="640" y="288">
    <point/>
   </object>
-  <object id="8" name="Projectile2" type="Projectile" x="528" y="352">
-   <point/>
-  </object>
   <object id="4" name="Grunt1" type="Grunt" x="880" y="352">
    <point/>
   </object>
   <object id="5" name="Flying1" type="Flying" x="768" y="224">
    <point/>
   </object>
-  <object id="15" name="Projectile1" type="Projectile" x="521" y="407">
-   <point/>
-  </object>
   <object id="19" name="Projectile3" type="Projectile" x="208" y="400">
-   <point/>
-  </object>
-  <object id="20" name="Projectile4" type="Projectile" x="215.75" y="359.023">
    <point/>
   </object>
   <object id="22" name="Grunt3" type="Grunt" x="336" y="400">
@@ -243,6 +234,9 @@
    <point/>
   </object>
   <object id="34" name="Grunt3" type="Grunt" x="188.333" y="122">
+   <point/>
+  </object>
+  <object id="37" name="Projectile4" type="Projectile" x="496" y="400">
    <point/>
   </object>
  </objectgroup>

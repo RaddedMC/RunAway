@@ -19,7 +19,7 @@ class Game:
             "agility": config.PLAYER_DATA["stats"]["agility"],
             "coins": config.PLAYER_DATA["stats"]["coins"],
         }
-        self.level = Level(LevelType.RAIN, self.player_stats)
+        self.level = Level(LevelType.RAIN_RETURN, self.player_stats)
         self.running = True
         self.lightning_clear = False
         self.snow_clear = False

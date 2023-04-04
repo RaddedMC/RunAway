@@ -113,7 +113,7 @@ class Player(AnimatedEntity):
             self.attack_time = pygame.time.get_ticks()
             self.weapon = self.create_attack(
                 self.rect.topleft,
-                config.GFX_PATH.joinpath("weapons", "test_stick.png"),
+                config.GFX_PATH.joinpath("weapons", "fishing_rod.png"),
                 config.WEAPON_DATA["damage"]
                 + self.strength
                 - config.PLAYER_DATA["stats"]["strength"],

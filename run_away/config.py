@@ -115,8 +115,8 @@ NPC_DIALOGUE = {
 WEAPON_DATA = {
     "damage": 4,
     "offset": {
-        "left": pygame.math.Vector2(-15, -4),
-        "right": pygame.math.Vector2(10, -4),
+        "left": pygame.math.Vector2(-12, 0),
+        "right": pygame.math.Vector2(12, 0),
     },
     "scale": (0, 1.1),
 }

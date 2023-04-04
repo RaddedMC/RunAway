@@ -12,7 +12,7 @@ import pygame
 DEBUG_VERBOSE_LOGGING = False
 DEBUG_UI = False
 DEBUG_ZOOM = False
-DEBUG_SHOW_HITBOXES = False
+DEBUG_SHOW_HITBOXES = True
 
 ### FOLDER PATHS ###
 BASE_PATH = Path.cwd().absolute().joinpath("run_away")
@@ -115,10 +115,10 @@ NPC_DIALOGUE = {
 WEAPON_DATA = {
     "damage": 4,
     "offset": {
-        "left": pygame.math.Vector2(-15, 10),
-        "right": pygame.math.Vector2(15, 10),
+        "left": pygame.math.Vector2(-15, -4),
+        "right": pygame.math.Vector2(10, -4),
     },
-    "scale": (0, 1.5),
+    "scale": (0, 1.1),
 }
 PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}
 LEVEL_DATA = {}

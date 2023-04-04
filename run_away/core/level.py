@@ -386,7 +386,7 @@ class Level:
             [self.all_sprites, self.weapon],
             [self.collidable_sprites, self.enemies],
             pos,
-            pygame.image.load(root_dir).convert_alpha(),
+            root_dir,
             damage,
             direction,
             self.player.sprite,

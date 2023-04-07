@@ -10,9 +10,10 @@ import pygame
 
 ### DEBUG FLAG ###
 DEBUG_VERBOSE_LOGGING = False
-DEBUG_UI = False
+DEBUG_UI = True
 DEBUG_ZOOM = False
 DEBUG_SHOW_HITBOXES = False
+DEBUG_STATS = True
 
 ### FOLDER PATHS ###
 BASE_PATH = Path.cwd().absolute().joinpath("run_away")
@@ -51,7 +52,7 @@ PLAYER_DATA = {
         "damage": 10,
         "strength": 10,
         "agility": 10,
-        "coins": 20,
+        "coins": 100 if DEBUG_STATS else 0,
     },
 }
 ENEMY_DATA = {
@@ -106,15 +107,20 @@ PROJECTILE_DATA = {
         },
     },
 }
-
 NPC_DIALOGUE = {
     "RAIN": ["You have to leave this place!"],
     "WIND": ["Be careful of the winged ones"],
     "SNOW": ["Brrrrrrrr"],
     "LIGHTNING": ["Why are we in the tropics?"],
 }
-
-WEAPON_DATA = {}
+WEAPON_DATA = {
+    "damage": 4,
+    "offset": {
+        "left": pygame.math.Vector2(-12, 0),
+        "right": pygame.math.Vector2(12, 0),
+    },
+    "scale": (0, 1.1),
+}
 PORTAL_DATA = {"animation_speed": 10, "dialogue": ["Press Z to Travel"]}
 LEVEL_DATA = {}
 SHOP_DATA = {"price": 7}

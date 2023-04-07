@@ -12,6 +12,7 @@ from core.entity import AnimatedEntity, Block, Hazard
 from core.npc import NPC
 from core.player import Player
 from core.shop import Shop
+from core.weapon import Weapon
 from pytmx.util_pygame import load_pygame
 from utils.tools import debug
 
@@ -78,6 +79,7 @@ class Level:
         self.enemies = pygame.sprite.Group()
         self.portals = pygame.sprite.Group()
         self.player = pygame.sprite.GroupSingle()
+        self.weapon = pygame.sprite.GroupSingle()
         self.home = pygame.sprite.GroupSingle()
         self.coins = pygame.sprite.Group()
         self.npcs = pygame.sprite.GroupSingle()
@@ -273,8 +275,11 @@ class Level:
                     health=config.PLAYER_DATA["stats"]["health"],
                     damage=config.PLAYER_DATA["stats"]["damage"],
                     jump_speed=config.PLAYER_DATA["jump_speed"],
+                    create_attack=self.create_attack,
+                    destroy_attack=self.destroy_attack,
+                    level_stats = self.stats
                 )
-                self.player.sprite.updatePlayer(self.stats)
+                self.player.sprite.updatePlayer(self.stats)  # TODO: refactor?
 
         # Ending cutscene
         if self.kind is LevelType.HOME:
@@ -371,13 +376,28 @@ class Level:
             # level has no coins
             pass
 
-    def check_interacting(self):
-        keys = pygame.key.get_pressed()
+    def create_attack(
+        self,
+        pos: tuple[int, int],
+        root_dir: Path,
+        damage: float,
+        direction: str,
+    ) -> Weapon:
+        return Weapon(
+            [self.all_sprites, self.weapon],
+            [self.collidable_sprites, self.enemies],
+            pos,
+            root_dir,
+            damage,
+            direction,
+            self.player.sprite,
+        )
 
-        if True in [keys[key] for key in config.KEYS_INTERACT]:
-            return True
-        else:
-            return False
+    def destroy_attack(self) -> None:
+        if self.weapon.sprite:
+            self.weapon.sprite.kill()
+
+        return None
 
     def create_projectile(
         self,
@@ -402,6 +422,14 @@ class Level:
             direction,
             LevelType.from_colour(colour),
         )
+
+    def check_interacting(self):
+        keys = pygame.key.get_pressed()
+
+        if True in [keys[key] for key in config.KEYS_INTERACT]:
+            return True
+        else:
+            return False
 
     def check_portals(self):
         collided = pygame.sprite.groupcollide(self.player, self.portals, False, False)

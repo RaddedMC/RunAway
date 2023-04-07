@@ -44,7 +44,7 @@ class Shop:
         self.import_assets()
 
     def import_assets(self):
-        tmx_data = load_pygame(Path("run_away/resources/gfx/GUI/shop.tmx"))
+        tmx_data = load_pygame(config.GFX_PATH.joinpath("GUI", "shop.tmx"))
 
         for layer in tmx_data.visible_layers:
             if hasattr(layer, "data"):

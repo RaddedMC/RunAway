@@ -24,7 +24,9 @@ class Player(AnimatedEntity):
         jump_speed: int,
         create_attack: Callable,
         destroy_attack: Callable,
-        coins: int = 0,
+        level_stats: dict,
+        coins: int = 0
+
     ) -> None:
         super().__init__(
             groups,
@@ -75,6 +77,7 @@ class Player(AnimatedEntity):
         self.die_sfx = get_sounds_by_key("player_die")
 
         self.coins = coins
+        self.level_stats = level_stats
 
     def get_inputs(self) -> None:
         """
@@ -192,6 +195,7 @@ class Player(AnimatedEntity):
     def get_coin(self) -> None:
         self.coins += 1
         self.coin_sounds[0].play()
+        self.level_stats["coins"] = self.coins
 
     def spend_coins(self, price: int) -> None:
         self.coins -= price
@@ -207,7 +211,8 @@ class Player(AnimatedEntity):
         self.strength = stats["strength"]
         self.agility = stats["agility"]
         self.coins = stats["coins"]
-        print("STATS: S, A, C: ", self.strength, self.agility, self.coins)
+        if config.DEBUG_VERBOSE_LOGGING:
+            print("STATS: S, A, C: ", self.strength, self.agility, self.coins)
 
     def update(self, dt) -> None:
         self.get_inputs()

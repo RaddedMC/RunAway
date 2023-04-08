@@ -277,6 +277,7 @@ class Level:
                     jump_speed=config.PLAYER_DATA["jump_speed"],
                     create_attack=self.create_attack,
                     destroy_attack=self.destroy_attack,
+                    level_stats = self.stats
                 )
                 self.player.sprite.updatePlayer(self.stats)  # TODO: refactor?
 

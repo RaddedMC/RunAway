@@ -13,6 +13,7 @@ DEBUG_VERBOSE_LOGGING = False
 DEBUG_UI = False
 DEBUG_ZOOM = False
 DEBUG_SHOW_HITBOXES = False
+DEBUG_STATS = False
 
 ### FOLDER PATHS ###
 BASE_PATH = Path.cwd().absolute().joinpath("run_away")
@@ -51,7 +52,7 @@ PLAYER_DATA = {
         "damage": 10,
         "strength": 10,
         "agility": 10,
-        "coins": 20,
+        "coins": 100 if DEBUG_STATS else 0,
     },
 }
 ENEMY_DATA = {

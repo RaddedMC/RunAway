@@ -10,10 +10,10 @@ import pygame
 
 ### DEBUG FLAG ###
 DEBUG_VERBOSE_LOGGING = False
-DEBUG_UI = True
+DEBUG_UI = False
 DEBUG_ZOOM = False
 DEBUG_SHOW_HITBOXES = False
-DEBUG_STATS = True
+DEBUG_STATS = False
 
 ### FOLDER PATHS ###
 BASE_PATH = Path.cwd().absolute().joinpath("run_away")

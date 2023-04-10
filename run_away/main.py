@@ -51,15 +51,17 @@ class Game:
             return
 
                 
-    def run(self) -> None:
+    def run(self) -> bool:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    return True
                 if event.type == pygame.KEYDOWN:
                     keys = pygame.key.get_pressed()
                     if True in [keys[key] for key in config.KEYS_QUIT]:
-                        self.running = False                    
+                        self.running = False     
+                        return True               
 
                 # For mouse wheel zooming
                 if event.type == pygame.MOUSEWHEEL:
@@ -91,16 +93,19 @@ class Game:
                         self.wind_clear = True
 
                 if self.lightning_clear and self.snow_clear and self.wind_clear:
-                    if next_level.target_level is LevelType.HUB:
+                    if next_level.target_level is LevelType.HUB:    
                         next_level.target_level = LevelType.HUB_RAIN_ACCESS
 
                 self.level = Level(next_level.target_level, self.player_stats)
-
-        pygame.quit()
-        sys.exit(0)
+            elif self.level.game_finished:
+                self.running = False
+                self.main_menu = True
 
 
 if __name__ == "__main__":
-    game = Game()
-    game.menu()
-    game.run()
+    while True:
+        game = Game()
+        game.menu()
+        if game.run():
+            pygame.quit()
+            exit(0)

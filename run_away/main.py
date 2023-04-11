@@ -1,5 +1,5 @@
 import sys
-
+from pathlib import Path
 import config
 import pygame
 from core.level import Level, LevelType
@@ -25,16 +25,43 @@ class Game:
         self.snow_clear = False
         self.wind_clear = False
         self.load_sfx = get_sounds_by_key("portal")
+        self.main_menu = True
+        self.menu_image = pygame.image.load("run_away/resources/gfx/bg/main_menu.png")
+        self.render_surface = pygame.Surface(config.RENDER_AREA)
 
-    def run(self) -> None:
+
+    def menu(self) -> None:                        
+            while self.main_menu:
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        keys = pygame.key.get_pressed()
+                        if True in keys:
+                            self.main_menu = False                    
+
+
+
+                menu_rect = self.menu_image.get_rect(center = self.display_surface.get_rect().center)
+                game_message = config.GAME_FONT.render("Press the ANY key to continue...", True, "yellow")
+                msg_rect = game_message.get_rect(center = (self.display_surface.get_rect().centerx, self.display_surface.get_rect().centery + 300))
+
+                self.display_surface.blit(self.menu_image, menu_rect)
+                self.display_surface.blit(game_message, msg_rect)
+                self.clock.tick(config.FPS)
+                pygame.display.flip()
+            return
+
+                
+    def run(self) -> bool:
         while self.running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                    return True
                 if event.type == pygame.KEYDOWN:
                     keys = pygame.key.get_pressed()
                     if True in [keys[key] for key in config.KEYS_QUIT]:
-                        self.running = False
+                        self.running = False     
+                        return True               
 
                 # For mouse wheel zooming
                 if event.type == pygame.MOUSEWHEEL:
@@ -66,15 +93,19 @@ class Game:
                         self.wind_clear = True
 
                 if self.lightning_clear and self.snow_clear and self.wind_clear:
-                    if next_level.target_level is LevelType.HUB:
+                    if next_level.target_level is LevelType.HUB:    
                         next_level.target_level = LevelType.HUB_RAIN_ACCESS
 
                 self.level = Level(next_level.target_level, self.player_stats)
-
-        pygame.quit()
-        sys.exit(0)
+            elif self.level.game_finished:
+                self.running = False
+                self.main_menu = True
 
 
 if __name__ == "__main__":
-    game = Game()
-    game.run()
+    while True:
+        game = Game()
+        game.menu()
+        if game.run():
+            pygame.quit()
+            exit(0)

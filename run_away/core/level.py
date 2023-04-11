@@ -92,6 +92,7 @@ class Level:
 
         self.kind = kind
         self.path: Path = self.kind.value
+        self.game_finished = False
 
         self.dialogue: list
         if self.kind is LevelType.RAIN:
@@ -459,6 +460,8 @@ class Level:
             self.in_shop = True
 
     def run(self, dt: float):
+        if self.game_finished:
+            return
         if self.in_shop:
             self.in_shop = self.shop.interact()
             self.player.sprite.coins = self.stats["coins"]
@@ -573,8 +576,8 @@ class Level:
 
         # End game
         if self.timer >= cutscene_end_time:
-            pygame.quit()
-            exit()
+            self.game_finished = True
+            return
 
         # Set frame of house based on player position
         dist_factor = self.player.sprite.rect.x - self.home.sprite.rect.x - 85

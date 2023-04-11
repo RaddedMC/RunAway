@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "run-away"
-version = "0.5.0"
+version = "0.6.0"
 description = ""
 authors = ["lukadd16 <lukadd@icloud.com>", "RaddedMC <mycooljames@hotmail.com>", "SharafSyed <sharaf.syed04@gmail.com>", "KelseyKloosterman <kkloost2@uwo.ca>"]
 readme = "README.md"

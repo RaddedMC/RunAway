@@ -1,20 +1,22 @@
+# ruff: noqa: E402
 import random
 from enum import Enum
 from pathlib import Path
 from typing import Union
 
-import config
 import pygame
-from config import LEVELS_PATH
-from core.camera import CameraGroup
-from core.enemy import Flying, Grunt, Projectile, Shooter
-from core.entity import AnimatedEntity, Block, Hazard
-from core.npc import NPC
-from core.player import Player
-from core.shop import Shop
-from core.weapon import Weapon
 from pytmx.util_pygame import load_pygame
-from utils.tools import debug
+
+from run_away import config
+from run_away.config import LEVELS_PATH
+from run_away.core.camera import CameraGroup
+from run_away.core.enemy import Flying, Grunt, Projectile, Shooter
+from run_away.core.entity import AnimatedEntity, Block, Hazard
+from run_away.core.npc import NPC
+from run_away.core.player import Player
+from run_away.core.shop import Shop
+from run_away.core.weapon import Weapon
+from run_away.utils.tools import debug
 
 
 class LevelType(Enum):
@@ -56,8 +58,8 @@ class LevelType(Enum):
         )
 
 
-from core.background import Background
-from core.portal import Portal
+from run_away.core.background import Background
+from run_away.core.portal import Portal
 
 
 class Level:
@@ -278,7 +280,7 @@ class Level:
                     jump_speed=config.PLAYER_DATA["jump_speed"],
                     create_attack=self.create_attack,
                     destroy_attack=self.destroy_attack,
-                    level_stats = self.stats
+                    level_stats=self.stats,
                 )
                 self.player.sprite.updatePlayer(self.stats)  # TODO: refactor?
 
@@ -298,7 +300,7 @@ class Level:
                         ).direction = pygame.Vector2(-1, 0)
                         self.player.sprite.status = "run"
                     elif obj.type == "Home":
-                        from core.home import Home
+                        from run_away.core.home import Home
 
                         Home(
                             [self.all_sprites, self.home],
@@ -452,7 +454,7 @@ class Level:
                 self.npcs.sprite.interact()
 
     def check_shop(self):
-        if self.shop == None:
+        if self.shop is None:
             return
         elif (
             self.shop.rect.colliderect(self.player.sprite) and self.check_interacting()
@@ -491,7 +493,7 @@ class Level:
             self.display_surface.blit(scaled_display, (0, 0))
             try:
                 self.check_coins()
-            except:
+            except:  # noqa: E722
                 print("error occured")
 
             self.check_interactables()
@@ -507,13 +509,20 @@ class Level:
                 debug(f"On Ground: {self.player.sprite.on_ground}", 100)
                 debug(f"Buffer: {self.player.sprite.pixels_buffer}", 120)
                 debug(
-                    f"Position: ({self.player.sprite.rect.x}, {self.player.sprite.rect.y})",
+                    (
+                        f"Position: ({self.player.sprite.rect.x}, "
+                        f"{self.player.sprite.rect.y})"
+                    ),
                     140,
                 )
                 debug(f"Player Health: {self.player.sprite.health}", 160)
                 debug(f"Player Coins: {self.player.sprite.coins}", 200)
                 debug(
-                    f"Stats: {self.stats}, Player Coins: {self.player.sprite.coins}, Player Health: {self.player.sprite.health}",
+                    (
+                        f"Stats: {self.stats}, "
+                        f"Player Coins: {self.player.sprite.coins}, "
+                        f"Player Health: {self.player.sprite.health}"
+                    ),
                     220,
                 )
         self.check_portals()

@@ -1,9 +1,9 @@
 import math
-import os
 from pathlib import Path
 
-import config
 import pygame
+
+from run_away import config
 
 
 class Background:

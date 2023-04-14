@@ -1,11 +1,10 @@
-import random
 from pathlib import Path
 from typing import Union
 
-import config
 import pygame
-from core.entity import InteractableEntity
-from utils.tools import get_sounds_by_key
+
+from run_away import config
+from run_away.core.entity import InteractableEntity
 
 
 class NPC(InteractableEntity):

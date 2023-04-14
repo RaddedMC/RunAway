@@ -38,14 +38,9 @@ The player’s end goal is to guide Tye through his emotions and help him throug
 
 ### Running the Game
 
-> Windows
-```cmd
-.\RunGame.bat
+> Windows/macOS/Linux
 ```
-
-> macOS/Linux
-```sh
-poetry run python run_away/main.py
+poetry run game
 ```
 
 ## How to Play

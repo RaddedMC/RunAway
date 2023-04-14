@@ -5,9 +5,10 @@ import random
 from pathlib import Path
 from typing import Optional, Union
 
-import config
 import pygame
-from utils.tools import get_wave_value, import_animations
+
+from run_away import config
+from run_away.utils.tools import get_wave_value, import_animations
 
 
 class Block(pygame.sprite.Sprite):
@@ -95,8 +96,8 @@ class Entity(pygame.sprite.Sprite):
             self.on_ground = False
 
     def horizontal_collision(self, dx: float) -> Union[None, float]:
-        from core.enemy import Enemy, Projectile
-        from core.player import Player
+        from run_away.core.enemy import Enemy, Projectile
+        from run_away.core.player import Player
 
         if dx != 0:
             # Move a copy of the entity and check for collisions
@@ -118,7 +119,7 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Projectile:
                         self.kill()
 
-                    # The max distance that this entity can move without causing collision
+                    # The max distance this entity can move without causing collision
                     return min_left - self.hitbox.right
                 else:  # Moving left
                     # The x-coordinate of the closest (rightmost) entity we collided with
@@ -130,15 +131,15 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Projectile:
                         self.kill()
 
-                    # The max distance that this entity can move without causing collision
+                    # The max distance this entity can move without causing collision
                     return max_right - self.hitbox.left
             else:
                 # No collisions, the entity can move the full distance
                 return dx
 
     def vertical_collision(self, dy: float) -> Union[None, float]:
-        from core.enemy import Enemy
-        from core.player import Player
+        from run_away.core.enemy import Enemy
+        from run_away.core.player import Player
 
         if dy != 0:
             # Move a copy of the entity and check for collisions
@@ -157,7 +158,7 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, lowest_bottom, "bottom")
 
-                    # The max distance that this entity can move without causing collision
+                    # The max distance this entity can move without causing collision
                     return lowest_bottom - self.hitbox.top
                 else:
                     self.direction.y = 0
@@ -176,7 +177,7 @@ class Entity(pygame.sprite.Sprite):
                     if type(self) is Player or isinstance(self, Enemy):
                         self.check_damage(collided, max_top, "top")
 
-                    # The max distance that this entity can move without causing collision
+                    # The max distance this entity can move without causing collision
                     return max_top - self.hitbox.bottom
             else:
                 # No collisions, the entity can move the full distance
@@ -217,8 +218,8 @@ class Entity(pygame.sprite.Sprite):
                 (sprite for sprite in collided if sprite.hitbox.right == rect_pos), None
             )
 
-        from core.enemy import Enemy, Projectile
-        from core.player import Player
+        from run_away.core.enemy import Enemy, Projectile
+        from run_away.core.player import Player
 
         # The player collided with...
         if type(self) is Player:
@@ -270,7 +271,7 @@ class AnimatedEntity(Entity):
         self.animations = import_animations(root_dir)
         self.flip_sprite = False  # False = right, True = left
 
-        from config import DEBUG_VERBOSE_LOGGING
+        from run_away.config import DEBUG_VERBOSE_LOGGING
 
         if DEBUG_VERBOSE_LOGGING:
             print(self.animations)
@@ -348,7 +349,7 @@ class Hazard(Entity):
             .inflate(
                 tuple(
                     l * r
-                    for l, r in zip(
+                    for l, r in zip(  # noqa: E741
                         self.rect.size, config.HAZARD_DATA[self.kind]["scale"]
                     )
                 )

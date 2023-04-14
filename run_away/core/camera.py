@@ -1,6 +1,7 @@
-import config
 import pygame
-from core.player import Player
+
+from run_away import config
+from run_away.core.player import Player
 
 
 class CameraGroup(pygame.sprite.Group):
@@ -15,7 +16,7 @@ class CameraGroup(pygame.sprite.Group):
         for sprite in self.sprites():
             offset_rect = sprite.rect.copy()
             offset_rect.center -= self.offset
-            
+
             if hasattr(sprite, "image"):
                 surface.blit(sprite.image, offset_rect)
 

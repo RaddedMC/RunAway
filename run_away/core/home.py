@@ -2,7 +2,8 @@ from pathlib import Path
 from typing import Union
 
 import pygame
-from core.entity import AnimatedEntity
+
+from run_away.core.entity import AnimatedEntity
 
 
 class Home(AnimatedEntity):

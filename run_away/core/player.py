@@ -2,11 +2,12 @@ import random
 from pathlib import Path
 from typing import Callable, Union
 
-import config
 import pygame
-from core.entity import AnimatedEntity
-from core.weapon import Weapon
-from utils.tools import get_sounds_by_key
+
+from run_away import config
+from run_away.core.entity import AnimatedEntity
+from run_away.core.weapon import Weapon
+from run_away.utils.tools import get_sounds_by_key
 
 
 class Player(AnimatedEntity):
@@ -25,8 +26,7 @@ class Player(AnimatedEntity):
         create_attack: Callable,
         destroy_attack: Callable,
         level_stats: dict,
-        coins: int = 0
-
+        coins: int = 0,
     ) -> None:
         super().__init__(
             groups,
@@ -174,7 +174,8 @@ class Player(AnimatedEntity):
         Determine if the player is dead.
         """
         if self.health <= 0:
-            print("You Died!")  # DEBUG
+            if config.DEBUG_VERBOSE_LOGGING:
+                print("You Died!")
 
             self.die_sfx[0].play()
 

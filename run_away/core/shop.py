@@ -1,12 +1,9 @@
-import random
-from pathlib import Path
-
-import config
 import pygame
-from core.entity import Block
 from pygame import Rect
 from pytmx.util_pygame import load_pygame
-from utils.tools import get_sounds_by_key
+
+from run_away import config
+from run_away.core.entity import Block
 
 
 class Shop:
@@ -157,43 +154,43 @@ class Shop:
                 if event.button == 1:
                     click = True
 
-        if self.close.collidepoint(mouse_pos) and click == True:
+        if self.close.collidepoint(mouse_pos) and click is True:
             self.inShop = False
 
         if (
             self.healthUp.collidepoint(mouse_pos)
-            and click == True
+            and click is True
             and self.stats["coins"] >= 7
         ):
             self.stats["health"] += 1
             self.stats["coins"] -= config.SHOP_DATA["price"]
 
-        if self.healthDown.collidepoint(mouse_pos) and click == True:
+        if self.healthDown.collidepoint(mouse_pos) and click is True:
             if self.stats["health"] > 10:
                 self.stats["health"] -= 1
                 self.stats["coins"] += config.SHOP_DATA["price"]
 
         if (
             self.strUp.collidepoint(mouse_pos)
-            and click == True
+            and click is True
             and self.stats["coins"] >= 7
         ):
             self.stats["strength"] += 1
             self.stats["coins"] -= config.SHOP_DATA["price"]
-        if self.strDown.collidepoint(mouse_pos) and click == True:
+        if self.strDown.collidepoint(mouse_pos) and click is True:
             if self.stats["strength"] > 10:
                 self.stats["strength"] -= 1
                 self.stats["coins"] += config.SHOP_DATA["price"]
 
         if (
             self.agUp.collidepoint(mouse_pos)
-            and click == True
+            and click is True
             and self.stats["coins"] >= 7
         ):
             self.stats["agility"] += 1
             self.stats["coins"] -= config.SHOP_DATA["price"]
 
-        if self.agDown.collidepoint(mouse_pos) and click == True:
+        if self.agDown.collidepoint(mouse_pos) and click is True:
             if self.stats["agility"] > 10:
                 self.stats["agility"] -= 1
                 self.stats["coins"] += config.SHOP_DATA["price"]

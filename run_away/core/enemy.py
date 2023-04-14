@@ -3,12 +3,12 @@ import random
 from pathlib import Path
 from typing import Callable, Optional, Union
 
-import config
 import pygame
-from config import DEBUG_VERBOSE_LOGGING
-from core.entity import AnimatedEntity
-from core.player import Player
-from core.weapon import Weapon
+
+from run_away import config
+from run_away.config import DEBUG_VERBOSE_LOGGING
+from run_away.core.entity import AnimatedEntity
+from run_away.core.player import Player
 
 
 class Enemy(AnimatedEntity):
@@ -55,7 +55,8 @@ class Enemy(AnimatedEntity):
 
     def run_behaviour(self) -> None:
         """
-        Called every frame, figures out what the enemy does (are they attacking the player? changing movement direction? etc)
+        Called every frame, figures out what the enemy does (are they attacking the
+        player? changing movement direction? etc)
         """
         pass
 
@@ -322,7 +323,7 @@ class Shooter(Enemy):
             self.flip_sprite = True
 
     def shoot(self) -> None:
-        # Spawn the projectile, make it move in the same direction that the shooter is facing
+        # Spawn the projectile, make it move in the same direction the shooter is facing
         if self.can_shoot:
             self.create_projectile(
                 self.rect.topleft,
@@ -381,7 +382,9 @@ class Projectile(Enemy):
         self.hitbox = self.rect.copy().inflate(
             tuple(
                 l * r
-                for l, r in zip(self.rect.size, config.PROJECTILE_DATA[kind]["scale"])
+                for l, r in zip(  # noqa: E741
+                    self.rect.size, config.PROJECTILE_DATA[kind]["scale"]
+                )
             )
         )
 

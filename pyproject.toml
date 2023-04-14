@@ -4,7 +4,6 @@ version = "0.6.0"
 description = ""
 authors = ["lukadd16 <lukadd@icloud.com>", "RaddedMC <mycooljames@hotmail.com>", "SharafSyed <sharaf.syed04@gmail.com>", "KelseyKloosterman <kkloost2@uwo.ca>"]
 readme = "README.md"
-packages = [{include = "run_away"}]
 
 [tool.poetry.dependencies]
 python = "^3.9"
@@ -18,3 +17,6 @@ ruff = "^0.0.255"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+game = "run_away.main:main"

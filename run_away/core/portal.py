@@ -3,8 +3,9 @@ from pathlib import Path
 from typing import Union
 
 import pygame
-from core.level import LevelType
-from core.npc import NPC
+
+from run_away.core.level import LevelType
+from run_away.core.npc import NPC
 
 
 class Portal(NPC):

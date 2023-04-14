@@ -1,7 +1,10 @@
-import config
-import pygame
-from core.entity import AnimatedEntity
 from pathlib import Path
+
+import pygame
+
+from run_away import config
+from run_away.core.entity import AnimatedEntity
+
 
 class Weapon(AnimatedEntity):
     def __init__(
@@ -41,7 +44,12 @@ class Weapon(AnimatedEntity):
 
     def create_hitbox(self) -> pygame.Rect:
         return self.rect.copy().inflate(
-            tuple(l * r for l, r in zip(self.rect.size, config.WEAPON_DATA["scale"]))
+            tuple(
+                l * r
+                for l, r in zip(  # noqa: E741
+                    self.rect.size, config.WEAPON_DATA["scale"]
+                )
+            )
         )
 
     def update(self, dt) -> None:

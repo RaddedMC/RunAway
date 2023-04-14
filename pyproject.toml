@@ -12,8 +12,9 @@ pytmx = "^3.31"
 pygame = "2.2.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "^23.1.0"
-ruff = "^0.0.255"
+black = "23.1.0"
+ruff = "0.0.255"
+pre-commit = "^3.2.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -21,3 +22,13 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 game = "run_away.main:main"
+
+[tool.ruff]
+line-length = 88
+ignore = []
+target-version = "py39"
+show-source = true
+
+[tool.black]
+line-length = 88
+target-version = ["py39"]

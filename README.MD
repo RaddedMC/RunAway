@@ -20,6 +20,7 @@ The player’s end goal is to guide Tye through his emotions and help him throug
 - Sharaf Syed
 - Kelsey Kloosterman
 
+
 ## Getting Started
 
 ### Prerequisites
@@ -43,6 +44,7 @@ The player’s end goal is to guide Tye through his emotions and help him throug
 poetry run game
 ```
 
+
 ## How to Play
 
 1. Use `A`/`D` or `Left`/`Right` to move
@@ -50,6 +52,11 @@ poetry run game
 3. Press `Z` or `J` to interact
 4. Press `X` or `K` to attack
 5. In shops, use the mouse to interact
+
+
+## License
+
+Distributed under the MIT License. See [`LICENSE`](https://github.com/RaddedMC/RunAway/blob/main/LICENSE) for more information.
 
 <!-- ## Screenshots
 xx -->

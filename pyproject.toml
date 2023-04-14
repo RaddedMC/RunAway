@@ -1,8 +1,9 @@
 [tool.poetry]
 name = "run-away"
 version = "0.6.0"
-description = ""
+description = "A side-scrolling platformer RPG game inspired by 2D indie hits like Celeste, Hollow Knight, and Towerfall."
 authors = ["lukadd16 <lukadd@icloud.com>", "RaddedMC <mycooljames@hotmail.com>", "SharafSyed <sharaf.syed04@gmail.com>", "KelseyKloosterman <kkloost2@uwo.ca>"]
+license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]

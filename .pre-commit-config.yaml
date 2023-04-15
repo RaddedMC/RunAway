@@ -13,3 +13,4 @@ repos:
     rev: 'v0.0.255'
     hooks:
       - id: ruff
+        args: ['--select=E9,F7,F63,F82', '--show-source']

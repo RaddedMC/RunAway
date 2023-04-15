@@ -12,7 +12,7 @@ pytmx = "^3.31"
 pygame = "2.2.0"
 
 [tool.poetry.group.dev.dependencies]
-black = "23.1.0"
+black = "^23.0"
 ruff = "0.0.255"
 pre-commit = "^3.2.2"
 
@@ -25,9 +25,9 @@ game = "run_away.main:main"
 
 [tool.ruff]
 line-length = 88
-ignore = []
+select = ["ALL"]
+ignore = ["D", "T20", "ANN101", "ANN102"]
 target-version = "py39"
-show-source = true
 
 [tool.black]
 line-length = 88

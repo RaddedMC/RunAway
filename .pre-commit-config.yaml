@@ -5,10 +5,6 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/rhysd/actionlint
-    rev: v1.6.24
-    hooks:
-      - id: actionlint
   - repo: https://github.com/psf/black
     rev: 23.1.0
     hooks:

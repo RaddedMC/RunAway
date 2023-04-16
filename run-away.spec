@@ -1,12 +1,14 @@
 # -*- mode: python ; coding: utf-8 -*-
 # Spec file for running pyinstaller in onefile mode
 
+from pathlib import Path
+
 block_cipher = None
 
 included_files = [('run_away/resources', 'resources')]
 
 a = Analysis(
-    ['run_away\\__main__.py'],
+    [str(Path('run_away/__main__.py'))],
     pathex=[],
     binaries=[],
     datas=included_files,

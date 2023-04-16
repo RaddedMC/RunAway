@@ -44,6 +44,7 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
+          name: artifact-${{ matrix.os }}
           path: dist/run-away-*
 
   windows-build:
@@ -64,10 +65,11 @@ jobs:
           poetry config virtualenvs.in-project true
           poetry install
           VERSION=$(poetry version | cut -d " " -f 2)
-          source $(poetry env info --path)/bin/activate
+          source "$(poetry env info --path)/Scripts/activate"
           pyinstaller --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-windows" --add-data "run_away/resources;resources"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
+          name: artifact-windows
           path: dist/run-away-*

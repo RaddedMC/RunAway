@@ -29,6 +29,7 @@ jobs:
         with:
           python-version: 3.9
 
+      # If/when project Python version gets updated to 3.11, set --target-architecture=universal2
       - name: Generate Binary
         run: |
           python -m pip install --upgrade pip
@@ -38,7 +39,7 @@ jobs:
           OS=$(uname -s | tr A-Z a-z)
           VERSION=$(poetry version) | cut -d " " -f 2
           source $(poetry env info --path)/bin/activate
-          pyinstaller --target-architecture=universal2 --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-$OS" --add-data "run_away/resources:resources"
+          pyinstaller --target-architecture=x86_64 --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-$OS" --add-data "run_away/resources:resources"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -63,7 +64,7 @@ jobs:
           poetry install
           poetry config virtualenvs.in-project true
           VERSION=$(poetry version) | cut -d " " -f 2
-          & ((poetry env info --path) + "\Scripts\activate.ps1")
+          source $(poetry env info --path)/bin/activate
           pyinstaller --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-windows" --add-data "run_away/resources;resources"
 
       - name: Upload Artifact

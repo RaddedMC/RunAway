@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = ">=3.9,<3.12"
 pytmx = "^3.31"
 pygame = "2.2.0"
 
@@ -15,6 +15,7 @@ pygame = "2.2.0"
 black = "^23.0"
 ruff = "0.0.255"
 pre-commit = "^3.2.2"
+pyinstaller = "^5.10.1"
 
 [build-system]
 requires = ["poetry-core"]

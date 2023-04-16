@@ -257,7 +257,7 @@ class Level:
                         [self.all_sprites, self.npcs],
                         None,
                         (obj.x, obj.y),
-                        "./run_away/resources/gfx/objects/female_npc",
+                        config.GFX_PATH.joinpath("objects", "female_npc"),
                         dialogue=self.dialogue,
                         animation_speed=9,
                     )

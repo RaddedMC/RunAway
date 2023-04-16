@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 
 import pygame
@@ -16,7 +17,13 @@ DEBUG_SHOW_HITBOXES = False
 DEBUG_STATS = False
 
 ### FOLDER PATHS ###
-BASE_PATH = Path.cwd().absolute().joinpath("run_away")
+if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+    # App is running in a PyInstaller bundle
+    BASE_PATH = Path(sys._MEIPASS)
+else:
+    # App is running in a normal Python process
+    BASE_PATH = Path.cwd().absolute().joinpath("run_away")
+
 RESOURCES_PATH = BASE_PATH.joinpath("resources")
 FONT_PATH = RESOURCES_PATH.joinpath("font")
 GFX_PATH = RESOURCES_PATH.joinpath("gfx")

@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 
 from run_away import config
@@ -24,7 +26,9 @@ class Game:
         self.wind_clear = False
         self.load_sfx = get_sounds_by_key("portal")
         self.main_menu = True
-        self.menu_image = pygame.image.load("run_away/resources/gfx/bg/main_menu.png")
+        self.menu_image = pygame.image.load(
+            config.GFX_PATH.joinpath("bg", "main_menu.png")
+        )
         self.render_surface = pygame.Surface(config.RENDER_AREA)
 
     def menu(self) -> None:
@@ -107,15 +111,21 @@ class Game:
 
 def main() -> None:
     """
-    Entry point for the game
+    Entry-point function that starts the game
     """
     while True:
         game = Game()
         game.menu()
         if game.run():
             pygame.quit()
-            exit(0)
+            return
 
 
 if __name__ == "__main__":
-    main()
+    rc = 1
+    try:
+        main()
+        rc = 0
+    except Exception as ex:
+        print(f"Error: {ex}", file=sys.stderr)
+    sys.exit(rc)

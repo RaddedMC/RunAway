@@ -1,7 +1,6 @@
 # Contains common operations used by multiple classes
 
 import os
-import pprint
 from math import sin
 from pathlib import Path
 from typing import Union
@@ -55,7 +54,3 @@ def debug(info, y: int = 10, x: int = 10) -> None:
     debug_rect = debug_surface.get_rect(topleft=(x, y))
     pygame.draw.rect(display_surface, config.RGB_BLACK, debug_rect)
     display_surface.blit(debug_surface, debug_rect)
-
-
-if __name__ == "__main__":  # DEBUG
-    pprint.pprint(import_animations(Path("./run_away/resources/gfx/player/")))

@@ -1,5 +1,4 @@
 import math
-from pathlib import Path
 
 import pygame
 
@@ -21,7 +20,7 @@ class Background:
     ):
         # Import things
         self.image = pygame.image.load(
-            Path(str(config.BASE_PATH) + "/resources/" + path_from_tiled[3:])
+            config.RESOURCES_PATH.joinpath(path_from_tiled[3:])
         )
         self.image = pygame.transform.scale(self.image, config.RENDER_AREA)
 

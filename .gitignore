@@ -166,4 +166,5 @@ cython_debug/
 .vscode/settings.json
 
 # PyInstaller
-!*.spec
+!run-away.spec
+!run-away-debug.spec

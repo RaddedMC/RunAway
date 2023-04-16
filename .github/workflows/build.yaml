@@ -1,0 +1,68 @@
+name: Artifacts
+
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  unix-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Generate Binary
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+          OS=$(uname -s | tr A-Z a-z)
+          VERSION=$(poetry version) | cut -d " " -f 2
+          pyinstaller --target-architecture=universal2 --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-$OS" --add-data "run_away/resources:resources"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: dist/run-away.*
+
+  windows-build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.9
+
+      - name: Generate Binary
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install
+          VERSION=$(poetry version) | cut -d " " -f 2
+          pyinstaller --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-windows" --add-data "run_away/resources;resources"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          path: dist/run-away.*

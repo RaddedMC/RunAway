@@ -37,14 +37,14 @@ jobs:
           poetry config virtualenvs.in-project true
           poetry install
           OS=$(uname -s | tr A-Z a-z)
-          VERSION=$(poetry version) | cut -d " " -f 2
+          VERSION=$(poetry version | cut -d " " -f 2)
           source $(poetry env info --path)/bin/activate
           pyinstaller --target-architecture=x86_64 --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-$OS" --add-data "run_away/resources:resources"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          path: dist/run-away.*
+          path: dist/run-away-*
 
   windows-build:
     runs-on: windows-latest
@@ -61,13 +61,13 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install poetry
-          poetry install
           poetry config virtualenvs.in-project true
-          VERSION=$(poetry version) | cut -d " " -f 2
+          poetry install
+          VERSION=$(poetry version | cut -d " " -f 2)
           source $(poetry env info --path)/bin/activate
           pyinstaller --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-windows" --add-data "run_away/resources;resources"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          path: dist/run-away.*
+          path: dist/run-away-*

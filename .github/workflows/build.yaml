@@ -33,10 +33,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install poetry
+          poetry config virtualenvs.in-project true
           poetry install
           OS=$(uname -s | tr A-Z a-z)
           VERSION=$(poetry version) | cut -d " " -f 2
-          poetry shell
+          source $(poetry env info --path)/bin/activate
           pyinstaller --target-architecture=universal2 --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-$OS" --add-data "run_away/resources:resources"
 
       - name: Upload Artifact
@@ -60,8 +61,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install poetry
           poetry install
+          poetry config virtualenvs.in-project true
           VERSION=$(poetry version) | cut -d " " -f 2
-          poetry shell
+          & ((poetry env info --path) + "\Scripts\activate.ps1")
           pyinstaller --noconsole --clean --noconfirm --onefile run_away/__main__.py --name "run-away-$VERSION-windows" --add-data "run_away/resources;resources"
 
       - name: Upload Artifact
